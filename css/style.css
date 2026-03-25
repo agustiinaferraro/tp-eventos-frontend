@@ -1,0 +1,52 @@
+/* Estilos generales del body */
+body {
+  margin: 0;
+  height: 100vh;
+
+  /* Centramos contenido vertical y horizontal */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+
+  color: white;
+  font-family: sans-serif;
+
+  /* Transición suave de color de fondo */
+  transition: background 0.5s;
+
+  /* Color inicial */
+  background: orange;
+}
+
+/* Estilo del número de puntos */
+#points {
+  font-size: 3rem;
+  margin-top: 40px;
+}
+
+/* Contenedor de la barra de progreso */
+#bar-container {
+  width: 80%;
+  height: 20px;
+
+  /* Fondo transparente */
+  background: rgba(255,255,255,0.2);
+
+  border-radius: 10px;
+  margin-bottom: 60px;
+
+  /* Oculta el contenido que se desborde */
+  overflow: hidden;
+}
+
+/* Barra de progreso que crece */
+#bar {
+  height: 100%;
+  width: 0%;
+
+  background: white;
+
+  /* Animación suave del crecimiento */
+  transition: width 0.3s;
+}
