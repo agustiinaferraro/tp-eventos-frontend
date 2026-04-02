@@ -115,21 +115,25 @@ body, html {
   text-shadow: 0 0 10px currentColor;
 }
 
+.milestone {
+  text-align: center;
+  width: 30px;
+}
+
 .milestone::after {
   content: '';
   @apply absolute;
   bottom: -8px;
-  left: 50%;
-  transform: translateX(-50%);
+  left: 0;
   width: 2px;
   height: 6px;
   background: currentColor;
 }
 
-.milestone-end::after {
-  left: auto;
-  right: 0;
-  transform: none;
+.milestone-center::after {
+  left: 50%;
+  transform: translateX(-50%);
+  width: 2px;
 }
 
 .milestone-orange { color: #ff6b00; }
