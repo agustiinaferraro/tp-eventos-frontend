@@ -35,9 +35,6 @@ body {
 
   border-radius: 10px;
   margin-bottom: 60px;
-
-  /* Oculta el contenido que se desborde */
-  overflow: hidden;
 }
 
 /* Barra de progreso que crece */

@@ -27,28 +27,12 @@ body, html {
   #progressLabels span {
     font-size: 0.6rem !important;
   }
-  
-  #progressLabels {
-    width: 400px !important;
-  }
-  
-  #bar-container {
-    width: 280px !important;
-  }
 }
 
 @media (max-width: 640px) {
   main {
     padding-left: 2.5rem;
     padding-right: 2.5rem;
-  }
-  
-  #progressLabels {
-    width: 400px !important;
-  }
-  
-  #bar-container {
-    width: 260px !important;
   }
 }
 

@@ -1,0 +1,1087 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Energía Colectiva</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      min-height: 100vh;
+      background: #0a0a0a;
+      font-family: 'Segoe UI', sans-serif;
+      color: #fff;
+    }
+    .screen {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      width: 100%;
+      padding: 40px 20px;
+    }
+    .screen.active { display: flex; }
+    .title {
+      font-size: 1.5rem;
+      letter-spacing: 8px;
+      color: #00ff88;
+      margin-bottom: 60px;
+      text-align: center;
+    }
+    .input-field {
+      width: 100%;
+      max-width: 350px;
+      background: transparent;
+      border: 2px solid #333;
+      color: #fff;
+      font-size: 1rem;
+      padding: 15px 20px;
+      border-radius: 8px;
+      outline: none;
+      transition: all 0.3s;
+      text-align: center;
+      margin-bottom: 15px;
+    }
+    .input-field:focus { border-color: #00ff88; }
+    .input-field::placeholder { color: #555; }
+    .btn {
+      width: 100%;
+      max-width: 350px;
+      margin-top: 10px;
+      background: transparent;
+      border: 2px solid #444;
+      color: #666;
+      font-size: 0.9rem;
+      padding: 15px 40px;
+      border-radius: 8px;
+      cursor: not-allowed;
+      letter-spacing: 2px;
+      transition: all 0.3s;
+    }
+    .btn.ready {
+      border-color: #00ff88;
+      color: #00ff88;
+      cursor: pointer;
+    }
+    .btn.ready:hover {
+      background: #00ff88;
+      color: #0a0a0a;
+    }
+    .btn.ready:active { transform: scale(0.98); }
+    .link-btn {
+      background: transparent;
+      border: none;
+      color: #00ff88;
+      font-size: 0.8rem;
+      cursor: pointer;
+      margin-top: 20px;
+      letter-spacing: 1px;
+    }
+    .link-btn:hover { text-decoration: underline; }
+    .error-msg {
+      color: #ff3333;
+      font-size: 0.75rem;
+      margin-top: 10px;
+      text-align: center;
+      min-height: 20px;
+    }
+    .success-msg {
+      color: #00ff88;
+      font-size: 0.75rem;
+      margin-top: 10px;
+      text-align: center;
+    }
+    .password-hint {
+      font-size: 0.7rem;
+      color: #555;
+      margin-top: -10px;
+      margin-bottom: 15px;
+      letter-spacing: 1px;
+      width: 100%;
+      max-width: 350px;
+    }
+    .profiles-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+      gap: 30px;
+      max-width: 600px;
+      width: 100%;
+      margin-top: 40px;
+    }
+    .profile-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .profile-card:hover .profile-avatar {
+      border-color: #00ff88;
+      transform: scale(1.05);
+    }
+    .profile-avatar {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      border: 3px solid #333;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      background: #111;
+      transition: all 0.3s;
+    }
+    .profile-name {
+      margin-top: 15px;
+      font-size: 0.9rem;
+      color: #888;
+      letter-spacing: 1px;
+    }
+    .profile-card:hover .profile-name { color: #fff; }
+    .add-profile {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+    }
+    .add-icon {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      border: 3px dashed #333;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      color: #333;
+      transition: all 0.3s;
+    }
+    .add-profile:hover .add-icon { border-color: #00ff88; color: #00ff88; }
+    .add-profile:hover .profile-name { color: #00ff88; }
+    .dashboard-header {
+      width: 100%;
+      max-width: 800px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    .user-info { display: flex; align-items: center; gap: 15px; }
+    .user-avatar {
+      width: 40px;
+      height: 40px;
+      background: #222;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      color: #00ff88;
+    }
+    .user-name { font-size: 0.8rem; color: #888; letter-spacing: 2px; }
+    .logout-btn {
+      background: transparent;
+      border: 1px solid #333;
+      color: #555;
+      font-size: 0.7rem;
+      padding: 8px 15px;
+      border-radius: 6px;
+      cursor: pointer;
+      letter-spacing: 1px;
+    }
+    .logout-btn:hover { border-color: #ff3333; color: #ff3333; }
+    .section-title {
+      font-size: 0.7rem;
+      color: #666;
+      letter-spacing: 3px;
+      margin-bottom: 15px;
+      text-transform: uppercase;
+      width: 100%;
+      max-width: 800px;
+      padding: 0 20px;
+    }
+    .salas-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 15px;
+      width: 100%;
+      max-width: 800px;
+      padding: 0 20px;
+    }
+    .sala-card {
+      background: #111;
+      border: 1px solid #222;
+      border-radius: 8px;
+      padding: 20px;
+      cursor: pointer;
+      transition: all 0.3s;
+      position: relative;
+    }
+    .sala-card:hover { border-color: #00ff88; }
+    .sala-name { font-size: 1rem; color: #fff; margin-bottom: 5px; }
+    .sala-status { font-size: 0.7rem; color: #666; }
+    .sala-delete {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: transparent;
+      border: none;
+      color: #444;
+      font-size: 1.2rem;
+      cursor: pointer;
+    }
+    .sala-delete:hover { color: #ff3333; }
+    .new-sala-btn {
+      background: transparent;
+      border: 2px dashed #333;
+      border-radius: 8px;
+      padding: 20px;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #444;
+      font-size: 2rem;
+    }
+    .new-sala-btn:hover { border-color: #00ff88; color: #00ff88; }
+    .new-sala-text { font-size: 0.7rem; margin-top: 5px; }
+    .back-btn {
+      background: transparent;
+      border: none;
+      color: #666;
+      font-size: 0.9rem;
+      cursor: pointer;
+      align-self: flex-start;
+      margin-bottom: 30px;
+      letter-spacing: 1px;
+    }
+    .back-btn:hover { color: #fff; }
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.9);
+      z-index: 1000;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .modal.visible { display: flex; }
+    .modal-title {
+      font-size: 1rem;
+      color: #00ff88;
+      letter-spacing: 3px;
+      margin-bottom: 30px;
+    }
+    .modal-close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: transparent;
+      border: none;
+      color: #666;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+    .modal-close:hover { color: #fff; }
+    .color-picker { display: flex; gap: 15px; margin: 20px 0; }
+    .color-option {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      cursor: pointer;
+      border: 3px solid transparent;
+      transition: all 0.3s;
+    }
+    .color-option:hover { transform: scale(1.1); }
+    .color-option.selected { border-color: #fff; }
+    .qr-fullscreen {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: #0a0a0a;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+      overflow-y: auto;
+      padding: 20px;
+    }
+    .qr-fullscreen.visible { display: flex; }
+    .qr-fullscreen-title {
+      font-size: 1.2rem;
+      color: #00ff88;
+      margin-bottom: 20px;
+      letter-spacing: 3px;
+      text-shadow: 0 0 15px rgba(0, 255, 136, 0.5);
+      text-align: center;
+    }
+    .qr-fullscreen-box {
+      background: #fff;
+      border-radius: 12px;
+      padding: 12px;
+      box-shadow: 0 0 30px rgba(0, 255, 136, 0.3);
+      max-width: 220px;
+      width: 100%;
+    }
+    .qr-fullscreen-box img,
+    .qr-fullscreen-box canvas {
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+    }
+    .qr-fullscreen-hint {
+      font-size: 0.9rem;
+      color: #666;
+      margin-top: 25px;
+      letter-spacing: 2px;
+      text-align: center;
+    }
+    .qr-fullscreen-direct { font-size: 0.75rem; color: #555; margin-top: 20px; letter-spacing: 1px; text-align: center; }
+    .qr-fullscreen-link {
+      font-size: 0.8rem;
+      color: #00ff88;
+      margin-top: 8px;
+      letter-spacing: 1px;
+      word-break: break-all;
+      text-align: center;
+      padding: 0 20px;
+    }
+    .qr-url-debug {
+      font-size: 0.65rem;
+      color: #ff3333;
+      margin-top: 15px;
+      letter-spacing: 1px;
+      text-align: center;
+      padding: 0 20px;
+    }
+    .action-btn {
+      width: 100%;
+      max-width: 350px;
+      background: transparent;
+      border: 2px solid #00ff88;
+      color: #00ff88;
+      font-size: 0.9rem;
+      padding: 15px 40px;
+      border-radius: 8px;
+      cursor: pointer;
+      letter-spacing: 2px;
+      margin-top: 15px;
+      transition: all 0.3s;
+    }
+    .action-btn:hover { background: #00ff88; color: #0a0a0a; }
+    .share-btns { display: flex; gap: 15px; margin-top: 30px; width: 100%; max-width: 350px; }
+    .share-btn {
+      flex: 1;
+      background: #111;
+      border: 1px solid #333;
+      color: #fff;
+      font-size: 0.8rem;
+      padding: 12px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      letter-spacing: 1px;
+      transition: all 0.3s;
+    }
+    .share-btn:hover { border-color: #00ff88; color: #00ff88; }
+    .copy-content {
+      width: 100%;
+      max-width: 350px;
+      background: #111;
+      border: 1px solid #333;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    .copy-label { font-size: 0.7rem; color: #555; margin-bottom: 5px; }
+    .copy-url { font-size: 0.8rem; color: #fff; word-break: break-all; }
+    .copy-success { color: #00ff88; font-size: 0.8rem; margin-top: 10px; display: none; }
+    .ngrok-section {
+      background: #111;
+      border: 1px solid #222;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 30px 0;
+      width: 100%;
+      max-width: 400px;
+    }
+    .ngrok-title {
+      font-size: 0.7rem;
+      color: #666;
+      letter-spacing: 2px;
+      margin-bottom: 15px;
+    }
+    .ngrok-instruction {
+      font-size: 0.75rem;
+      color: #555;
+      margin-bottom: 15px;
+      line-height: 1.6;
+    }
+    .ngrok-instruction code {
+      background: #1a1a1a;
+      padding: 2px 6px;
+      border-radius: 4px;
+      color: #00ff88;
+    }
+    .ngrok-input-row {
+      display: flex;
+      gap: 10px;
+    }
+    .ngrok-input {
+      flex: 1;
+      background: #1a1a1a;
+      border: 1px solid #333;
+      color: #fff;
+      font-size: 0.8rem;
+      padding: 10px 15px;
+      border-radius: 6px;
+      outline: none;
+    }
+    .ngrok-input:focus { border-color: #00ff88; }
+    .ngrok-btn {
+      background: transparent;
+      border: 1px solid #00ff88;
+      color: #00ff88;
+      font-size: 0.75rem;
+      padding: 10px 15px;
+      border-radius: 6px;
+      cursor: pointer;
+      letter-spacing: 1px;
+      white-space: nowrap;
+    }
+    .ngrok-btn:hover { background: #00ff88; color: #0a0a0a; }
+    .ngrok-status {
+      font-size: 0.7rem;
+      margin-top: 10px;
+      color: #666;
+    }
+    .ngrok-status.active { color: #00ff88; }
+    @media (max-width: 600px) {
+      .qr-fullscreen-title { font-size: 1.8rem; }
+      .qr-fullscreen-hint { font-size: 1rem; }
+      .qr-fullscreen-link { font-size: 0.9rem; }
+      .profiles-grid { grid-template-columns: repeat(2, 1fr); }
+      .salas-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- AUTH -->
+<div class="screen active" id="authScreen">
+  <h1 class="title">ENERGÍA COLECTIVA</h1>
+  <input type="email" class="input-field" id="authEmail" placeholder="Email">
+  <input type="password" class="input-field" id="authPassword" placeholder="Contraseña">
+  <button class="btn" id="authBtn" disabled>ENTRAR</button>
+  <button class="link-btn" id="forgotPasswordBtn" style="margin-top:5px;">¿Olvidaste tu contraseña?</button>
+  <button class="link-btn" id="switchToRegister">¿No tenés cuenta? Creá una</button>
+  <p class="error-msg" id="authError"></p>
+  <p class="success-msg" id="authSuccess" style="display:none;"></p>
+</div>
+
+<!-- REGISTER -->
+<div class="screen" id="registerScreen">
+  <button class="back-btn" id="backFromRegister">← Volver</button>
+  <h1 class="title">CREAR CUENTA</h1>
+  <input type="text" class="input-field" id="regName" placeholder="Tu nombre">
+  <input type="email" class="input-field" id="regEmail" placeholder="Email">
+  <input type="password" class="input-field" id="regPassword" placeholder="Contraseña">
+  <p class="password-hint">Mínimo 6 caracteres, 1 mayúscula y 1 número</p>
+  <input type="password" class="input-field" id="regPasswordConfirm" placeholder="Confirmar contraseña">
+  <p class="error-msg" id="regError"></p>
+  <button class="btn" id="regBtn">CREAR CUENTA</button>
+</div>
+
+<!-- PROFILES -->
+<div class="screen" id="profilesScreen">
+  <h1 class="title">¿QUIÉN SOS?</h1>
+  <div class="profiles-grid" id="profilesGrid"></div>
+  <button class="link-btn" id="manageAccount">Gestionar cuentas</button>
+</div>
+
+<!-- ADD/EDIT PROFILE -->
+<div class="screen" id="profileEditScreen">
+  <button class="back-btn" id="backFromProfileEdit">← Volver</button>
+  <h1 class="title" id="profileEditTitle">NUEVO PERFIL</h1>
+  <div class="profile-avatar" id="profileAvatarPreview" style="width:120px;height:120px;font-size:3rem;margin-bottom:30px;background:#222;border:3px solid #333;">?</div>
+  <div class="color-picker" id="colorPicker"></div>
+  <input type="text" class="input-field" id="profileName" placeholder="Nombre del perfil" maxlength="15">
+  <button class="btn" id="saveProfileBtn" disabled>GUARDAR</button>
+  <button class="btn" id="deleteProfileBtn" style="display:none;border-color:#ff3333;color:#ff3333;margin-top:10px;">ELIMINAR PERFIL</button>
+</div>
+
+<!-- DASHBOARD -->
+<div class="screen" id="dashboardScreen">
+  <div class="dashboard-header">
+    <div class="user-info">
+      <div class="user-avatar" id="userAvatar"></div>
+      <span class="user-name" id="userDisplay"></span>
+    </div>
+    <div style="display:flex;gap:10px;">
+      <button class="logout-btn" id="openSettingsBtn" style="border-color:#444;color:#666;">⚙</button>
+      <button class="logout-btn" id="logoutBtn">SALIR</button>
+    </div>
+  </div>
+  <h1 class="title">MIS SALAS</h1>
+  <p class="section-title">Salas activas</p>
+  <div class="salas-grid" id="salasGrid"></div>
+</div>
+
+<!-- SALA DETAIL -->
+<div class="screen" id="salaDetailScreen">
+  <button class="back-btn" id="backFromSala">← Volver</button>
+  <h1 class="title" id="salaDetailName"></h1>
+  <button class="action-btn" id="goToExperience">IR A LA EXPERIENCIA</button>
+  <div class="share-btns">
+    <button class="share-btn" id="shareQrBtn">📷 QR</button>
+    <button class="share-btn" id="shareLinkBtn">🔗 LINK</button>
+  </div>
+</div>
+
+<!-- CREATE SALA MODAL -->
+<div class="modal" id="createSalaModal">
+  <button class="modal-close" id="closeCreateSala">×</button>
+  <p class="modal-title">NUEVA SALA</p>
+  <input type="text" class="input-field" id="newSalaInput" placeholder="Nombre del artista o banda">
+  <button class="btn ready" id="confirmCreateSala">CREAR SALA</button>
+</div>
+
+<!-- QR FULLSCREEN -->
+<div class="qr-fullscreen" id="qrFullscreen">
+  <p class="qr-fullscreen-title" id="qrFullscreenTitle"></p>
+  <div class="qr-fullscreen-box">
+    <div id="qrCodeBox"></div>
+  </div>
+  <p class="qr-url-debug" id="qrUrlDebug"></p>
+  <p class="qr-fullscreen-hint">ESCANEÁ PARA VIVIR LA EXPERIENCIA</p>
+  <p class="qr-fullscreen-direct">O PODÉS ENTRAR A:</p>
+  <p class="qr-fullscreen-link" id="qrFullscreenLink"></p>
+</div>
+
+<!-- COPY LINK MODAL -->
+<div class="modal" id="copyModal">
+  <button class="modal-close" id="closeCopyModal">×</button>
+  <p class="modal-title">COPIAR LINK</p>
+  <div class="copy-content">
+    <p class="copy-label">Link para compartir</p>
+    <p class="copy-url" id="copyUrl"></p>
+  </div>
+  <button class="btn ready" id="doCopyBtn">COPIAR</button>
+  <p class="copy-success" id="copySuccess">¡Copiado!</p>
+</div>
+
+<!-- SETTINGS MODAL -->
+<div class="modal" id="settingsModal">
+  <button class="modal-close" id="closeSettingsModal">×</button>
+  <p class="modal-title">CONFIGURACIÓN</p>
+  <div class="ngrok-section" style="max-width:350px;margin:0 0 20px 0;">
+    <p class="ngrok-title">URL PÚBLICA (PARA MÓVILES)</p>
+    <p class="ngrok-instruction">
+      1. Ejecutá <code>yarn ngrok</code> en backend y frontend<br>
+      2. Copiá la URL del frontend en ngrok<br>
+      3. Pegala abajo
+    </p>
+    <div class="ngrok-input-row">
+      <input type="text" class="ngrok-input" id="publicUrlInput" placeholder="URL Frontend (para QR)">
+      <button class="ngrok-btn" id="savePublicUrlBtn">OK</button>
+    </div>
+    <button class="link-btn" id="clearPublicUrlBtn">Restablecer localhost</button>
+    <p class="ngrok-status" id="ngrokStatus">Usando localhost</p>
+  </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+const LOCAL_URL = "http://localhost:5173";
+
+function getBaseUrl() {
+  const saved = localStorage.getItem('publicUrl');
+  return saved || LOCAL_URL;
+}
+
+function setBaseUrl(url) {
+  localStorage.setItem('publicUrl', url);
+  document.getElementById('publicUrlInput').value = url;
+}
+
+function clearPublicUrl() {
+  localStorage.removeItem('publicUrl');
+  document.getElementById('publicUrlInput').value = LOCAL_URL;
+  document.getElementById('ngrokStatus').textContent = 'Usando localhost';
+  document.getElementById('ngrokStatus').style.color = '#666';
+}
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAyBKmJoZ4AOxfoob5BNTVD_5yDiWHNXbY",
+  authDomain: "eventos-5c6e2.firebaseapp.com",
+  projectId: "eventos-5c6e2",
+  storageBucket: "eventos-5c6e2.firebasestorage.app",
+  messagingSenderId: "384718750905",
+  appId: "1:384718750905:web:b072faacb5a65f269d4768"
+};
+
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+
+const COLORS = ['#ff6b00', '#00ff88', '#00aaff', '#ff00ff', '#ffff00', '#ff3366', '#33ff99', '#9966ff'];
+
+const authScreen = document.getElementById("authScreen");
+const registerScreen = document.getElementById("registerScreen");
+const profilesScreen = document.getElementById("profilesScreen");
+const profileEditScreen = document.getElementById("profileEditScreen");
+const dashboardScreen = document.getElementById("dashboardScreen");
+const salaDetailScreen = document.getElementById("salaDetailScreen");
+
+const authEmail = document.getElementById("authEmail");
+const authPassword = document.getElementById("authPassword");
+const authBtn = document.getElementById("authBtn");
+const authError = document.getElementById("authError");
+const switchToRegister = document.getElementById("switchToRegister");
+
+const regName = document.getElementById("regName");
+const regEmail = document.getElementById("regEmail");
+const regPassword = document.getElementById("regPassword");
+const regPasswordConfirm = document.getElementById("regPasswordConfirm");
+const regBtn = document.getElementById("regBtn");
+const regError = document.getElementById("regError");
+
+const profilesGrid = document.getElementById("profilesGrid");
+const manageAccount = document.getElementById("manageAccount");
+
+const profileEditTitle = document.getElementById("profileEditTitle");
+const profileAvatarPreview = document.getElementById("profileAvatarPreview");
+const colorPicker = document.getElementById("colorPicker");
+const profileName = document.getElementById("profileName");
+const saveProfileBtn = document.getElementById("saveProfileBtn");
+const deleteProfileBtn = document.getElementById("deleteProfileBtn");
+
+const userAvatar = document.getElementById("userAvatar");
+const userDisplay = document.getElementById("userDisplay");
+const logoutBtn = document.getElementById("logoutBtn");
+const salasGrid = document.getElementById("salasGrid");
+
+const salaDetailName = document.getElementById("salaDetailName");
+const goToExperience = document.getElementById("goToExperience");
+const shareQrBtn = document.getElementById("shareQrBtn");
+const shareLinkBtn = document.getElementById("shareLinkBtn");
+
+const qrFullscreen = document.getElementById("qrFullscreen");
+const qrFullscreenTitle = document.getElementById("qrFullscreenTitle");
+const qrFullscreenLink = document.getElementById("qrFullscreenLink");
+const qrCodeBox = document.getElementById("qrCodeBox");
+
+const copyModal = document.getElementById("copyModal");
+const copyUrl = document.getElementById("copyUrl");
+const doCopyBtn = document.getElementById("doCopyBtn");
+const copySuccess = document.getElementById("copySuccess");
+
+let currentUser = null;
+let profiles = [];
+let currentProfile = null;
+let salas = [];
+let currentSala = null;
+let editingProfileIndex = -1;
+
+COLORS.forEach((color, i) => {
+  const btn = document.createElement('div');
+  btn.className = 'color-option' + (i === 0 ? ' selected' : '');
+  btn.style.background = color;
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.color-option').forEach(c => c.classList.remove('selected'));
+    btn.classList.add('selected');
+    profileAvatarPreview.style.background = color;
+  });
+  colorPicker.appendChild(btn);
+});
+
+function showScreen(screen) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  screen.classList.add('active');
+}
+
+function validateAuthForm() {
+  const ready = authEmail.value.includes('@') && authPassword.value.length >= 6;
+  authBtn.classList.toggle('ready', ready);
+  authBtn.disabled = !ready;
+}
+
+const savedEmail = localStorage.getItem('lastEmail');
+if (savedEmail) {
+  authEmail.value = savedEmail;
+  validateAuthForm();
+}
+
+authEmail.addEventListener('input', validateAuthForm);
+authPassword.addEventListener('input', validateAuthForm);
+
+authBtn.addEventListener('click', async () => {
+  authError.textContent = '';
+  try {
+    const cred = await auth.signInWithEmailAndPassword(authEmail.value, authPassword.value);
+    currentUser = cred.user;
+    localStorage.setItem('lastEmail', authEmail.value);
+    loadProfiles();
+    showScreen(profilesScreen);
+  } catch (err) {
+    if (err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password') {
+      authError.textContent = 'Email o contraseña incorrectos';
+    } else {
+      authError.textContent = 'Error: ' + err.code;
+    }
+  }
+});
+
+switchToRegister.addEventListener('click', () => showScreen(registerScreen));
+document.getElementById('backFromRegister').addEventListener('click', () => showScreen(authScreen));
+
+document.getElementById('forgotPasswordBtn').addEventListener('click', async () => {
+  const email = authEmail.value.trim();
+  if (!email || !email.includes('@')) {
+    authError.textContent = 'Ingresá tu email arriba';
+    return;
+  }
+  try {
+    await auth.sendPasswordResetEmail(email);
+    document.getElementById('authSuccess').textContent = 'Revisá tu email para restablecer la contraseña';
+    document.getElementById('authSuccess').style.display = 'block';
+    authError.textContent = '';
+  } catch (err) {
+    authError.textContent = 'Error: ' + err.message;
+  }
+});
+
+function validateRegForm() {
+  const nameOk = regName.value.trim().length >= 2;
+  const emailOk = regEmail.value.includes('@');
+  const passwordOk = regPassword.value.length >= 6 && /[A-Z]/.test(regPassword.value) && /[0-9]/.test(regPassword.value);
+  const confirmOk = regPasswordConfirm.value === regPassword.value && regPassword.value.length > 0;
+  const ready = nameOk && emailOk && passwordOk && confirmOk;
+  regBtn.classList.toggle('ready', ready);
+  regBtn.disabled = !ready;
+}
+
+regName.addEventListener('input', validateRegForm);
+regEmail.addEventListener('input', validateRegForm);
+regPassword.addEventListener('input', validateRegForm);
+regPasswordConfirm.addEventListener('input', validateRegForm);
+
+regBtn.addEventListener('click', async () => {
+  regError.textContent = '';
+  
+  if (regName.value.trim().length < 2) { regError.textContent = 'El nombre debe tener al menos 2 caracteres'; return; }
+  if (!regEmail.value.includes('@')) { regError.textContent = 'Ingresá un email válido'; return; }
+  if (!/[A-Z]/.test(regPassword.value)) { regError.textContent = 'La contraseña debe tener al menos 1 mayúscula'; return; }
+  if (!/[0-9]/.test(regPassword.value)) { regError.textContent = 'La contraseña debe tener al menos 1 número'; return; }
+  if (regPassword.value !== regPasswordConfirm.value) { regError.textContent = 'Las contraseñas no coinciden'; return; }
+  
+  try {
+    const cred = await auth.createUserWithEmailAndPassword(regEmail.value, regPassword.value);
+    await cred.user.updateProfile({ displayName: regName.value.trim() });
+    await auth.sendEmailVerification(cred.user);
+    regError.className = 'success-msg';
+    regError.textContent = '¡Cuenta creada! Verificá tu email';
+    regBtn.textContent = 'CUENTA CREADA';
+    setTimeout(() => {
+      auth.signOut();
+      regError.className = 'error-msg';
+      regBtn.textContent = 'CREAR CUENTA';
+      showScreen(authScreen);
+      authEmail.value = regEmail.value;
+    }, 2000);
+  } catch (err) {
+    if (err.code === 'auth/email-already-in-use') {
+      regError.textContent = 'Este email ya está registrado';
+    } else {
+      regError.textContent = 'Error: ' + err.code;
+    }
+  }
+});
+
+function loadProfiles() {
+  const saved = localStorage.getItem('profiles_' + currentUser.uid);
+  profiles = saved ? JSON.parse(saved) : [];
+  renderProfiles();
+}
+
+function saveProfiles() {
+  localStorage.setItem('profiles_' + currentUser.uid, JSON.stringify(profiles));
+}
+
+function renderProfiles() {
+  profilesGrid.innerHTML = '';
+  profiles.forEach((profile, i) => {
+    const card = document.createElement('div');
+    card.className = 'profile-card';
+    card.innerHTML = '<div class="profile-avatar" style="background:' + profile.color + '">' + profile.name.charAt(0).toUpperCase() + '</div><p class="profile-name">' + profile.name + '</p>';
+    card.addEventListener('click', () => selectProfile(i));
+    card.addEventListener('dblclick', () => editProfile(i));
+    profilesGrid.appendChild(card);
+  });
+  const addCard = document.createElement('div');
+  addCard.className = 'add-profile';
+  addCard.innerHTML = '<div class="add-icon">+</div><p class="profile-name">Agregar perfil</p>';
+  addCard.addEventListener('click', () => editProfile(-1));
+  profilesGrid.appendChild(addCard);
+}
+
+function selectProfile(i) {
+  currentProfile = profiles[i];
+  userDisplay.textContent = currentProfile.name.toUpperCase();
+  userAvatar.textContent = currentProfile.name.charAt(0).toUpperCase();
+  userAvatar.style.background = currentProfile.color;
+  loadSalas();
+  showScreen(dashboardScreen);
+}
+
+function editProfile(i) {
+  editingProfileIndex = i;
+  if (i === -1) {
+    profileEditTitle.textContent = 'NUEVO PERFIL';
+    profileName.value = '';
+    profileAvatarPreview.style.background = COLORS[0];
+    profileAvatarPreview.textContent = '?';
+    deleteProfileBtn.style.display = 'none';
+    document.querySelectorAll('.color-option')[0].click();
+  } else {
+    profileEditTitle.textContent = 'EDITAR PERFIL';
+    profileName.value = profiles[i].name;
+    profileAvatarPreview.style.background = profiles[i].color;
+    profileAvatarPreview.textContent = profiles[i].name.charAt(0).toUpperCase();
+    deleteProfileBtn.style.display = 'block';
+    COLORS.forEach((c, idx) => {
+      document.querySelectorAll('.color-option')[idx].classList.toggle('selected', c === profiles[i].color);
+    });
+  }
+  showScreen(profileEditScreen);
+}
+
+profileName.addEventListener('input', () => {
+  const ready = profileName.value.trim().length >= 1;
+  saveProfileBtn.classList.toggle('ready', ready);
+  saveProfileBtn.disabled = !ready;
+  profileAvatarPreview.textContent = profileName.value.charAt(0).toUpperCase() || '?';
+});
+
+saveProfileBtn.addEventListener('click', () => {
+  const color = profileAvatarPreview.style.background;
+  const name = profileName.value.trim();
+  if (editingProfileIndex === -1) {
+    profiles.push({ name: name, color: color });
+  } else {
+    profiles[editingProfileIndex] = { name: name, color: color };
+  }
+  saveProfiles();
+  renderProfiles();
+  showScreen(profilesScreen);
+});
+
+deleteProfileBtn.addEventListener('click', () => {
+  if (confirm('¿Eliminar este perfil?')) {
+    profiles.splice(editingProfileIndex, 1);
+    saveProfiles();
+    renderProfiles();
+    showScreen(profilesScreen);
+  }
+});
+
+document.getElementById('backFromProfileEdit').addEventListener('click', () => showScreen(profilesScreen));
+
+document.getElementById('openSettingsBtn').addEventListener('click', () => {
+  const input = document.getElementById('publicUrlInput');
+  const status = document.getElementById('ngrokStatus');
+  input.value = getBaseUrl();
+  if (getBaseUrl() !== LOCAL_URL) {
+    status.textContent = 'URL activa ✓';
+    status.style.color = '#00ff88';
+  } else {
+    status.textContent = 'Usando localhost';
+    status.style.color = '#666';
+  }
+  document.getElementById('settingsModal').classList.add('visible');
+});
+
+document.getElementById('closeSettingsModal').addEventListener('click', () => {
+  document.getElementById('settingsModal').classList.remove('visible');
+});
+
+document.getElementById('settingsModal').addEventListener('click', (e) => {
+  if (e.target === document.getElementById('settingsModal')) {
+    document.getElementById('settingsModal').classList.remove('visible');
+  }
+});
+
+document.getElementById('savePublicUrlBtn').addEventListener('click', () => {
+  const url = document.getElementById('publicUrlInput').value.trim();
+  if (url) {
+    setBaseUrl(url);
+    document.getElementById('ngrokStatus').textContent = 'URL guardada ✓';
+    document.getElementById('ngrokStatus').style.color = '#00ff88';
+  }
+});
+
+document.getElementById('clearPublicUrlBtn').addEventListener('click', clearPublicUrl);
+
+document.getElementById('publicUrlInput').addEventListener('keypress', (e) => {
+  if (e.key === 'Enter') document.getElementById('savePublicUrlBtn').click();
+});
+
+manageAccount.addEventListener('click', async () => {
+  await auth.signOut();
+  currentUser = null;
+  profiles = [];
+  showScreen(authScreen);
+});
+
+function loadSalas() {
+  const saved = localStorage.getItem('salas_' + currentUser.uid + '_' + currentProfile.name);
+  salas = saved ? JSON.parse(saved) : [];
+  renderSalas();
+}
+
+function saveSalas() {
+  localStorage.setItem('salas_' + currentUser.uid + '_' + currentProfile.name, JSON.stringify(salas));
+}
+
+function renderSalas() {
+  salasGrid.innerHTML = '';
+  salas.forEach((sala, i) => {
+    const card = document.createElement('div');
+    card.className = 'sala-card';
+    card.innerHTML = '<button class="sala-delete">×</button><p class="sala-name">' + sala.name.toUpperCase() + '</p><p class="sala-status">Sala activa</p>';
+    card.querySelector('.sala-delete').addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (confirm('¿Eliminar esta sala?')) {
+        salas.splice(i, 1);
+        saveSalas();
+        renderSalas();
+      }
+    });
+    card.addEventListener('click', () => openSalaDetail(sala));
+    salasGrid.appendChild(card);
+  });
+  const newCard = document.createElement('div');
+  newCard.className = 'new-sala-btn';
+  newCard.innerHTML = '<span>+</span><span class="new-sala-text">Nueva sala</span>';
+  newCard.addEventListener('click', () => {
+    document.getElementById('newSalaInput').value = '';
+    document.getElementById('createSalaModal').classList.add('visible');
+    document.getElementById('newSalaInput').focus();
+  });
+  salasGrid.appendChild(newCard);
+}
+
+document.getElementById('closeCreateSala').addEventListener('click', () => {
+  document.getElementById('createSalaModal').classList.remove('visible');
+});
+
+document.getElementById('confirmCreateSala').addEventListener('click', () => {
+  const name = document.getElementById('newSalaInput').value.trim();
+  if (name) {
+    salas.push({ name: name, id: Date.now() });
+    saveSalas();
+    renderSalas();
+    document.getElementById('createSalaModal').classList.remove('visible');
+  }
+});
+
+document.getElementById('newSalaInput').addEventListener('keypress', (e) => {
+  if (e.key === 'Enter') document.getElementById('confirmCreateSala').click();
+});
+
+function openSalaDetail(sala) {
+  currentSala = sala;
+  salaDetailName.textContent = sala.name.toUpperCase();
+  showScreen(salaDetailScreen);
+}
+
+goToExperience.addEventListener('click', () => {
+  if (currentSala) {
+    const url = getBaseUrl() + '/?sala=' + currentSala.name.toLowerCase().replace(/\s+/g, '-');
+    window.open(url, '_blank');
+  }
+});
+
+shareQrBtn.addEventListener('click', () => {
+  if (!currentSala) return;
+  const url = getBaseUrl() + '/?sala=' + currentSala.name.toLowerCase().replace(/\s+/g, '-');
+  qrFullscreenTitle.textContent = currentSala.name.toUpperCase();
+  qrFullscreenLink.textContent = url;
+  qrCodeBox.innerHTML = '';
+  
+  const debug = document.getElementById('qrUrlDebug');
+  if (url.includes('localhost')) {
+    debug.textContent = '⚠ localhost no funciona en celulares. Usá ⚙ para cambiar la URL';
+    debug.style.display = 'block';
+  } else {
+    debug.style.display = 'none';
+  }
+  new QRCode(qrCodeBox, {
+    text: url,
+    width: 196,
+    height: 196,
+    colorDark: "#0a0a0a",
+    colorLight: "#ffffff"
+  });
+  qrFullscreen.classList.add('visible');
+});
+
+shareLinkBtn.addEventListener('click', () => {
+  if (!currentSala) return;
+  const url = getBaseUrl() + '/?sala=' + currentSala.name.toLowerCase().replace(/\s+/g, '-');
+  copyUrl.textContent = url;
+  copySuccess.style.display = 'none';
+  copyModal.classList.add('visible');
+});
+
+qrFullscreen.addEventListener('click', (e) => {
+  if (e.target === qrFullscreen) qrFullscreen.classList.remove('visible');
+});
+
+copyModal.addEventListener('click', (e) => {
+  if (e.target === copyModal) copyModal.classList.remove('visible');
+});
+
+document.getElementById('closeCopyModal').addEventListener('click', () => copyModal.classList.remove('visible'));
+
+doCopyBtn.addEventListener('click', () => {
+  navigator.clipboard.writeText(copyUrl.textContent).then(() => {
+    copySuccess.style.display = 'block';
+    setTimeout(() => copyModal.classList.remove('visible'), 1500);
+  });
+});
+
+document.getElementById('backFromSala').addEventListener('click', () => showScreen(dashboardScreen));
+
+logoutBtn.addEventListener('click', async () => {
+  await auth.signOut();
+  currentUser = null;
+  profiles = [];
+  currentProfile = null;
+  showScreen(profilesScreen);
+});
+
+auth.onAuthStateChanged((user) => {
+  if (user) {
+    currentUser = user;
+    loadProfiles();
+    showScreen(profilesScreen);
+  } else {
+    showScreen(authScreen);
+  }
+});
+</script>
+</body>
+</html>
