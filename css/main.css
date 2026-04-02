@@ -82,8 +82,9 @@ body, html {
 }
 
 .title {
-  @apply text-xl tracking-widest uppercase text-gray-500 mb-8 font-bold;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+  @apply text-xl tracking-widest uppercase mb-8 font-bold;
+  color: #9ca3af;
+  text-shadow: 3px 3px 6px rgba(0,0,0,0.9);
 }
 
 #points {
