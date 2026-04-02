@@ -107,7 +107,7 @@
     }
     lastProgress = progress;
     
-    bar.className = colorClass;
+    bar.className = `${colorClass} h-full rounded`;
 
     const points = data.points;
 
