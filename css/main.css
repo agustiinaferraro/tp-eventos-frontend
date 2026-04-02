@@ -124,9 +124,16 @@ body, html {
 }
 
 .milestone-num {
-  @apply absolute text-xs;
+  @apply absolute;
   bottom: 8px;
   white-space: nowrap;
+  font-size: 0.75rem;
+  font-weight: bold;
+}
+
+.milestone-num.big {
+  font-size: 1rem;
+  font-weight: 900;
 }
 
 .milestone-center .milestone-num {
