@@ -1,28 +1,107 @@
 <!DOCTYPE html>
-<html>
+<html lang="es" class="overflow-hidden">
 <head>
-  <!-- Título de la página -->
-  <title>Experiencia Evento</title>
-
-  <!-- Conexión al archivo de estilos -->
-  <link rel="stylesheet" href="/css/style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Evento Interactivo</title>
+  <link rel="stylesheet" href="/css/main.css">
 </head>
+<body class="bg-black text-white h-full overflow-hidden">
 
-<body>
+  <div class="motion-overlay" id="motionOverlay">
+    <button class="enable-motion-btn" id="enableMotionBtn">TOCÁ PARA ACTIVAR SENSORES</button>
+  </div>
 
-<!-- Contador de puntos -->
-<div id="points">0</div>
+  <main class="flex flex-col items-center justify-center h-screen px-4">
+    <header class="text-center">
+      <p class="title" id="eventTitle">Evento</p>
+      <div>
+        <div id="points" class="orange">0</div>
+        <p class="label">puntos</p>
+        <p class="text-lg text-gray-500 mt-4 tracking-wide text-center px-5" id="pumpsToGo">Incliná el teléfono</p>
+        <div class="tilt-indicator" id="tiltIndicator">
+          <div class="phone-icon">📱</div>
+          <p class="text-sm text-gray-400 mt-2 tracking-wider uppercase">Incliná para arriba y abajo</p>
+        </div>
+      </div>
+    </header>
 
-<!-- Contenedor de la barra de progreso -->
-<div id="bar-container">
-  <div id="bar"></div>
-</div>
+    <section class="w-full max-w-md mt-8 mb-8 box-border">
+      <div class="relative h-6 mb-1 w-full box-border" id="progressLabels">
+        <span class="milestone milestone-orange absolute text-xs" style="left: 0%">0</span>
+        <span class="absolute text-xs text-gray-500" style="left: 10%">100</span>
+        <span class="absolute text-xs text-gray-500" style="left: 20%">200</span>
+        <span class="absolute text-xs text-gray-500" style="left: 30%">300</span>
+        <span class="absolute text-xs text-gray-500" style="left: 40%">400</span>
+        <span class="milestone milestone-yellow absolute text-xs" style="left: 50%">500</span>
+        <span class="absolute text-xs text-gray-500" style="left: 60%">600</span>
+        <span class="absolute text-xs text-gray-500" style="left: 70%">700</span>
+        <span class="absolute text-xs text-gray-500" style="left: 80%">800</span>
+        <span class="milestone milestone-green absolute text-xs" style="left: 100%; transform: translateX(-100%)">1000</span>
+      </div>
+      <div id="bar-container" class="h-2 bg-neutral-900 rounded w-full box-border">
+        <div id="bar" class="orange h-full w-0 rounded"></div>
+      </div>
+    </section>
+  </main>
 
-<!-- Librería de Socket.IO para conexión en tiempo real -->
-<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+  <div class="boost-overlay" id="boostOverlay">
+    <div class="text-center animate-boost-zoom">
+      <p class="boost-title">¡ZONA BOOST!</p>
+      <p class="boost-text">Puntos x2 hasta los <span id="boostTarget" class="text-yellow-400 font-bold">500</span></p>
+    </div>
+  </div>
 
-<!-- Archivo principal de JavaScript -->
-<script type="module" src="/js/main.js"></script>
+  <div class="gesture-overlay" id="gestureOverlay">
+    <div class="text-center">
+      <p class="gesture-label" id="gestureLabel">¡GESTO REQUERIDO!</p>
+      <div class="gesture-icon" id="gestureIcon"></div>
+      <p class="gesture-name" id="gestureName">BOMBEAR</p>
+      <div class="gesture-timer" id="gestureTimer"></div>
+      <p class="gesture-instruction" id="gestureInstruction">Agitá el celular arriba y abajo</p>
+    </div>
+  </div>
+
+  <div class="near-threshold-overlay" id="nearThresholdOverlay">
+    <div class="text-center">
+      <p class="near-threshold-title">¡ÚLTIMO MOMENTO!</p>
+      <p class="text-xl mb-4">Hagan el <span id="thresholdGesture" class="text-yellow-400 font-bold">MISMO GESTO</span> todos juntos</p>
+      <p class="text-lg" id="thresholdCount">Repeticiones: 0/5</p>
+    </div>
+  </div>
+
+  <div class="gesture-feedback" id="gestureFeedback">
+    <div class="h-2 bg-neutral-800 rounded overflow-hidden mb-2">
+      <div class="h-full bg-green-500 transition-all" id="feedbackFill"></div>
+    </div>
+    <p class="text-sm text-gray-400" id="feedbackText">Haciendo el gesto...</p>
+  </div>
+
+  <div class="motion-indicator" id="motionIndicator"></div>
+
+  <div class="effects-container" id="effectsContainer">
+    <div class="effects-particles" id="effectsParticles"></div>
+    <div class="effects-rays"></div>
+    <div class="effects-orbs"></div>
+    <div class="effects-glow"></div>
+  </div>
+
+  <div class="unlock-effects" id="unlockEffects">
+    <div class="effects-particles-burst" id="effectsParticlesBurst"></div>
+    <div class="effects-flash"></div>
+    <div class="text-center animate-effects-appear">
+      <p class="effects-title">¡EFECTOS DESBLOQUEADOS!</p>
+      <p class="effects-subtitle" id="effectsSubtitle">Nivel 2 activado</p>
+    </div>
+  </div>
+
+  <footer class="footer py-4 text-center">
+    <span class="connection-status" id="connectionStatus"></span>
+    <span id="connectionText" class="text-xs tracking-widest uppercase">CONECTANDO</span>
+  </footer>
+
+  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+  <script type="module" src="/js/main.js"></script>
 
 </body>
 </html>
