@@ -116,24 +116,27 @@ body, html {
 }
 
 .milestone {
-  text-align: center;
-  width: 30px;
-}
-
-.milestone::after {
-  content: '';
   @apply absolute;
-  bottom: -8px;
-  left: 0;
-  width: 2px;
+  bottom: 0;
   height: 6px;
+  width: 2px;
   background: currentColor;
 }
 
-.milestone-center::after {
+.milestone-num {
+  @apply absolute text-xs;
+  bottom: 8px;
+  white-space: nowrap;
+}
+
+.milestone-center .milestone-num {
   left: 50%;
   transform: translateX(-50%);
-  width: 2px;
+}
+
+.milestone-center {
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .milestone-orange { color: #ff6b00; }
