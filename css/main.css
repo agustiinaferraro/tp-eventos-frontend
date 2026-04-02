@@ -229,7 +229,7 @@ body, html {
 .motion-indicator.active { @apply opacity-100; }
 
 .effects-container {
-  @apply fixed inset-0 pointer-events-none z-[1] overflow-hidden hidden;
+  @apply fixed inset-0 pointer-events-none z-0 overflow-hidden hidden;
 }
 .effects-container.active { @apply block; }
 
