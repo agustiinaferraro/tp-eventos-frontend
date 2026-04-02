@@ -119,8 +119,7 @@ body, html {
   content: '';
   @apply absolute;
   bottom: -8px;
-  left: 50%;
-  transform: translateX(-50%);
+  right: 0;
   width: 2px;
   height: 6px;
   background: currentColor;
