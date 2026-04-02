@@ -119,10 +119,17 @@ body, html {
   content: '';
   @apply absolute;
   bottom: -8px;
-  right: 0;
+  left: 50%;
+  transform: translateX(-50%);
   width: 2px;
   height: 6px;
   background: currentColor;
+}
+
+.milestone-end::after {
+  left: auto;
+  right: 0;
+  transform: none;
 }
 
 .milestone-orange { color: #ff6b00; }
