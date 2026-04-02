@@ -57,7 +57,7 @@
   const tiltIndicator = document.getElementById("tiltIndicator");
   const pumpsToGoEl = document.getElementById("pumpsToGo");
 
-  const THRESHOLDS = [0, 50, 500, 1000];
+  const THRESHOLDS = [0, 500, 1000];
 
   function getNextThreshold(currentPoints) {
     for (const threshold of THRESHOLDS) {
@@ -171,8 +171,7 @@
       const nextThreshold = getNextThreshold(points);
       const remaining = nextThreshold - Math.floor(points);
       let targetColor = '#888';
-      if (nextThreshold === 50) targetColor = '#ff6b00';
-      else if (nextThreshold === 500) targetColor = '#ffdd00';
+      if (nextThreshold === 500) targetColor = '#ffdd00';
       else if (nextThreshold === 1000) targetColor = '#00ff88';
       pumpsToGoEl.innerHTML = `Faltan <span style="color:#fff;font-weight:bold">${remaining}</span> movimientos para llegar a los <span style="color:${targetColor}">${nextThreshold}</span> puntos`;
     }
