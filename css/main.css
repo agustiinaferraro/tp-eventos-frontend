@@ -126,6 +126,12 @@ body, html {
   background: currentColor;
 }
 
+.milestone-end::after {
+  left: auto;
+  right: 0;
+  transform: none;
+}
+
 .milestone-orange { color: #ff6b00; }
 .milestone-yellow { color: #ffdd00; }
 .milestone-green { color: #00ff88; }
