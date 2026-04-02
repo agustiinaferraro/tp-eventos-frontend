@@ -174,7 +174,7 @@
       if (nextThreshold === 50) targetColor = '#ff6b00';
       else if (nextThreshold === 500) targetColor = '#ffdd00';
       else if (nextThreshold === 1000) targetColor = '#00ff88';
-      pumpsToGoEl.innerHTML = `Faltan <span style="color:#fff;font-size:1.3em;font-weight:900">${remaining}</span> movimientos para llegar a los <span style="color:${targetColor}">${nextThreshold}</span> puntos`;
+      pumpsToGoEl.innerHTML = `Faltan <span style="color:#fff;font-weight:bold">${remaining}</span> movimientos para llegar a los <span style="color:${targetColor}">${nextThreshold}</span> puntos`;
     }
 
     if (titleEl && data.room) {
