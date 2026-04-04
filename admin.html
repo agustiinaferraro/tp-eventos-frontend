@@ -255,21 +255,27 @@
       left: 30px;
       background: rgba(255,255,255,0.1);
       border: none;
-      color: #888;
+      color: #fff;
       width: 50px;
       height: 50px;
       border-radius: 50%;
       cursor: pointer;
-      font-size: 1.5rem;
+      font-size: 1.2rem;
       display: flex;
       align-items: center;
       justify-content: center;
       transition: all 0.3s;
       z-index: 100;
+      padding: 0;
+      line-height: 1;
     }
     .back-btn:hover { 
       background: rgba(255,255,255,0.2);
-      color: #fff;
+    }
+    .back-btn::before {
+      content: '‹';
+      font-size: 2rem;
+      font-weight: 300;
     }
     .modal {
       display: none;
@@ -514,7 +520,7 @@
 
   <!-- REGISTER -->
   <div class="screen" id="registerScreen">
-    <button class="back-btn" id="backFromRegister">←</button>
+    <button class="back-btn" id="backFromRegister"></button>
   <h1 class="title">CREAR CUENTA</h1>
   <input type="text" class="input-field" id="regName" placeholder="Tu nombre">
   <input type="email" class="input-field" id="regEmail" placeholder="Email">
@@ -534,7 +540,7 @@
 
   <!-- ADD/EDIT PROFILE -->
   <div class="screen" id="profileEditScreen">
-    <button class="back-btn" id="backFromProfileEdit">←</button>
+    <button class="back-btn" id="backFromProfileEdit"></button>
   <h1 class="title" id="profileEditTitle">NUEVO PERFIL</h1>
   <div class="profile-avatar" id="profileAvatarPreview" style="width:120px;height:120px;font-size:3rem;margin-bottom:30px;background:#222;border:3px solid #333;">?</div>
   <div class="color-picker" id="colorPicker"></div>
@@ -562,7 +568,7 @@
 
   <!-- SALA DETAIL -->
   <div class="screen" id="salaDetailScreen">
-    <button class="back-btn" id="backFromSala">←</button>
+    <button class="back-btn" id="backFromSala"></button>
   <h1 class="title" id="salaDetailName"></h1>
   <button class="action-btn" id="goToExperience">IR A LA EXPERIENCIA</button>
   <div class="share-btns">
