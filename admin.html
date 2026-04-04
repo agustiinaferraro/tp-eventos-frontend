@@ -250,16 +250,27 @@
     .new-sala-btn:hover { border-color: #00ff88; color: #00ff88; }
     .new-sala-text { font-size: 0.7rem; margin-top: 5px; }
     .back-btn {
-      background: transparent;
+      position: fixed;
+      top: 30px;
+      left: 30px;
+      background: rgba(255,255,255,0.1);
       border: none;
-      color: #666;
-      font-size: 0.9rem;
+      color: #888;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
       cursor: pointer;
-      align-self: flex-start;
-      margin-bottom: 30px;
-      letter-spacing: 1px;
+      font-size: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s;
+      z-index: 100;
     }
-    .back-btn:hover { color: #fff; }
+    .back-btn:hover { 
+      background: rgba(255,255,255,0.2);
+      color: #fff;
+    }
     .modal {
       display: none;
       position: fixed;
@@ -473,6 +484,17 @@
       .qr-fullscreen-link { font-size: 0.9rem; }
       .profiles-grid { grid-template-columns: repeat(2, 1fr); }
       .salas-grid { grid-template-columns: 1fr; }
+      .back-btn {
+        position: static;
+        margin-bottom: 30px;
+        width: auto;
+        height: auto;
+        background: transparent;
+        border: none;
+        color: #666;
+        font-size: 0.9rem;
+        letter-spacing: 1px;
+      }
     }
   </style>
 </head>
@@ -490,9 +512,9 @@
   <p class="success-msg" id="authSuccess" style="display:none;"></p>
 </div>
 
-<!-- REGISTER -->
-<div class="screen" id="registerScreen">
-  <button class="back-btn" id="backFromRegister">← Volver</button>
+  <!-- REGISTER -->
+  <div class="screen" id="registerScreen">
+    <button class="back-btn" id="backFromRegister">←</button>
   <h1 class="title">CREAR CUENTA</h1>
   <input type="text" class="input-field" id="regName" placeholder="Tu nombre">
   <input type="email" class="input-field" id="regEmail" placeholder="Email">
@@ -510,9 +532,9 @@
   <button class="link-btn" id="manageAccount">Gestionar cuentas</button>
 </div>
 
-<!-- ADD/EDIT PROFILE -->
-<div class="screen" id="profileEditScreen">
-  <button class="back-btn" id="backFromProfileEdit">← Volver</button>
+  <!-- ADD/EDIT PROFILE -->
+  <div class="screen" id="profileEditScreen">
+    <button class="back-btn" id="backFromProfileEdit">←</button>
   <h1 class="title" id="profileEditTitle">NUEVO PERFIL</h1>
   <div class="profile-avatar" id="profileAvatarPreview" style="width:120px;height:120px;font-size:3rem;margin-bottom:30px;background:#222;border:3px solid #333;">?</div>
   <div class="color-picker" id="colorPicker"></div>
@@ -538,9 +560,9 @@
   <div class="salas-grid" id="salasGrid"></div>
 </div>
 
-<!-- SALA DETAIL -->
-<div class="screen" id="salaDetailScreen">
-  <button class="back-btn" id="backFromSala">← Volver</button>
+  <!-- SALA DETAIL -->
+  <div class="screen" id="salaDetailScreen">
+    <button class="back-btn" id="backFromSala">←</button>
   <h1 class="title" id="salaDetailName"></h1>
   <button class="action-btn" id="goToExperience">IR A LA EXPERIENCIA</button>
   <div class="share-btns">
