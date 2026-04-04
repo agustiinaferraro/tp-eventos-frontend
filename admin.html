@@ -603,6 +603,7 @@
 
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
 const LOCAL_URL = "http://localhost:5173";
@@ -635,6 +636,7 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
+const db = firebase.firestore();
 
 const COLORS = ['#ff6b00', '#00ff88', '#00aaff', '#ff00ff', '#ffff00', '#ff3366', '#33ff99', '#9966ff'];
 
@@ -813,11 +815,19 @@ regBtn.addEventListener('click', async () => {
 function loadProfiles() {
   const saved = localStorage.getItem('profiles_' + currentUser.uid);
   profiles = saved ? JSON.parse(saved) : [];
-  renderProfiles();
+  db.collection('users').doc(currentUser.uid).get().then(doc => {
+    if (doc.exists && doc.data().profiles) {
+      profiles = doc.data().profiles;
+    }
+    renderProfiles();
+  }).catch(() => {
+    renderProfiles();
+  });
 }
 
 function saveProfiles() {
   localStorage.setItem('profiles_' + currentUser.uid, JSON.stringify(profiles));
+  db.collection('users').doc(currentUser.uid).set({ profiles: profiles }, { merge: true });
 }
 
 function renderProfiles() {
@@ -948,11 +958,19 @@ manageAccount.addEventListener('click', async () => {
 function loadSalas() {
   const saved = localStorage.getItem('salas_' + currentUser.uid + '_' + currentProfile.name);
   salas = saved ? JSON.parse(saved) : [];
-  renderSalas();
+  db.collection('users').doc(currentUser.uid).collection('profiles').doc(currentProfile.name).get().then(doc => {
+    if (doc.exists && doc.data().salas) {
+      salas = doc.data().salas;
+    }
+    renderSalas();
+  }).catch(() => {
+    renderSalas();
+  });
 }
 
 function saveSalas() {
   localStorage.setItem('salas_' + currentUser.uid + '_' + currentProfile.name, JSON.stringify(salas));
+  db.collection('users').doc(currentUser.uid).collection('profiles').doc(currentProfile.name).set({ salas: salas }, { merge: true });
 }
 
 function renderSalas() {
