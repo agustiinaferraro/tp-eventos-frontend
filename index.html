@@ -5,6 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <title>Evento Interactivo</title>
   <link rel="stylesheet" href="/css/main.css">
+  <script>
+    if (!window.location.search.includes('sala=')) {
+      window.location.href = '/admin.html';
+    }
+  </script>
 </head>
 <body class="bg-black text-white h-full overflow-hidden">
 
