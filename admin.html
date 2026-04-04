@@ -33,9 +33,9 @@
       width: 100%;
       max-width: 350px;
       background: transparent;
-      border: 2px solid #555;
+      border: 2px solid #666;
       color: #fff;
-      font-size: 1rem;
+      font-size: 1.1rem;
       padding: 15px 20px;
       border-radius: 8px;
       outline: none;
@@ -44,15 +44,16 @@
       margin-bottom: 15px;
     }
     .input-field:focus { border-color: #00ff88; }
-    .input-field::placeholder { color: #888; }
+    .input-field::placeholder { color: #aaa; }
+
     .btn {
       width: 100%;
       max-width: 350px;
       margin-top: 10px;
       background: transparent;
-      border: 2px solid #666;
-      color: #aaa;
-      font-size: 0.9rem;
+      border: 2px solid #777;
+      color: #ccc;
+      font-size: 1rem;
       padding: 15px 40px;
       border-radius: 8px;
       cursor: not-allowed;
@@ -61,24 +62,35 @@
     }
     .btn.ready {
       border-color: #00ff88;
-      color: #00ff88;
+      color: #fff;
       cursor: pointer;
     }
     .btn.ready:hover {
       background: #00ff88;
       color: #0a0a0a;
+      transform: scale(1.05);
     }
-    .btn.ready:active { transform: scale(0.98); }
+    .btn.ready:active { 
+      transform: scale(0.95);
+      background: #00cc6a;
+    }
     .link-btn {
       background: transparent;
       border: none;
       color: #00ff88;
-      font-size: 0.8rem;
+      font-size: 0.9rem;
       cursor: pointer;
       margin-top: 20px;
       letter-spacing: 1px;
+      transition: all 0.3s;
     }
-    .link-btn:hover { text-decoration: underline; }
+    .link-btn:hover { 
+      color: #33ffaa;
+      transform: scale(1.05);
+    }
+    .link-btn:active {
+      transform: scale(0.95);
+    }
     .error-msg {
       color: #ff3333;
       font-size: 0.75rem;
@@ -118,13 +130,16 @@
     }
     .profile-card:hover .profile-avatar {
       border-color: #00ff88;
-      transform: scale(1.05);
+      transform: scale(1.1);
+    }
+    .profile-card:active .profile-avatar {
+      transform: scale(0.95);
     }
     .profile-avatar {
       width: 100px;
       height: 100px;
       border-radius: 50%;
-      border: 3px solid #333;
+      border: 3px solid #555;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -134,11 +149,17 @@
     }
     .profile-name {
       margin-top: 15px;
-      font-size: 0.9rem;
-      color: #ccc;
+      font-size: 1rem;
+      color: #ddd;
       letter-spacing: 1px;
     }
-    .profile-card:hover .profile-name { color: #fff; }
+    .profile-card:hover .profile-name { 
+      color: #fff;
+      transform: scale(1.1);
+    }
+    .profile-card:active .profile-name {
+      transform: scale(0.95);
+    }
     .add-profile {
       display: flex;
       flex-direction: column;
@@ -149,15 +170,22 @@
       width: 100px;
       height: 100px;
       border-radius: 50%;
-      border: 3px dashed #333;
+      border: 3px dashed #555;
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 3rem;
-      color: #333;
+      color: #555;
       transition: all 0.3s;
     }
-    .add-profile:hover .add-icon { border-color: #00ff88; color: #00ff88; }
+    .add-profile:hover .add-icon { 
+      border-color: #00ff88; 
+      color: #00ff88;
+      transform: scale(1.1);
+    }
+    .add-profile:active .add-icon {
+      transform: scale(0.95);
+    }
     .add-profile:hover .profile-name { color: #00ff88; }
     .dashboard-header {
       width: 100%;
@@ -180,21 +208,29 @@
       font-size: 1rem;
       color: #00ff88;
     }
-    .user-name { font-size: 0.9rem; color: #ccc; letter-spacing: 2px; }
+    .user-name { font-size: 1rem; color: #ddd; letter-spacing: 2px; }
     .logout-btn {
       background: transparent;
-      border: 1px solid #666;
-      color: #ccc;
-      font-size: 0.8rem;
+      border: 1px solid #777;
+      color: #ddd;
+      font-size: 0.85rem;
       padding: 8px 15px;
       border-radius: 6px;
       cursor: pointer;
       letter-spacing: 1px;
+      transition: all 0.3s;
     }
-    .logout-btn:hover { border-color: #ff3333; color: #ff3333; }
+    .logout-btn:hover { 
+      border-color: #ff3333; 
+      color: #ff3333;
+      transform: scale(1.05);
+    }
+    .logout-btn:active {
+      transform: scale(0.95);
+    }
     .section-title {
-      font-size: 0.8rem;
-      color: #999;
+      font-size: 0.9rem;
+      color: #bbb;
       letter-spacing: 3px;
       margin-bottom: 15px;
       text-transform: uppercase;
@@ -212,30 +248,43 @@
     }
     .sala-card {
       background: #111;
-      border: 1px solid #222;
+      border: 1px solid #444;
       border-radius: 8px;
       padding: 20px;
       cursor: pointer;
       transition: all 0.3s;
       position: relative;
     }
-    .sala-card:hover { border-color: #00ff88; }
-    .sala-name { font-size: 1.1rem; color: #fff; margin-bottom: 5px; }
-    .sala-status { font-size: 0.8rem; color: #888; }
+    .sala-card:hover { 
+      border-color: #00ff88;
+      transform: scale(1.02);
+    }
+    .sala-card:active {
+      transform: scale(0.98);
+    }
+    .sala-name { font-size: 1.2rem; color: #fff; margin-bottom: 5px; }
+    .sala-status { font-size: 0.9rem; color: #aaa; }
     .sala-delete {
       position: absolute;
       top: 10px;
       right: 10px;
       background: transparent;
       border: none;
-      color: #444;
+      color: #666;
       font-size: 1.2rem;
       cursor: pointer;
+      transition: all 0.3s;
     }
-    .sala-delete:hover { color: #ff3333; }
+    .sala-delete:hover { 
+      color: #ff3333;
+      transform: scale(1.2);
+    }
+    .sala-delete:active {
+      transform: scale(0.9);
+    }
     .new-sala-btn {
       background: transparent;
-      border: 2px dashed #333;
+      border: 2px dashed #555;
       border-radius: 8px;
       padding: 20px;
       cursor: pointer;
@@ -244,11 +293,18 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      color: #444;
+      color: #777;
       font-size: 2rem;
     }
-    .new-sala-btn:hover { border-color: #00ff88; color: #00ff88; }
-    .new-sala-text { font-size: 0.7rem; margin-top: 5px; }
+    .new-sala-btn:hover { 
+      border-color: #00ff88; 
+      color: #00ff88;
+      transform: scale(1.05);
+    }
+    .new-sala-btn:active {
+      transform: scale(0.95);
+    }
+    .new-sala-text { font-size: 0.9rem; margin-top: 5px; }
     .back-btn {
       position: fixed;
       top: 30px;
@@ -394,16 +450,23 @@
     .share-btn {
       flex: 1;
       background: #111;
-      border: 1px solid #333;
-      color: #fff;
-      font-size: 0.8rem;
+      border: 1px solid #555;
+      color: #ddd;
+      font-size: 0.9rem;
       padding: 12px 20px;
       border-radius: 8px;
       cursor: pointer;
       letter-spacing: 1px;
       transition: all 0.3s;
     }
-    .share-btn:hover { border-color: #00ff88; color: #00ff88; }
+    .share-btn:hover { 
+      border-color: #00ff88; 
+      color: #00ff88;
+      transform: scale(1.05);
+    }
+    .share-btn:active {
+      transform: scale(0.95);
+    }
     .copy-content {
       width: 100%;
       max-width: 350px;
