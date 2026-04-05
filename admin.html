@@ -1270,6 +1270,8 @@ function editProfile(i) {
     profileAvatarPreview.style.background = COLORS[0];
     profileAvatarPreview.textContent = '?';
     deleteProfileBtn.style.display = 'none';
+    saveProfileBtn.disabled = true;
+    saveProfileBtn.classList.remove('ready');
     document.querySelectorAll('.color-option')[0].click();
   } else {
     profileEditTitle.textContent = 'EDITAR PERFIL';
@@ -1277,6 +1279,8 @@ function editProfile(i) {
     profileAvatarPreview.style.background = profiles[i].color;
     profileAvatarPreview.textContent = profiles[i].name.charAt(0).toUpperCase();
     deleteProfileBtn.style.display = 'block';
+    saveProfileBtn.disabled = false;
+    saveProfileBtn.classList.add('ready');
     COLORS.forEach((c, idx) => {
       document.querySelectorAll('.color-option')[idx].classList.toggle('selected', c === profiles[i].color);
     });
