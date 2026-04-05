@@ -261,15 +261,29 @@
       max-width: 1200px;
       display: flex;
       justify-content: flex-start;
-      align-items: center;
+      align-items: flex-start;
       padding: 0 20px;
       margin-bottom: 20px;
+      position: relative;
     }
     .user-menu { 
       display: flex; 
       align-items: center; 
-      gap: 15px; 
+      gap: 15px;
       position: relative;
+    }
+    .user-dropdown {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background: #1a1a1a;
+      border: 1px solid #444;
+      border-radius: 8px;
+      padding: 10px 0;
+      min-width: 150px;
+      z-index: 1000;
+      margin-top: 10px;
     }
     .user-avatar {
       width: 40px;
@@ -703,15 +717,15 @@
 </div>
 
 <!-- DASHBOARD -->
-<div class="screen" id="dashboardScreen">
+  <div class="screen" id="dashboardScreen">
   <div class="dashboard-header">
     <div class="user-menu" id="userMenuBtn" style="display:flex;align-items:center;gap:15px;cursor:pointer;">
       <div class="user-avatar" id="userAvatar"></div>
       <span class="user-name" id="userDisplay"></span>
       <span style="color:#888;font-size:1.5rem;">▼</span>
-    </div>
-    <div class="user-dropdown" id="userDropdown">
-      <div class="dropdown-item" id="logoutBtn">SALIR</div>
+      <div class="user-dropdown" id="userDropdown">
+        <div class="dropdown-item" id="logoutBtn">SALIR</div>
+      </div>
     </div>
   </div>
   <h1 class="dashboard-title">MIS SALAS</h1>
