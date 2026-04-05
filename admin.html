@@ -900,7 +900,6 @@ function showScreen(screen) {
 function validateAuthForm() {
   const ready = authEmail.value.includes('@') && authPassword.value.length >= 6;
   authBtn.classList.toggle('ready', ready);
-  authBtn.disabled = !ready;
 }
 
 const savedEmail = localStorage.getItem('lastEmail');
@@ -914,6 +913,7 @@ authPassword.addEventListener('input', validateAuthForm);
 setTimeout(validateAuthForm, 100);
 
 authBtn.addEventListener('click', async () => {
+  if (!authBtn.classList.contains('ready')) return;
   authError.textContent = '';
   try {
     const cred = await auth.signInWithEmailAndPassword(authEmail.value, authPassword.value);
