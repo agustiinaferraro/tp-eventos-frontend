@@ -1223,10 +1223,7 @@ deleteProfileBtn.addEventListener('click', () => {
 
 document.getElementById('backFromProfileEdit').addEventListener('click', () => showScreen(profilesScreen));
 
-manageAccount.addEventListener('click', async () => {
-  await auth.signOut();
-  currentUser = null;
-  profiles = [];
+manageAccount.addEventListener('click', () => {
   showScreen(authScreen);
 });
 
