@@ -221,6 +221,7 @@
       font-size: 1rem;
       color: #ddd;
       letter-spacing: 1px;
+      text-shadow: 0 0 10px rgba(0,0,0,0.8);
     }
     .profile-card:hover .profile-name { 
       color: #fff;
@@ -753,6 +754,31 @@
       color: #fff;
       transform: scale(0.95);
     }
+    #saveProfileBtn {
+      border-color: #00ff88;
+      color: #00ff88;
+    }
+    #saveProfileBtn:hover {
+      background: #00ff88;
+      color: #fff;
+    }
+    #saveProfileBtn:active {
+      background: #00cc6a;
+      border-color: #00cc6a;
+      color: #fff;
+      transform: scale(0.95);
+    }
+    #deleteProfileBtn:hover {
+      background: #b22222;
+      border-color: #b22222;
+      color: #fff;
+    }
+    #deleteProfileBtn:active {
+      background: #8b0000;
+      border-color: #8b0000;
+      color: #fff;
+      transform: scale(0.95);
+    }
     @media (max-width: 600px) {
       .qr-fullscreen-title { font-size: 1.8rem; }
       .qr-fullscreen-hint { font-size: 1rem; }
@@ -817,8 +843,8 @@
   <div class="profile-avatar" id="profileAvatarPreview" style="width:120px;height:120px;font-size:3rem;margin-bottom:30px;background:#222;border:3px solid #333;">?</div>
   <div class="color-picker" id="colorPicker"></div>
   <input type="text" class="input-field" id="profileName" placeholder="Nombre del perfil" maxlength="15">
-  <button class="btn" id="saveProfileBtn" disabled>GUARDAR</button>
-  <button class="btn" id="deleteProfileBtn" style="display:none;border-color:#ff3333;color:#ff3333;margin-top:10px;">ELIMINAR PERFIL</button>
+  <button class="btn" id="saveProfileBtn" disabled>Guardar</button>
+  <button class="btn" id="deleteProfileBtn" style="display:none;border-color:#b22222;margin-top:10px;">Eliminar perfil</button>
 </div>
 
 <!-- DASHBOARD -->
