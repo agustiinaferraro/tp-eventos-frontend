@@ -894,6 +894,17 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
+(function() {
+  const pw = document.getElementById('authPassword');
+  if (pw) {
+    pw.value = '';
+    pw.type = 'text';
+    setTimeout(() => { pw.type = 'password'; }, 100);
+  }
+  const em = document.getElementById('authEmail');
+  if (em) em.value = '';
+})();
+
 const LOCAL_URL = "http://localhost:5173";
 
 function getBaseUrl() {
@@ -1420,6 +1431,8 @@ auth.onAuthStateChanged((user) => {
     loadProfiles();
     showScreen(profilesScreen);
   } else {
+    authPassword.value = '';
+    authEmail.value = '';
     showScreen(authScreen);
   }
 });
