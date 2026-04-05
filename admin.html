@@ -755,16 +755,16 @@
       transform: scale(0.95);
     }
     #saveProfileBtn {
-      border-color: #00ff88;
-      color: #00ff88;
+      border-color: #00cc6a;
+      color: #00cc6a;
     }
     #saveProfileBtn:hover {
-      background: #00ff88;
+      background: #00cc6a;
       color: #fff;
     }
     #saveProfileBtn:active {
-      background: #00cc6a;
-      border-color: #00cc6a;
+      background: #009950;
+      border-color: #009950;
       color: #fff;
       transform: scale(0.95);
     }
@@ -833,7 +833,7 @@
 <div class="screen" id="profilesScreen">
   <h1 class="title">¿QUIÉN SOS?</h1>
   <div class="profiles-grid" id="profilesGrid"></div>
-  <button class="link-btn" id="manageAccount" style="margin-top:30px;">Gestionar cuentas</button>
+  <button class="link-btn" id="manageAccount" style="margin-top:30px;">Gestionar perfiles</button>
 </div>
 
   <!-- ADD/EDIT PROFILE -->
@@ -1188,7 +1188,7 @@ function renderProfiles() {
   profiles.forEach((profile, i) => {
     const card = document.createElement('div');
     card.className = 'profile-card';
-    card.innerHTML = '<div class="profile-avatar" style="background:' + profile.color + '">' + profile.name.charAt(0).toUpperCase() + '</div><p class="profile-name">' + profile.name + '</p><span class="profile-edit-btn">✏️</span>';
+    card.innerHTML = '<div class="profile-avatar" style="background:' + profile.color + '">' + profile.name.charAt(0).toUpperCase() + '</div><p class="profile-name">' + profile.name + '</p><span class="profile-edit-btn">&#9998;</span>';
     card.querySelector('.profile-avatar').addEventListener('click', (e) => {
       e.stopPropagation();
       selectProfile(i);
