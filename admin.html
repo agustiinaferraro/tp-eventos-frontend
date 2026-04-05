@@ -120,8 +120,8 @@
       margin-top: 10px;
       margin-bottom: 15px;
       background: transparent;
-      border: 2px solid #555;
-      color: #888;
+      border: 2px solid #00ff88;
+      color: #fff;
       font-size: 1rem;
       padding: 15px 40px;
       border-radius: 8px;
@@ -129,18 +129,13 @@
       letter-spacing: 2px;
       transition: all 0.3s;
     }
-    .btn.ready {
-      border-color: #00ff88;
-      color: #fff;
-      cursor: pointer;
-    }
-    .btn.ready:hover {
+    .btn:hover {
       background: #00cc6a;
       border-color: #00cc6a;
       color: #fff;
       transform: scale(1.05);
     }
-    .btn.ready:active { 
+    .btn:active { 
       transform: scale(0.95);
     }
     .link-btn {
@@ -903,16 +898,10 @@ function validateAuthForm() {
   authBtn.classList.toggle('ready', ready);
 }
 
-const savedEmail = localStorage.getItem('lastEmail');
-if (savedEmail) {
-  authEmail.value = savedEmail;
-}
-
 authEmail.addEventListener('input', validateAuthForm);
 authPassword.addEventListener('input', validateAuthForm);
 
-window.addEventListener('load', validateAuthForm);
-window.addEventListener('pageshow', validateAuthForm);
+setInterval(validateAuthForm, 100);
 
 authBtn.addEventListener('click', async () => {
   if (!authBtn.classList.contains('ready')) return;
