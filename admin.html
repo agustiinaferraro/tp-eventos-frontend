@@ -911,10 +911,7 @@ if (savedEmail) {
 authEmail.addEventListener('input', validateAuthForm);
 authPassword.addEventListener('input', validateAuthForm);
 
-if (authEmail.value.includes('@') && authPassword.value.length >= 6) {
-  authBtn.classList.add('ready');
-  authBtn.disabled = false;
-}
+setTimeout(validateAuthForm, 100);
 
 authBtn.addEventListener('click', async () => {
   authError.textContent = '';
