@@ -910,7 +910,12 @@ if (savedEmail) {
 authEmail.addEventListener('input', validateAuthForm);
 authPassword.addEventListener('input', validateAuthForm);
 
-setTimeout(validateAuthForm, 100);
+const interval = setInterval(() => {
+  validateAuthForm();
+  if (authEmail.value.includes('@') && authPassword.value.length >= 6) {
+    clearInterval(interval);
+  }
+}, 500);
 
 authBtn.addEventListener('click', async () => {
   if (!authBtn.classList.contains('ready')) return;
