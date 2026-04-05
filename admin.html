@@ -231,10 +231,16 @@
       transform: scale(0.95);
     }
     .profile-edit-btn {
+      position: absolute;
       font-size: 1.2rem;
-      margin-top: 8px;
-      opacity: 0.5;
+      opacity: 0;
       transition: all 0.2s;
+      color: #fff;
+      text-shadow: 0 0 5px rgba(0,0,0,0.8);
+      pointer-events: none;
+    }
+    .profile-avatar {
+      position: relative;
     }
     .profile-card:hover .profile-edit-btn {
       opacity: 1;
@@ -844,7 +850,7 @@
   <div class="color-picker" id="colorPicker"></div>
   <input type="text" class="input-field" id="profileName" placeholder="Nombre del perfil" maxlength="15">
   <button class="btn" id="saveProfileBtn" disabled>Guardar</button>
-  <button class="btn" id="deleteProfileBtn" style="display:none;border-color:#b22222;margin-top:10px;">Eliminar perfil</button>
+  <button class="btn" id="deleteProfileBtn" style="display:none;border-color:#b22222;color:#b22222;margin-top:10px;">Eliminar perfil</button>
 </div>
 
 <!-- DASHBOARD -->
@@ -1189,10 +1195,11 @@ function renderProfiles() {
   profiles.forEach((profile, i) => {
     const card = document.createElement('div');
     card.className = 'profile-card';
-    let html = '<div class="profile-avatar" style="background:' + profile.color + '">' + profile.name.charAt(0).toUpperCase() + '</div><p class="profile-name">' + profile.name + '</p>';
+    let html = '<div class="profile-avatar" style="background:' + profile.color + '">' + profile.name.charAt(0).toUpperCase();
     if (manageMode) {
       html += '<span class="profile-edit-btn">&#9998;</span>';
     }
+    html += '</div><p class="profile-name">' + profile.name + '</p>';
     card.innerHTML = html;
     card.querySelector('.profile-avatar').addEventListener('click', (e) => {
       e.stopPropagation();
