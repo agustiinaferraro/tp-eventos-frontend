@@ -1199,12 +1199,16 @@ COLORS.forEach((color, i) => {
   btn.addEventListener('click', () => {
     document.querySelectorAll('.color-option').forEach(c => c.classList.remove('selected'));
     btn.classList.add('selected');
-    if (!currentProfileImage) {
-      profileImagePreview.style.display = 'none';
-      profileImagePreview.src = '';
+    profileImagePreview.style.display = 'none';
+    profileImagePreview.src = '';
+    // Keep original profile image in memory for saving
+    if (editingProfileIndex >= 0) {
+      currentProfileImage = profiles[editingProfileIndex].image;
+    } else {
+      currentProfileImage = null;
     }
     profileAvatarPreview.style.background = color;
-    profileAvatarPreview.textContent = currentProfileImage ? '' : (profileName.value.charAt(0).toUpperCase() || '?');
+    profileAvatarPreview.textContent = profileName.value.charAt(0).toUpperCase() || '?';
     const saveBtn = document.getElementById('saveProfileBtn');
     if (profileName.value.trim().length > 0) {
       saveBtn.disabled = false;
