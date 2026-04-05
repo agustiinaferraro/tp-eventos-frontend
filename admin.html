@@ -1008,6 +1008,7 @@ function showScreen(screen) {
 
 function validateAuthForm() {
   const ready = authEmail.value.includes('@') && authPassword.value.length >= 6;
+  authBtn.disabled = !ready;
   authBtn.classList.toggle('ready', ready);
 }
 
