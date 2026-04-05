@@ -229,6 +229,19 @@
     .profile-card:active .profile-name {
       transform: scale(0.95);
     }
+    .profile-edit-btn {
+      font-size: 1.2rem;
+      margin-top: 8px;
+      opacity: 0.5;
+      transition: all 0.2s;
+    }
+    .profile-card:hover .profile-edit-btn {
+      opacity: 1;
+      transform: scale(1.2);
+    }
+    .profile-card:active .profile-edit-btn {
+      transform: scale(0.9);
+    }
     .add-profile {
       display: flex;
       flex-direction: column;
@@ -794,7 +807,7 @@
 <div class="screen" id="profilesScreen">
   <h1 class="title">¿QUIÉN SOS?</h1>
   <div class="profiles-grid" id="profilesGrid"></div>
-  <button class="link-btn" id="manageAccount">Gestionar cuentas</button>
+  <button class="link-btn" id="manageAccount" style="margin-top:30px;">Gestionar cuentas</button>
 </div>
 
   <!-- ADD/EDIT PROFILE -->
@@ -1149,9 +1162,22 @@ function renderProfiles() {
   profiles.forEach((profile, i) => {
     const card = document.createElement('div');
     card.className = 'profile-card';
-    card.innerHTML = '<div class="profile-avatar" style="background:' + profile.color + '">' + profile.name.charAt(0).toUpperCase() + '</div><p class="profile-name">' + profile.name + '</p>';
-    card.addEventListener('click', () => selectProfile(i));
-    card.addEventListener('dblclick', () => editProfile(i));
+    card.innerHTML = '<div class="profile-avatar" style="background:' + profile.color + '">' + profile.name.charAt(0).toUpperCase() + '</div><p class="profile-name">' + profile.name + '</p><span class="profile-edit-btn">✏️</span>';
+    card.querySelector('.profile-avatar').addEventListener('click', (e) => {
+      e.stopPropagation();
+      selectProfile(i);
+    });
+    card.querySelector('.profile-name').addEventListener('click', (e) => {
+      e.stopPropagation();
+      selectProfile(i);
+    });
+    card.querySelector('.profile-edit-btn').addEventListener('click', (e) => {
+      e.stopPropagation();
+      editProfile(i);
+    });
+    card.querySelector('.profile-avatar').style.cursor = 'pointer';
+    card.querySelector('.profile-name').style.cursor = 'pointer';
+    card.querySelector('.profile-edit-btn').style.cursor = 'pointer';
     profilesGrid.appendChild(card);
   });
   const addCard = document.createElement('div');
