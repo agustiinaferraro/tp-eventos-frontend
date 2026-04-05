@@ -895,14 +895,17 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
 (function() {
-  const pw = document.getElementById('authPassword');
-  if (pw) {
-    pw.value = '';
-    pw.type = 'text';
-    setTimeout(() => { pw.type = 'password'; }, 100);
+  if (sessionStorage.getItem('clearAuth') === '1') {
+    sessionStorage.removeItem('clearAuth');
+    const pw = document.getElementById('authPassword');
+    if (pw) {
+      pw.value = '';
+      pw.type = 'text';
+      setTimeout(() => { pw.type = 'password'; }, 100);
+    }
+    const em = document.getElementById('authEmail');
+    if (em) em.value = '';
   }
-  const em = document.getElementById('authEmail');
-  if (em) em.value = '';
 })();
 
 const LOCAL_URL = "http://localhost:5173";
@@ -1371,7 +1374,8 @@ if (userMenuBtn && userDropdown) {
 
 document.getElementById('logoutBtn').addEventListener('click', async () => {
   await auth.signOut();
-  window.location.reload();
+  sessionStorage.setItem('clearAuth', '1');
+  window.location.href = window.location.pathname;
 });
 
 document.getElementById('switchAccountBtn').addEventListener('click', (e) => {
