@@ -665,6 +665,48 @@
       color: #666;
     }
     .ngrok-status.active { color: #00ff88; }
+    .saved-account-item {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      padding: 15px 20px;
+      background: #1a1a1a;
+      border: 1px solid #333;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-bottom: 10px;
+    }
+    .saved-account-item:hover {
+      border-color: #00ff88;
+      transform: scale(1.02);
+    }
+    .saved-account-item:active {
+      transform: scale(0.98);
+    }
+    .saved-account-avatar {
+      width: 40px;
+      height: 40px;
+      background: #222;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      color: #00ff88;
+    }
+    .saved-account-info {
+      flex: 1;
+    }
+    .saved-account-email {
+      font-size: 0.9rem;
+      color: #fff;
+    }
+    .saved-account-label {
+      font-size: 0.7rem;
+      color: #666;
+      margin-top: 2px;
+    }
     @media (max-width: 600px) {
       .qr-fullscreen-title { font-size: 1.8rem; }
       .qr-fullscreen-hint { font-size: 1rem; }
@@ -693,6 +735,14 @@
   <p class="error-msg" id="authError"></p>
   <p class="success-msg" id="authSuccess" style="display:none;"></p>
 </div>
+
+  <!-- SWITCH ACCOUNT MODAL -->
+  <div class="modal" id="switchAccountModal">
+    <button class="modal-close" id="closeSwitchAccount">×</button>
+    <p class="modal-title">CAMBIAR CUENTA</p>
+    <div id="savedAccountsList" style="width:100%;max-width:350px;margin-bottom:20px;"></div>
+    <button class="btn" id="signOutAllBtn" style="border-color:#ff3333;color:#ff3333;margin-top:10px;">CERRAR TODAS LAS SESIONES</button>
+  </div>
 
   <!-- REGISTER -->
   <div class="screen" id="registerScreen">
@@ -733,7 +783,8 @@
       <span class="user-name" id="userDisplay"></span>
       <span style="color:#888;font-size:1.5rem;">▼</span>
       <div class="user-dropdown" id="userDropdown">
-        <div class="dropdown-item" id="logoutBtn">SALIR</div>
+        <div class="dropdown-item" id="switchAccountBtn">Cambiar cuenta</div>
+        <div class="dropdown-item" id="logoutBtn">Cerrar sesión</div>
       </div>
     </div>
   </div>
@@ -940,6 +991,11 @@ authBtn.addEventListener('click', async () => {
     const cred = await auth.signInWithEmailAndPassword(authEmail.value, authPassword.value);
     currentUser = cred.user;
     localStorage.setItem('lastEmail', authEmail.value);
+    const savedEmails = JSON.parse(localStorage.getItem('savedAccounts') || '[]');
+    if (!savedEmails.includes(authEmail.value)) {
+      savedEmails.push(authEmail.value);
+      localStorage.setItem('savedAccounts', JSON.stringify(savedEmails));
+    }
     loadProfiles();
     showScreen(profilesScreen);
   } catch (err) {
@@ -998,6 +1054,11 @@ regBtn.addEventListener('click', async () => {
     const cred = await auth.createUserWithEmailAndPassword(regEmail.value, regPassword.value);
     await cred.user.updateProfile({ displayName: regName.value.trim() });
     await auth.sendEmailVerification(cred.user);
+    const savedEmails = JSON.parse(localStorage.getItem('savedAccounts') || '[]');
+    if (!savedEmails.includes(regEmail.value)) {
+      savedEmails.push(regEmail.value);
+      localStorage.setItem('savedAccounts', JSON.stringify(savedEmails));
+    }
     regError.className = 'success-msg';
     regError.textContent = '¡Cuenta creada! Verificá tu email';
     regBtn.textContent = 'CUENTA CREADA';
@@ -1269,7 +1330,58 @@ document.getElementById('logoutBtn').addEventListener('click', async () => {
   profiles = [];
   currentProfile = null;
   userDropdown.classList.remove('active');
-  showScreen(profilesScreen);
+  showScreen(authScreen);
+});
+
+document.getElementById('switchAccountBtn').addEventListener('click', (e) => {
+  e.stopPropagation();
+  userDropdown.classList.remove('active');
+  renderSavedAccounts();
+  document.getElementById('switchAccountModal').classList.add('visible');
+});
+
+document.getElementById('closeSwitchAccount').addEventListener('click', () => {
+  document.getElementById('switchAccountModal').classList.remove('visible');
+});
+
+function renderSavedAccounts() {
+  const container = document.getElementById('savedAccountsList');
+  const savedEmails = JSON.parse(localStorage.getItem('savedAccounts') || '[]');
+  
+  if (savedEmails.length === 0) {
+    container.innerHTML = '<p style="color:#666;font-size:0.8rem;text-align:center;">No hay cuentas guardadas</p>';
+    return;
+  }
+  
+  container.innerHTML = '';
+  savedEmails.forEach(email => {
+    const item = document.createElement('div');
+    item.className = 'saved-account-item';
+    item.innerHTML = '<div class="saved-account-avatar">' + email.charAt(0).toUpperCase() + '</div><div class="saved-account-info"><p class="saved-account-email">' + email + '</p><p class="saved-account-label">Tocá para cambiar</p></div>';
+    item.addEventListener('click', async () => {
+      document.getElementById('switchAccountModal').classList.remove('visible');
+      await auth.signOut();
+      authEmail.value = email;
+      authPassword.value = '';
+      showScreen(authScreen);
+      authPassword.focus();
+    });
+    container.appendChild(item);
+  });
+}
+
+document.getElementById('signOutAllBtn').addEventListener('click', async () => {
+  if (confirm('¿Cerrar todas las sesiones?')) {
+    await auth.signOut();
+    localStorage.removeItem('savedAccounts');
+    currentUser = null;
+    profiles = [];
+    currentProfile = null;
+    document.getElementById('switchAccountModal').classList.remove('visible');
+    showScreen(authScreen);
+    authEmail.value = '';
+    authPassword.value = '';
+  }
 });
 
 auth.onAuthStateChanged((user) => {
