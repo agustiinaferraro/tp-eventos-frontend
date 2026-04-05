@@ -707,6 +707,37 @@
       color: #666;
       margin-top: 2px;
     }
+    #switchAccountModal .modal-title {
+      font-size: 2rem;
+    }
+    #switchAccountModal .modal-close {
+      top: 25px;
+      right: 25px;
+      font-size: 2rem;
+      padding: 10px;
+    }
+    #switchAccountModal .modal-close:hover {
+      color: #fff;
+      transform: scale(1.2);
+    }
+    #switchAccountModal .modal-close:active {
+      color: #ff3333;
+      transform: scale(0.9);
+    }
+    #signOutAllBtn {
+      font-size: 1rem;
+    }
+    #signOutAllBtn:hover {
+      background: #ff3333;
+      border-color: #ff3333;
+      color: #fff;
+    }
+    #signOutAllBtn:active {
+      background: #cc0000;
+      border-color: #cc0000;
+      color: #fff;
+      transform: scale(0.95);
+    }
     @media (max-width: 600px) {
       .qr-fullscreen-title { font-size: 1.8rem; }
       .qr-fullscreen-hint { font-size: 1rem; }
@@ -1344,12 +1375,18 @@ document.getElementById('closeSwitchAccount').addEventListener('click', () => {
   document.getElementById('switchAccountModal').classList.remove('visible');
 });
 
+document.getElementById('switchAccountModal').addEventListener('click', (e) => {
+  if (e.target === document.getElementById('switchAccountModal')) {
+    document.getElementById('switchAccountModal').classList.remove('visible');
+  }
+});
+
 function renderSavedAccounts() {
   const container = document.getElementById('savedAccountsList');
   const savedEmails = JSON.parse(localStorage.getItem('savedAccounts') || '[]');
   
   if (savedEmails.length === 0) {
-    container.innerHTML = '<p style="color:#666;font-size:0.8rem;text-align:center;">No hay cuentas guardadas</p>';
+    container.innerHTML = '<p style="color:#fff;font-size:1rem;text-align:center;">No hay cuentas guardadas</p>';
     return;
   }
   
