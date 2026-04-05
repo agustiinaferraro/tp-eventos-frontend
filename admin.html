@@ -1090,45 +1090,6 @@ deleteProfileBtn.addEventListener('click', () => {
 
 document.getElementById('backFromProfileEdit').addEventListener('click', () => showScreen(profilesScreen));
 
-document.getElementById('openSettingsBtn').addEventListener('click', () => {
-  const input = document.getElementById('publicUrlInput');
-  const status = document.getElementById('ngrokStatus');
-  input.value = getBaseUrl();
-  if (getBaseUrl() !== LOCAL_URL) {
-    status.textContent = 'URL activa ✓';
-    status.style.color = '#00ff88';
-  } else {
-    status.textContent = 'Usando localhost';
-    status.style.color = '#666';
-  }
-  document.getElementById('settingsModal').classList.add('visible');
-});
-
-document.getElementById('closeSettingsModal').addEventListener('click', () => {
-  document.getElementById('settingsModal').classList.remove('visible');
-});
-
-document.getElementById('settingsModal').addEventListener('click', (e) => {
-  if (e.target === document.getElementById('settingsModal')) {
-    document.getElementById('settingsModal').classList.remove('visible');
-  }
-});
-
-document.getElementById('savePublicUrlBtn').addEventListener('click', () => {
-  const url = document.getElementById('publicUrlInput').value.trim();
-  if (url) {
-    setBaseUrl(url);
-    document.getElementById('ngrokStatus').textContent = 'URL guardada ✓';
-    document.getElementById('ngrokStatus').style.color = '#00ff88';
-  }
-});
-
-document.getElementById('clearPublicUrlBtn').addEventListener('click', clearPublicUrl);
-
-document.getElementById('publicUrlInput').addEventListener('keypress', (e) => {
-  if (e.key === 'Enter') document.getElementById('savePublicUrlBtn').click();
-});
-
 manageAccount.addEventListener('click', async () => {
   await auth.signOut();
   currentUser = null;
