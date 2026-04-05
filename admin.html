@@ -911,7 +911,8 @@ if (savedEmail) {
 authEmail.addEventListener('input', validateAuthForm);
 authPassword.addEventListener('input', validateAuthForm);
 
-setInterval(validateAuthForm, 200);
+window.addEventListener('load', validateAuthForm);
+window.addEventListener('pageshow', validateAuthForm);
 
 authBtn.addEventListener('click', async () => {
   if (!authBtn.classList.contains('ready')) return;
