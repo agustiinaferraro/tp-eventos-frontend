@@ -909,7 +909,6 @@ authPassword.addEventListener('input', validateAuthForm);
 setInterval(validateAuthForm, 100);
 
 authBtn.addEventListener('click', async () => {
-  if (!authBtn.classList.contains('ready')) return;
   authError.textContent = '';
   try {
     const cred = await auth.signInWithEmailAndPassword(authEmail.value, authPassword.value);
