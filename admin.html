@@ -1041,6 +1041,7 @@ let currentProfile = null;
 let salas = [];
 let currentSala = null;
 let editingProfileIndex = -1;
+let manageMode = false;
 
 COLORS.forEach((color, i) => {
   const btn = document.createElement('div');
@@ -1188,22 +1189,36 @@ function renderProfiles() {
   profiles.forEach((profile, i) => {
     const card = document.createElement('div');
     card.className = 'profile-card';
-    card.innerHTML = '<div class="profile-avatar" style="background:' + profile.color + '">' + profile.name.charAt(0).toUpperCase() + '</div><p class="profile-name">' + profile.name + '</p><span class="profile-edit-btn">&#9998;</span>';
+    let html = '<div class="profile-avatar" style="background:' + profile.color + '">' + profile.name.charAt(0).toUpperCase() + '</div><p class="profile-name">' + profile.name + '</p>';
+    if (manageMode) {
+      html += '<span class="profile-edit-btn">&#9998;</span>';
+    }
+    card.innerHTML = html;
     card.querySelector('.profile-avatar').addEventListener('click', (e) => {
       e.stopPropagation();
-      selectProfile(i);
+      if (manageMode) {
+        editProfile(i);
+      } else {
+        selectProfile(i);
+      }
     });
     card.querySelector('.profile-name').addEventListener('click', (e) => {
       e.stopPropagation();
-      selectProfile(i);
+      if (manageMode) {
+        editProfile(i);
+      } else {
+        selectProfile(i);
+      }
     });
-    card.querySelector('.profile-edit-btn').addEventListener('click', (e) => {
-      e.stopPropagation();
-      editProfile(i);
-    });
+    if (manageMode) {
+      card.querySelector('.profile-edit-btn').addEventListener('click', (e) => {
+        e.stopPropagation();
+        editProfile(i);
+      });
+      card.querySelector('.profile-edit-btn').style.cursor = 'pointer';
+    }
     card.querySelector('.profile-avatar').style.cursor = 'pointer';
     card.querySelector('.profile-name').style.cursor = 'pointer';
-    card.querySelector('.profile-edit-btn').style.cursor = 'pointer';
     profilesGrid.appendChild(card);
   });
   const addCard = document.createElement('div');
@@ -1214,6 +1229,7 @@ function renderProfiles() {
 }
 
 function selectProfile(i) {
+  manageMode = false;
   currentProfile = profiles[i];
   userDisplay.textContent = currentProfile.name.toUpperCase();
   userAvatar.textContent = currentProfile.name.charAt(0).toUpperCase();
@@ -1276,8 +1292,8 @@ deleteProfileBtn.addEventListener('click', () => {
 document.getElementById('backFromProfileEdit').addEventListener('click', () => showScreen(profilesScreen));
 
 manageAccount.addEventListener('click', () => {
-  renderSavedAccounts();
-  document.getElementById('switchAccountModal').classList.add('visible');
+  manageMode = true;
+  renderProfiles();
 });
 
 function loadSalas() {
