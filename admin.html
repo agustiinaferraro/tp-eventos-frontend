@@ -1201,10 +1201,10 @@ COLORS.forEach((color, i) => {
     btn.classList.add('selected');
     profileImagePreview.style.display = 'none';
     profileImagePreview.src = '';
-    // Keep original profile image in memory for saving
-    if (editingProfileIndex >= 0) {
+    // Only reset to original if user didn't select a new image
+    if (editingProfileIndex >= 0 && !currentProfileImage) {
       currentProfileImage = profiles[editingProfileIndex].image;
-    } else {
+    } else if (editingProfileIndex === -1) {
       currentProfileImage = null;
     }
     profileAvatarPreview.style.background = color;
