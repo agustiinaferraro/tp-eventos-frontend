@@ -709,12 +709,13 @@
     }
     #switchAccountModal .modal-title {
       font-size: 2rem;
+      margin-bottom: 25px;
     }
     #switchAccountModal .modal-close {
-      top: 25px;
-      right: 25px;
-      font-size: 2rem;
-      padding: 10px;
+      top: 30px;
+      right: 40px;
+      font-size: 3rem;
+      padding: 15px;
     }
     #switchAccountModal .modal-close:hover {
       color: #fff;
@@ -731,6 +732,7 @@
       background: #ff3333;
       border-color: #ff3333;
       color: #fff;
+      transform: scale(1.05);
     }
     #signOutAllBtn:active {
       background: #cc0000;
@@ -771,7 +773,7 @@
   <div class="modal" id="switchAccountModal">
     <button class="modal-close" id="closeSwitchAccount">×</button>
     <p class="modal-title">CAMBIAR CUENTA</p>
-    <div id="savedAccountsList" style="width:100%;max-width:350px;margin-bottom:20px;"></div>
+    <div id="savedAccountsList" style="width:100%;max-width:350px;margin-bottom:30px;"></div>
     <button class="btn" id="signOutAllBtn" style="border-color:#ff3333;color:#ff3333;margin-top:10px;">CERRAR TODAS LAS SESIONES</button>
   </div>
 
@@ -1386,7 +1388,7 @@ function renderSavedAccounts() {
   const savedEmails = JSON.parse(localStorage.getItem('savedAccounts') || '[]');
   
   if (savedEmails.length === 0) {
-    container.innerHTML = '<p style="color:#fff;font-size:1rem;text-align:center;">No hay cuentas guardadas</p>';
+    container.innerHTML = '<p style="color:#fff;font-size:1rem;text-align:center;margin-bottom:25px;">No hay cuentas guardadas</p>';
     return;
   }
   
