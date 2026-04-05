@@ -521,6 +521,19 @@
     }
     .modal-close:hover { color: #fff; }
     .color-picker { display: flex; gap: 15px; margin: 20px 0; }
+    .photo-buttons { display: flex; gap: 10px; margin-bottom: 15px; }
+    .photo-btn {
+      background: #222;
+      border: 1px solid #555;
+      color: #ddd;
+      font-size: 0.85rem;
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .photo-btn:hover { border-color: #00ff88; color: #00ff88; }
+    .photo-btn:active { transform: scale(0.95); }
     .color-option {
       width: 50px;
       height: 50px;
@@ -863,7 +876,14 @@
   <div class="screen" id="profileEditScreen">
     <button class="back-btn" id="backFromProfileEdit"></button>
   <h1 class="title" id="profileEditTitle">NUEVO PERFIL</h1>
-  <div class="profile-avatar" id="profileAvatarPreview" style="width:120px;height:120px;font-size:3rem;margin-bottom:30px;background:#222;border:3px solid #333;">?</div>
+  <div class="profile-avatar" id="profileAvatarPreview" style="width:120px;height:120px;font-size:3rem;margin-bottom:15px;background:#222;border:3px solid #333;cursor:pointer;text-shadow:2px 2px 4px rgba(0,0,0,0.9);">
+    <img id="profileImagePreview" style="display:none;width:120px;height:120px;object-fit:cover;border-radius:50%;">
+  </div>
+  <div class="photo-buttons">
+    <button class="photo-btn" id="cameraBtn">Cámara</button>
+    <button class="photo-btn" id="galleryBtn">Galería</button>
+  </div>
+  <input type="file" id="galleryInput" accept="image/*" capture="user" style="display:none;">
   <div class="color-picker" id="colorPicker"></div>
   <input type="text" class="input-field" id="profileName" placeholder="Nombre del perfil" maxlength="15">
   <button class="btn" id="saveProfileBtn" disabled>Guardar</button>
@@ -1065,6 +1085,113 @@ let salas = [];
 let currentSala = null;
 let editingProfileIndex = -1;
 let manageMode = false;
+let currentProfileImage = null;
+
+const cameraBtn = document.getElementById('cameraBtn');
+const galleryBtn = document.getElementById('galleryBtn');
+const galleryInput = document.getElementById('galleryInput');
+const profileImagePreview = document.getElementById('profileImagePreview');
+const profileAvatarPreview = document.getElementById('profileAvatarPreview');
+
+function handleImageFile(file) {
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    currentProfileImage = e.target.result;
+    profileImagePreview.src = currentProfileImage;
+    profileImagePreview.style.display = 'block';
+    profileAvatarPreview.textContent = '';
+    profileAvatarPreview.style.background = 'transparent';
+  };
+  reader.readAsDataURL(file);
+}
+
+galleryBtn.addEventListener('click', () => galleryInput.click());
+galleryInput.addEventListener('change', (e) => {
+  handleImageFile(e.target.files[0]);
+  e.target.value = '';
+});
+
+cameraBtn.addEventListener('click', async () => {
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' }, audio: false });
+    const video = document.createElement('video');
+    video.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;z-index:9999;background:#000;object-fit:cover;';
+    document.body.appendChild(video);
+    video.srcObject = stream;
+    video.play();
+    
+    const btnContainer = document.createElement('div');
+    btnContainer.style.cssText = 'position:fixed;bottom:40px;left:0;right:0;display:flex;justify-content:center;z-index:10000;';
+    document.body.appendChild(btnContainer);
+    
+    const captureBtn = document.createElement('button');
+    captureBtn.textContent = '●';
+    captureBtn.style.cssText = 'width:80px;height:80px;border-radius:50%;background:#fff;color:#fff;font-size:3rem;border:none;cursor:pointer;box-shadow:0 0 20px rgba(255,255,255,0.3);';
+    btnContainer.appendChild(captureBtn);
+    
+    const closeBtn = document.createElement('button');
+    closeBtn.textContent = '×';
+    closeBtn.style.cssText = 'position:fixed;top:20px;right:20px;z-index:10001;width:50px;height:50px;border-radius:50%;background:rgba(255,255,255,0.2);color:#fff;font-size:1.8rem;border:none;cursor:pointer;';
+    document.body.appendChild(closeBtn);
+    
+    const cleanup = () => {
+      stream.getTracks().forEach(track => track.stop());
+      document.body.removeChild(video);
+      document.body.removeChild(btnContainer);
+      document.body.removeChild(closeBtn);
+    };
+    
+    closeBtn.onclick = cleanup;
+    
+    captureBtn.onclick = () => {
+      const canvas = document.createElement('canvas');
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      canvas.getContext('2d').drawImage(video, 0, 0);
+      const dataUrl = canvas.toDataURL('image/jpeg');
+      
+      const previewContainer = document.createElement('div');
+      previewContainer.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:#000;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;';
+      
+      const img = document.createElement('img');
+      img.src = dataUrl;
+      img.style.cssText = 'width:80%;max-height:70%;object-fit:contain;border-radius:12px;';
+      previewContainer.appendChild(img);
+      
+      const newBtnContainer = document.createElement('div');
+      newBtnContainer.style.cssText = 'display:flex;gap:40px;margin-top:30px;';
+      previewContainer.appendChild(newBtnContainer);
+      
+      const rejectBtn = document.createElement('button');
+      rejectBtn.textContent = '×';
+      rejectBtn.style.cssText = 'width:70px;height:70px;border-radius:50%;background:rgba(255,0,0,0.8);color:#fff;font-size:2.5rem;border:none;cursor:pointer;';
+      rejectBtn.onclick = () => {
+        document.body.removeChild(previewContainer);
+      };
+      newBtnContainer.appendChild(rejectBtn);
+      
+      const acceptBtn = document.createElement('button');
+      acceptBtn.textContent = '✓';
+      acceptBtn.style.cssText = 'width:70px;height:70px;border-radius:50%;background:rgba(0,255,136,0.8);color:#fff;font-size:2.5rem;border:none;cursor:pointer;';
+      acceptBtn.onclick = () => {
+        currentProfileImage = dataUrl;
+        profileImagePreview.src = dataUrl;
+        profileImagePreview.style.display = 'block';
+        profileAvatarPreview.textContent = '';
+        profileAvatarPreview.style.background = 'transparent';
+        document.body.removeChild(previewContainer);
+        cleanup();
+      };
+      newBtnContainer.appendChild(acceptBtn);
+      
+      cleanup();
+      document.body.appendChild(previewContainer);
+    };
+  } catch (err) {
+    alert('No se pudo acceder a la cámara');
+  }
+});
 
 COLORS.forEach((color, i) => {
   const btn = document.createElement('div');
@@ -1073,7 +1200,16 @@ COLORS.forEach((color, i) => {
   btn.addEventListener('click', () => {
     document.querySelectorAll('.color-option').forEach(c => c.classList.remove('selected'));
     btn.classList.add('selected');
+    currentProfileImage = null;
+    profileImagePreview.style.display = 'none';
+    profileImagePreview.src = '';
     profileAvatarPreview.style.background = color;
+    profileAvatarPreview.textContent = profileName.value.charAt(0).toUpperCase() || '?';
+    const saveBtn = document.getElementById('saveProfileBtn');
+    if (profileName.value.trim().length > 0) {
+      saveBtn.disabled = false;
+      saveBtn.classList.add('ready');
+    }
   });
   colorPicker.appendChild(btn);
 });
@@ -1212,7 +1348,12 @@ function renderProfiles() {
   profiles.forEach((profile, i) => {
     const card = document.createElement('div');
     card.className = 'profile-card' + (manageMode ? ' manage-mode' : '');
-    let html = '<div class="profile-avatar" style="background:' + profile.color + '">' + profile.name.charAt(0).toUpperCase();
+    let html = '<div class="profile-avatar" style="background:' + profile.color + '">';
+    if (profile.image) {
+      html += '<img src="' + profile.image + '" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">';
+    } else {
+      html += '<span style="text-shadow:2px 2px 4px rgba(0,0,0,0.9);">' + profile.name.charAt(0).toUpperCase() + '</span>';
+    }
     if (manageMode) {
       html += '<span class="profile-edit-btn">&#9998;</span>';
     }
@@ -1256,14 +1397,22 @@ function selectProfile(i) {
   manageMode = false;
   currentProfile = profiles[i];
   userDisplay.textContent = currentProfile.name.toUpperCase();
-  userAvatar.textContent = currentProfile.name.charAt(0).toUpperCase();
-  userAvatar.style.background = currentProfile.color;
+  if (currentProfile.image) {
+    userAvatar.innerHTML = '<img src="' + currentProfile.image + '" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">';
+    userAvatar.style.background = 'transparent';
+  } else {
+    userAvatar.innerHTML = currentProfile.name.charAt(0).toUpperCase();
+    userAvatar.style.background = currentProfile.color;
+  }
   loadSalas();
   showScreen(dashboardScreen);
 }
 
 function editProfile(i) {
   editingProfileIndex = i;
+  currentProfileImage = null;
+  profileImagePreview.style.display = 'none';
+  profileImagePreview.src = '';
   if (i === -1) {
     profileEditTitle.textContent = 'NUEVO PERFIL';
     profileName.value = '';
@@ -1278,6 +1427,13 @@ function editProfile(i) {
     profileName.value = profiles[i].name;
     profileAvatarPreview.style.background = profiles[i].color;
     profileAvatarPreview.textContent = profiles[i].name.charAt(0).toUpperCase();
+    if (profiles[i].image) {
+      currentProfileImage = profiles[i].image;
+      profileImagePreview.src = profiles[i].image;
+      profileImagePreview.style.display = 'block';
+      profileAvatarPreview.textContent = '';
+      profileAvatarPreview.style.background = 'transparent';
+    }
     deleteProfileBtn.style.display = 'block';
     saveProfileBtn.disabled = false;
     saveProfileBtn.classList.add('ready');
@@ -1299,9 +1455,13 @@ saveProfileBtn.addEventListener('click', () => {
   const color = profileAvatarPreview.style.background;
   const name = profileName.value.trim();
   if (editingProfileIndex === -1) {
-    profiles.push({ name: name, color: color });
+    profiles.push({ name: name, color: color, image: currentProfileImage });
   } else {
-    profiles[editingProfileIndex] = { name: name, color: color };
+    profiles[editingProfileIndex] = { 
+      name: name, 
+      color: color, 
+      image: currentProfileImage || profiles[editingProfileIndex].image 
+    };
   }
   saveProfiles();
   manageMode = false;
