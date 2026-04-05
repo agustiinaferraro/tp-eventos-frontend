@@ -1085,6 +1085,7 @@ let currentSala = null;
 let editingProfileIndex = -1;
 let manageMode = false;
 let currentProfileImage = null;
+let choseColor = false;
 
 const cameraBtn = document.getElementById('cameraBtn');
 const galleryBtn = document.getElementById('galleryBtn');
@@ -1094,6 +1095,7 @@ const profileAvatarPreview = document.getElementById('profileAvatarPreview');
 
 function handleImageFile(file) {
   if (!file) return;
+  choseColor = false;
   const reader = new FileReader();
   reader.onload = (e) => {
     currentProfileImage = e.target.result;
@@ -1199,7 +1201,7 @@ COLORS.forEach((color, i) => {
   btn.addEventListener('click', () => {
     document.querySelectorAll('.color-option').forEach(c => c.classList.remove('selected'));
     btn.classList.add('selected');
-    // Remove image, show color
+    choseColor = true;
     currentProfileImage = null;
     profileImagePreview.style.display = 'none';
     profileImagePreview.src = '';
@@ -1412,6 +1414,7 @@ function selectProfile(i) {
 function editProfile(i) {
   editingProfileIndex = i;
   currentProfileImage = null;
+  choseColor = false;
   profileImagePreview.style.display = 'none';
   profileImagePreview.src = '';
   if (i === -1) {
@@ -1460,17 +1463,18 @@ saveProfileBtn.addEventListener('click', () => {
     profiles.push({ name: name, color: color, image: currentProfileImage });
   } else {
     if (currentProfileImage) {
-      // Saving new image, remove color
       profiles[editingProfileIndex] = { name: name, color: null, image: currentProfileImage };
+    } else if (choseColor) {
+      profiles[editingProfileIndex] = { name: name, color: color, image: null };
     } else {
-      // Saving without new image - keep original or set new color
       profiles[editingProfileIndex] = { 
         name: name, 
-        color: color, 
+        color: profiles[editingProfileIndex].color, 
         image: profiles[editingProfileIndex].image 
       };
     }
   }
+  choseColor = false;
   saveProfiles();
   manageMode = false;
   renderProfiles();
