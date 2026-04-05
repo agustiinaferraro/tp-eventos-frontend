@@ -1300,6 +1300,7 @@ saveProfileBtn.addEventListener('click', () => {
     profiles[editingProfileIndex] = { name: name, color: color };
   }
   saveProfiles();
+  manageMode = false;
   renderProfiles();
   showScreen(profilesScreen);
 });
@@ -1308,6 +1309,7 @@ deleteProfileBtn.addEventListener('click', () => {
   if (confirm('¿Eliminar este perfil?')) {
     profiles.splice(editingProfileIndex, 1);
     saveProfiles();
+    manageMode = false;
     renderProfiles();
     showScreen(profilesScreen);
   }
