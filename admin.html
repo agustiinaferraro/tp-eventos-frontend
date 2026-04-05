@@ -124,7 +124,7 @@
       font-size: 1rem;
       padding: 15px 40px;
       border-radius: 8px;
-      cursor: not-allowed;
+      cursor: pointer;
       letter-spacing: 2px;
       transition: all 0.3s;
     }
@@ -910,12 +910,7 @@ if (savedEmail) {
 authEmail.addEventListener('input', validateAuthForm);
 authPassword.addEventListener('input', validateAuthForm);
 
-const interval = setInterval(() => {
-  validateAuthForm();
-  if (authEmail.value.includes('@') && authPassword.value.length >= 6) {
-    clearInterval(interval);
-  }
-}, 500);
+setTimeout(validateAuthForm, 100);
 
 authBtn.addEventListener('click', async () => {
   if (!authBtn.classList.contains('ready')) return;
