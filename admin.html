@@ -1199,14 +1199,10 @@ COLORS.forEach((color, i) => {
   btn.addEventListener('click', () => {
     document.querySelectorAll('.color-option').forEach(c => c.classList.remove('selected'));
     btn.classList.add('selected');
+    // Remove image, show color
+    currentProfileImage = null;
     profileImagePreview.style.display = 'none';
     profileImagePreview.src = '';
-    // Only reset to original if user didn't select a new image
-    if (editingProfileIndex >= 0 && !currentProfileImage) {
-      currentProfileImage = profiles[editingProfileIndex].image;
-    } else if (editingProfileIndex === -1) {
-      currentProfileImage = null;
-    }
     profileAvatarPreview.style.background = color;
     profileAvatarPreview.textContent = profileName.value.charAt(0).toUpperCase() || '?';
     const saveBtn = document.getElementById('saveProfileBtn');
@@ -1353,7 +1349,7 @@ function renderProfiles() {
   profiles.forEach((profile, i) => {
     const card = document.createElement('div');
     card.className = 'profile-card' + (manageMode ? ' manage-mode' : '');
-    let html = '<div class="profile-avatar" style="background:' + profile.color + '">';
+    let html = '<div class="profile-avatar" style="background:' + (profile.color || '#222') + '">';
     if (profile.image) {
       html += '<img src="' + profile.image + '" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">';
     } else {
@@ -1430,14 +1426,15 @@ function editProfile(i) {
   } else {
     profileEditTitle.textContent = 'EDITAR PERFIL';
     profileName.value = profiles[i].name;
-    profileAvatarPreview.style.background = profiles[i].color;
-    profileAvatarPreview.textContent = profiles[i].name.charAt(0).toUpperCase();
     if (profiles[i].image) {
       currentProfileImage = profiles[i].image;
       profileImagePreview.src = profiles[i].image;
       profileImagePreview.style.display = 'block';
       profileAvatarPreview.textContent = '';
       profileAvatarPreview.style.background = 'transparent';
+    } else {
+      profileAvatarPreview.style.background = profiles[i].color || COLORS[0];
+      profileAvatarPreview.textContent = profiles[i].name.charAt(0).toUpperCase();
     }
     deleteProfileBtn.style.display = 'block';
     saveProfileBtn.disabled = false;
@@ -1462,11 +1459,17 @@ saveProfileBtn.addEventListener('click', () => {
   if (editingProfileIndex === -1) {
     profiles.push({ name: name, color: color, image: currentProfileImage });
   } else {
-    profiles[editingProfileIndex] = { 
-      name: name, 
-      color: color, 
-      image: currentProfileImage || profiles[editingProfileIndex].image 
-    };
+    if (currentProfileImage) {
+      // Saving new image, remove color
+      profiles[editingProfileIndex] = { name: name, color: null, image: currentProfileImage };
+    } else {
+      // Saving without new image - keep original or set new color
+      profiles[editingProfileIndex] = { 
+        name: name, 
+        color: color, 
+        image: profiles[editingProfileIndex].image 
+      };
+    }
   }
   saveProfiles();
   manageMode = false;
