@@ -1227,6 +1227,7 @@ function validateAuthForm() {
 
 authEmail.addEventListener('input', validateAuthForm);
 authPassword.addEventListener('input', validateAuthForm);
+validateAuthForm();
 
 authBtn.addEventListener('click', async () => {
   if (!authEmail.value || !authPassword.value) {
