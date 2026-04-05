@@ -232,25 +232,36 @@
     }
     .profile-edit-btn {
       position: absolute;
-      font-size: 1.2rem;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 2rem;
       opacity: 0;
       transition: all 0.2s;
       color: #fff;
       text-shadow: 0 0 5px rgba(0,0,0,0.8);
-      pointer-events: none;
+      z-index: 2;
     }
     .profile-avatar {
       position: relative;
     }
     .profile-card:hover .profile-edit-btn {
       opacity: 1;
-      transform: scale(1.2);
+      transform: translate(-50%, -50%) scale(1.2);
+    }
+    .profile-card.manage-mode .profile-avatar::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.6);
+      border-radius: 50%;
+      z-index: 1;
     }
     .profile-card.manage-mode .profile-edit-btn {
       opacity: 1;
-    }
-    .profile-card.manage-mode .profile-avatar {
-      background: rgba(0,0,0,0.6) !important;
     }
     .profile-card:active .profile-edit-btn {
       transform: scale(0.9);
