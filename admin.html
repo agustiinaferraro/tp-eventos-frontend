@@ -906,9 +906,11 @@ function validateAuthForm() {
 authEmail.addEventListener('input', validateAuthForm);
 authPassword.addEventListener('input', validateAuthForm);
 
-setInterval(validateAuthForm, 100);
-
 authBtn.addEventListener('click', async () => {
+  if (!authEmail.value || !authPassword.value) {
+    authError.textContent = 'Completá todos los campos';
+    return;
+  }
   authError.textContent = '';
   try {
     const cred = await auth.signInWithEmailAndPassword(authEmail.value, authPassword.value);
