@@ -1359,13 +1359,7 @@ if (userMenuBtn && userDropdown) {
 
 document.getElementById('logoutBtn').addEventListener('click', async () => {
   await auth.signOut();
-  currentUser = null;
-  profiles = [];
-  currentProfile = null;
-  userDropdown.classList.remove('active');
-  authEmail.value = '';
-  authPassword.value = '';
-  showScreen(authScreen);
+  window.location.reload();
 });
 
 document.getElementById('switchAccountBtn').addEventListener('click', (e) => {
@@ -1415,13 +1409,7 @@ document.getElementById('signOutAllBtn').addEventListener('click', async () => {
   if (confirm('¿Cerrar todas las sesiones?')) {
     await auth.signOut();
     localStorage.removeItem('savedAccounts');
-    currentUser = null;
-    profiles = [];
-    currentProfile = null;
-    document.getElementById('switchAccountModal').classList.remove('visible');
-    showScreen(authScreen);
-    authEmail.value = '';
-    authPassword.value = '';
+    window.location.reload();
   }
 });
 
