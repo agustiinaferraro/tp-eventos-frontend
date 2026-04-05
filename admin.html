@@ -1228,18 +1228,6 @@ document.getElementById('backFromSala').addEventListener('click', () => showScre
 const userMenuBtn = document.getElementById('userMenuBtn');
 const userDropdown = document.getElementById('userDropdown');
 
-userMenuBtn.addEventListener('click', (e) => {
-  e.stopPropagation();
-  userDropdown.classList.toggle('active');
-});
-
-document.addEventListener('click', () => {
-  userDropdown.classList.remove('active');
-});
-
-const userMenuBtn = document.getElementById('userMenuBtn');
-const userDropdown = document.getElementById('userDropdown');
-
 if (userMenuBtn && userDropdown) {
   userMenuBtn.addEventListener('click', (e) => {
     e.stopPropagation();
