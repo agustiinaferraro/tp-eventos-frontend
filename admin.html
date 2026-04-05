@@ -1224,7 +1224,8 @@ deleteProfileBtn.addEventListener('click', () => {
 document.getElementById('backFromProfileEdit').addEventListener('click', () => showScreen(profilesScreen));
 
 manageAccount.addEventListener('click', () => {
-  showScreen(authScreen);
+  renderSavedAccounts();
+  document.getElementById('switchAccountModal').classList.add('visible');
 });
 
 function loadSalas() {
