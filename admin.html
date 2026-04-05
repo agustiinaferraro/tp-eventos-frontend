@@ -98,7 +98,7 @@
       background: transparent;
       border: 2px solid #666;
       color: #fff;
-      font-size: 0.9rem;
+      font-size: 0.8rem;
       padding: 18px 20px;
       border-radius: 8px;
       outline: none;
@@ -107,6 +107,15 @@
     }
     .input-field:focus { 
       border-color: #00ff88;
+    }
+    .input-field:-webkit-autofill,
+    .input-field:-webkit-autofill:hover,
+    .input-field:-webkit-autofill:focus,
+    .input-field:-webkit-autofill:active {
+      -webkit-text-fill-color: #fff;
+      -webkit-box-shadow: 0 0 0px 1000px #0a0a0a inset;
+      font-size: 0.8rem;
+      transition: background-color 5000s ease-in-out 0s;
     }
     .input-field::placeholder { color: #aaa; }
 
