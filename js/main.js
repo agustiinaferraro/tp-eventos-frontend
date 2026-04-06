@@ -170,14 +170,22 @@
 
       const nextThreshold = getNextThreshold(points);
       const remaining = nextThreshold - Math.floor(points);
+      let remainingColor = '#ff6b00';
+      if (nextThreshold > 375) remainingColor = '#ffdd00';
+      if (nextThreshold >= 1000) remainingColor = '#00ff88';
       let targetColor = '#ff6b00';
       if (nextThreshold >= 500) targetColor = '#ffdd00';
       if (nextThreshold >= 1000) targetColor = '#00ff88';
-      pumpsToGoEl.innerHTML = `Faltan <span style="color:#fff;font-weight:bold">${remaining}</span> movimientos para llegar a los <span style="color:${targetColor}">${nextThreshold}</span> puntos`;
+      pumpsToGoEl.innerHTML = `Faltan <span class="big-number" style="color:${remainingColor}">${remaining}</span> movimientos para llegar a los <span class="big-number" style="color:${targetColor}">${nextThreshold}</span> puntos`;
     }
 
     if (titleEl && data.room) {
       titleEl.textContent = data.room.toUpperCase();
+      
+      let titleColor = '#ff6b00';
+      if (data.points >= 500) titleColor = '#ffdd00';
+      if (data.points >= 1000) titleColor = '#00ff88';
+      titleEl.style.color = titleColor;
     }
 
     if (data.gestureActive && !gestureActive) {
