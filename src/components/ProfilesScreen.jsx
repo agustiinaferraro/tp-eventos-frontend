@@ -1,0 +1,209 @@
+// =====================
+// ProfilesScreen.jsx - Selector de Perfiles
+// =====================
+
+// Importamos React y los hooks necesarios
+import React, { useState, useEffect } from 'react'
+
+// useNavigate para navegar entre pantallas
+import { useNavigate } from 'react-router-dom'
+
+// useAuth nos da acceso al usuario actual
+// db es la instancia de Firestore (base de datos)
+import { useAuth, db } from '../context/AuthContext'
+
+// Funciones de Firestore:
+// - doc: crea una referencia a un documento específico
+// - getDoc: obtiene un documento de Firestore
+// - setDoc: guarda o actualiza un documento
+import { doc, getDoc, setDoc } from 'firebase/firestore'
+
+// Componente principal de la pantalla de selección de perfiles
+export default function ProfilesScreen() {
+  // Obtenemos el usuario actual del contexto
+  const { user } = useAuth()
+  
+  // Hook para navegar programáticamente
+  const navigate = useNavigate()
+
+  // =====================
+  // ESTADOS
+  // =====================
+  // profiles: array con todos los perfiles del usuario
+  const [profiles, setProfiles] = useState([])
+  
+  // manageMode: si está en true, podemos editar/eliminar perfiles
+  // si está en false, tocar un perfil lo selecciona
+  const [manageMode, setManageMode] = useState(false)
+
+  // =====================
+  // EFECTO: CARGAR PERFILES AL MONTAR
+  // =====================
+  // useEffect se ejecuta cuando el componente se monta y cuando 'user' cambia
+  useEffect(() => {
+    loadProfiles()  // Cargamos los perfiles del usuario
+  }, [user])  // Dependencia en user para recargar si cambia de cuenta
+
+  // =====================
+  // FUNCIÓN: CARGAR PERFILES
+  // =====================
+  const loadProfiles = async () => {
+    // Primero intentamos cargar desde localStorage (cache local)
+    // Usamos el ID del usuario como clave para guardar sus perfiles
+    const saved = localStorage.getItem('profiles_' + user.uid)
+    
+    // Parseamos el JSON o inicializamos array vacío
+    let localProfiles = saved ? JSON.parse(saved) : []
+    
+    try {
+      // Intentamos cargar desde Firestore (base de datos en la nube)
+      // doc(db, 'users', user.uid) crea referencia a: /users/{userId}
+      const docSnap = await getDoc(doc(db, 'users', user.uid))
+      
+      // Si el documento existe y tiene un campo 'profiles'
+      if (docSnap.exists() && docSnap.data().profiles) {
+        // Usamos los perfiles de Firestore (la "verdadera" fuente)
+        localProfiles = docSnap.data().profiles
+      }
+    } catch (e) {
+      // Si hay error (sin internet, etc), usamos los datos locales
+    }
+    
+    // Actualizamos el estado con los perfiles cargados
+    setProfiles(localProfiles)
+  }
+
+  // =====================
+  // FUNCIÓN: GUARDAR PERFILES
+  // =====================
+  // Guarda en localStorage Y en Firestore
+  const saveProfiles = async (newProfiles) => {
+    // Actualiza el estado local
+    setProfiles(newProfiles)
+    
+    // Guarda en localStorage (cache)
+    localStorage.setItem('profiles_' + user.uid, JSON.stringify(newProfiles))
+    
+    // Guarda en Firestore (nube)
+    // { merge: true } significa: si existe, actualiza; si no, crea
+    // Evita sobrescribir otros datos del documento
+    await setDoc(doc(db, 'users', user.uid), { profiles: newProfiles }, { merge: true })
+  }
+
+  // =====================
+  // FUNCIÓN: SELECCIONAR PERFIL
+  // =====================
+  const handleSelectProfile = (index) => {
+    // Dependiendo del modo:
+    if (manageMode) {
+      // Modo gestión: navegamos a editar el perfil en ese índice
+      navigate('/profiles/edit', { state: { index } })
+    } else {
+      // Modo normal: seleccionamos el perfil y vamos al dashboard
+      localStorage.setItem('currentProfile', JSON.stringify(profiles[index]))
+      navigate('/dashboard')
+    }
+  }
+
+  // =====================
+  // FUNCIÓN: ELIMINAR PERFIL
+  // =====================
+  const handleDeleteProfile = async (index) => {
+    // Pedimos confirmación con window.confirm
+    if (confirm('¿Eliminar este perfil?')) {
+      // Creamos nuevo array sin el perfil en esa posición
+      const newProfiles = [...profiles]  // Copiamos el array
+      newProfiles.splice(index, 1)       // Eliminamos 1 elemento en esa posición
+      await saveProfiles(newProfiles)    // Guardamos el array sin ese perfil
+      setManageMode(false)               // Salimos del modo gestión
+    }
+  }
+
+  // =====================
+  // RENDERIZADO
+  // =====================
+  return (
+    // Contenedor centrado en la pantalla
+    <div className="flex flex-col items-center justify-center min-h-screen w-full p-10">
+      
+      {/* Título */}
+      <h1 className="text-2xl md:text-4xl tracking-widest text-green-400 mb-16 text-center">
+        ¿QUIÉN SOS?
+      </h1>
+      
+      {/* Grid de perfiles (2 columnas en móvil, 3 en desktop) */}
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-8 max-w-2xl w-full mt-10">
+        
+        {/* Recorremos cada perfil y lo mostramos */}
+        {profiles.map((profile, i) => (
+          // key={i} es el índice, necesario para React
+          <div
+            key={i}
+            className={`flex flex-col items-center cursor-pointer transition-all hover:scale-105 ${manageMode ? 'opacity-80' : ''}`}
+            onClick={() => handleSelectProfile(i)}  // Al tocar, seleccionamos/editamos
+          >
+            {/* Avatar circular del perfil */}
+            <div
+              className={`w-24 h-24 md:w-32 md:h-32 rounded-full border-4 ${manageMode ? 'border-zinc-500' : 'border-zinc-600'} flex items-center justify-center text-4xl md:text-5xl transition-all hover:border-green-400 hover:scale-110 relative`}
+              style={{ background: profile.color || '#222' }}  // Color de fondo o gris por defecto
+            >
+              {/* Si tiene imagen, mostramos la imagen */}
+              {profile.image ? (
+                <img
+                  src={profile.image}
+                  className="w-full h-full object-cover rounded-full"
+                  alt={profile.name}
+                />
+              ) : (
+                // Si no tiene imagen, mostramos la inicial del nombre
+                <span className="text-white drop-shadow-[2px_2px_4px_rgba(0,0,0,0.9)]">
+                  {profile.name.charAt(0).toUpperCase()}  {/* Primera letra en mayúscula */}
+                </span>
+              )}
+              
+              {/* En modo gestión, mostramos el ícono de editar (lápiz) */}
+              {manageMode && (
+                <span className="absolute inset-0 flex items-center justify-center text-4xl opacity-0 hover:opacity-100 z-10">
+                  &#9998;  {/* Código HTML para el ícono de lápiz */}
+                </span>
+              )}
+            </div>
+            
+            {/* Nombre del perfil */}
+            <p className="mt-4 text-base text-zinc-300 tracking-wider">{profile.name}</p>
+          </div>
+        ))}
+        
+        {/* Tarjeta para agregar nuevo perfil */}
+        <div
+          className="flex flex-col items-center cursor-pointer"
+          onClick={() => navigate('/profiles/edit', { state: { index: -1 } })}
+          // index: -1 significa "nuevo perfil" (no estamos editando ninguno existente)
+        >
+          <div className="w-24 h-24 md:w-32 md:h-32 rounded-full border-4 border-dashed border-zinc-600 flex items-center justify-center text-4xl md:text-5xl text-zinc-600 transition-all hover:border-green-400 hover:text-green-400 hover:scale-110">
+            +
+          </div>
+          <p className="mt-4 text-base text-zinc-600 tracking-wider">Agregar perfil</p>
+        </div>
+      </div>
+      
+      {/* Botón para alternar modo gestión */}
+      <button
+        className="bg-transparent border-none text-green-400 text-sm cursor-pointer mt-12 tracking-wider transition-all hover:text-green-300 hover:scale-105 active:scale-95"
+        onClick={() => setManageMode(!manageMode)}  // Alterna entre true/false
+      >
+        {manageMode ? 'Listo' : 'Gestionar perfiles'}
+      </button>
+      
+      {/* Botón para eliminar (solo visible en modo gestión si hay perfiles) */}
+      {manageMode && profiles.length > 0 && (
+        <button
+          className="w-full max-w-md mt-5 bg-transparent border-2 border-red-700 text-red-700 text-base py-4 px-10 rounded-lg cursor-pointer tracking-wider transition-all hover:bg-red-700 hover:text-white"
+          onClick={() => handleDeleteProfile(0)}  // Elimina el primer perfil
+        >
+          Eliminar primer perfil
+        </button>
+      )}
+    </div>
+  )
+}

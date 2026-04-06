@@ -25,5 +25,13 @@ export default defineConfig({
     postcss: {
       plugins: [tailwindcss(), autoprefixer()]
     }
+  },
+  build: {
+    rollupOptions: {
+      input: {
+        main: resolve(__dirname, 'index.html'),
+        experience: resolve(__dirname, 'admin.html')
+      }
+    }
   }
 });
