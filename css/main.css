@@ -139,74 +139,38 @@ body, html {
 }
 
 .milestone {
-  @apply text-sm font-bold;
-  text-shadow: 0 0 10px currentColor;
-}
-
-.milestone {
   @apply absolute;
   bottom: 0;
   height: 6px;
   width: 2px;
   background: currentColor;
-}
-
-.milestone-num {
-  @apply absolute;
-  bottom: 8px;
-  white-space: nowrap;
-  font-size: 0.75rem;
-  font-weight: bold;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.milestone-num.big {
-  font-size: 1rem;
-  font-weight: 900;
-}
-
-.milestone-center .milestone-num {
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.milestone-center {
-  left: 50%;
-  transform: translateX(-50%);
+  text-shadow: 0 0 10px currentColor;
 }
 
 .milestone-orange { color: #ff6b00; }
 .milestone-yellow { color: #ffdd00; }
 .milestone-green { color: #00ff88; }
 
-.milestone-orange-medium { color: #fff; }
-.milestone-yellow-medium { color: #fff; }
-.milestone-green-medium { color: #fff; }
-
 .milestone-num {
   @apply absolute;
-  bottom: 8px;
+  bottom: 10px;
   white-space: nowrap;
-  font-size: 0.75rem;
   font-weight: bold;
   left: 50%;
   transform: translateX(-50%);
+  font-size: 0.7rem !important;
+  color: #fff;
 }
 
 .milestone-num.big {
-  font-size: 1.2rem;
+  font-size: 1.3rem !important;
   font-weight: 900;
 }
 
-.milestone-center .milestone-num {
-  left: 50%;
-  transform: translateX(-50%);
-}
-
+.milestone-center .milestone-num,
 .milestone-center {
-  left: 50%;
-  transform: translateX(-50%);
+  left: 50% !important;
+  transform: translateX(-50%) !important;
 }
 
 .big-number {
