@@ -47,10 +47,10 @@ export default function SalaScreen() {
   // =====================
   const goToExperience = () => {
     if (sala) {
-      // Construimos la URL: baseUrl/admin.html?sala=nombre-sala
+      // Construimos la URL: baseUrl/experiencia.html?sala=nombre-sala
       // replace(/\s+/g, '-') convierte espacios en guiones
       // toLowerCase() todo en minúsculas
-      const url = getBaseUrl() + '/admin.html?sala=' + sala.name.toLowerCase().replace(/\s+/g, '-')
+      const url = getBaseUrl() + '/experiencia.html?sala=' + sala.name.toLowerCase().replace(/\s+/g, '-')
       
       // Navegamos a la URL de la experiencia
       window.location.href = url
@@ -67,7 +67,7 @@ export default function SalaScreen() {
     // luego generamos el código QR
     setTimeout(() => {
       // Verificamos que la librería QRCode esté disponible
-      // (se carga desde CDN en admin.html)
+      // (se carga desde CDN en experiencia.html)
       if (sala && typeof QRCode !== 'undefined') {
         const qrBox = document.getElementById('qrCodeBox')
         if (qrBox) {
