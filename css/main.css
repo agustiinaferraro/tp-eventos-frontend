@@ -147,9 +147,9 @@ body, html {
   text-shadow: 0 0 10px currentColor;
 }
 
-.milestone-orange { color: #ff6b00; }
-.milestone-yellow { color: #ffdd00; }
-.milestone-green { color: #00ff88; }
+.milestone-orange { color: #ff6b00 !important; }
+.milestone-yellow { color: #ffdd00 !important; }
+.milestone-green { color: #00ff88 !important; }
 
 .milestone-num {
   @apply absolute;
