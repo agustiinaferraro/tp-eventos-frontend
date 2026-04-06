@@ -828,6 +828,18 @@
         color: #888;
       }
     }
+    .forgot-password { margin-top: 5px; }
+    .hidden { display: none; }
+    .saved-accounts-list { width: 100%; max-width: 350px; margin-bottom: 30px; }
+    .btn-sign-out { border-color: #fff; margin-top: 10px; padding: 15px 25px; }
+    .manage-account { margin-top: 30px; }
+    .profile-avatar-edit { width: 120px; height: 120px; font-size: 3rem; margin-bottom: 15px; background: #222; border: 3px solid #333; cursor: pointer; text-shadow: 2px 2px 4px rgba(0,0,0,0.9); }
+    .profile-image-preview { display: none; width: 120px; height: 120px; object-fit: cover; border-radius: 50%; }
+    .gallery-input { display: none; }
+    .btn-delete { display: none; border-color: #b22222; color: #b22222; margin-top: 10px; }
+    .user-menu-btn { display: flex; align-items: center; gap: 15px; cursor: pointer; }
+    .dropdown-arrow { color: #888; font-size: 1.5rem; }
+    .ngrok-section-edit { max-width: 350px; margin: 0 0 20px 0; }
   </style>
 </head>
 <body>
@@ -838,18 +850,18 @@
   <input type="email" class="input-field" id="authEmail" placeholder="Email" autocomplete="off">
   <input type="password" class="input-field" id="authPassword" placeholder="Contraseña" autocomplete="off">
   <button class="btn" id="authBtn" disabled>ENTRAR</button>
-  <button class="link-btn" id="forgotPasswordBtn" style="margin-top:5px;">¿Olvidaste tu contraseña?</button>
+  <button class="link-btn forgot-password" id="forgotPasswordBtn">¿Olvidaste tu contraseña?</button>
   <button class="link-btn" id="switchToRegister">¿No tenés cuenta? Creá una</button>
   <p class="error-msg" id="authError"></p>
-  <p class="success-msg" id="authSuccess" style="display:none;"></p>
+  <p class="success-msg hidden" id="authSuccess"></p>
 </div>
 
   <!-- SWITCH ACCOUNT MODAL -->
   <div class="modal" id="switchAccountModal">
     <button class="modal-close" id="closeSwitchAccount">×</button>
     <p class="modal-title">CAMBIAR CUENTA</p>
-    <div id="savedAccountsList" style="width:100%;max-width:350px;margin-bottom:30px;"></div>
-    <button class="btn" id="signOutAllBtn" style="border-color:#fff;margin-top:10px;padding:15px 25px;">Cerrar todas las sesiones</button>
+    <div id="savedAccountsList" class="saved-accounts-list"></div>
+    <button class="btn btn-sign-out" id="signOutAllBtn">Cerrar todas las sesiones</button>
   </div>
 
   <!-- REGISTER -->
@@ -869,34 +881,34 @@
 <div class="screen" id="profilesScreen">
   <h1 class="title">¿QUIÉN SOS?</h1>
   <div class="profiles-grid" id="profilesGrid"></div>
-  <button class="link-btn" id="manageAccount" style="margin-top:30px;">Gestionar perfiles</button>
+  <button class="link-btn manage-account" id="manageAccount">Gestionar perfiles</button>
 </div>
 
   <!-- ADD/EDIT PROFILE -->
   <div class="screen" id="profileEditScreen">
     <button class="back-btn" id="backFromProfileEdit"></button>
   <h1 class="title" id="profileEditTitle">NUEVO PERFIL</h1>
-  <div class="profile-avatar" id="profileAvatarPreview" style="width:120px;height:120px;font-size:3rem;margin-bottom:15px;background:#222;border:3px solid #333;cursor:pointer;text-shadow:2px 2px 4px rgba(0,0,0,0.9);">
-    <img id="profileImagePreview" style="display:none;width:120px;height:120px;object-fit:cover;border-radius:50%;">
+  <div class="profile-avatar profile-avatar-edit" id="profileAvatarPreview">
+    <img id="profileImagePreview" class="profile-image-preview">
   </div>
   <div class="photo-buttons">
     <button class="photo-btn" id="cameraBtn">Cámara</button>
     <button class="photo-btn" id="galleryBtn">Galería</button>
   </div>
-  <input type="file" id="galleryInput" accept="image/*" capture="user" style="display:none;">
+  <input type="file" id="galleryInput" accept="image/*" capture="user" class="gallery-input">
   <div class="color-picker" id="colorPicker"></div>
   <input type="text" class="input-field" id="profileName" placeholder="Nombre del perfil" maxlength="15">
   <button class="btn" id="saveProfileBtn" disabled>Guardar</button>
-  <button class="btn" id="deleteProfileBtn" style="display:none;border-color:#b22222;color:#b22222;margin-top:10px;">Eliminar perfil</button>
+  <button class="btn btn-delete" id="deleteProfileBtn">Eliminar perfil</button>
 </div>
 
 <!-- DASHBOARD -->
   <div class="screen" id="dashboardScreen">
   <div class="dashboard-header">
-    <div class="user-menu" id="userMenuBtn" style="display:flex;align-items:center;gap:15px;cursor:pointer;">
+    <div class="user-menu user-menu-btn" id="userMenuBtn">
       <div class="user-avatar" id="userAvatar"></div>
       <span class="user-name" id="userDisplay"></span>
-      <span style="color:#888;font-size:1.5rem;">▼</span>
+      <span class="dropdown-arrow">▼</span>
       <div class="user-dropdown" id="userDropdown">
         <div class="dropdown-item" id="switchAccountBtn">Cambiar cuenta</div>
         <div class="dropdown-item" id="logoutBtn">Cerrar sesión</div>
@@ -955,7 +967,7 @@
 <div class="modal" id="settingsModal">
   <button class="modal-close" id="closeSettingsModal">×</button>
   <p class="modal-title">CONFIGURACIÓN</p>
-  <div class="ngrok-section" style="max-width:350px;margin:0 0 20px 0;">
+    <div class="ngrok-section ngrok-section-edit">
     <p class="ngrok-title">URL PÚBLICA (PARA MÓVILES)</p>
     <p class="ngrok-instruction">
       1. Ejecutá <code>yarn ngrok</code> en backend y frontend<br>
@@ -1100,7 +1112,7 @@ function handleImageFile(file) {
   reader.onload = (e) => {
     currentProfileImage = e.target.result;
     profileImagePreview.src = currentProfileImage;
-    profileImagePreview.style.display = 'block';
+    profileImagePreview.classList.remove('hidden');
     profileAvatarPreview.textContent = '';
     profileAvatarPreview.style.background = 'transparent';
   };
@@ -1178,7 +1190,7 @@ cameraBtn.addEventListener('click', async () => {
       acceptBtn.onclick = () => {
         currentProfileImage = dataUrl;
         profileImagePreview.src = dataUrl;
-        profileImagePreview.style.display = 'block';
+        profileImagePreview.classList.remove('hidden');
         profileAvatarPreview.textContent = '';
         profileAvatarPreview.style.background = 'transparent';
         document.body.removeChild(previewContainer);
@@ -1203,7 +1215,7 @@ COLORS.forEach((color, i) => {
     btn.classList.add('selected');
     choseColor = true;
     currentProfileImage = null;
-    profileImagePreview.style.display = 'none';
+    profileImagePreview.classList.add('hidden');
     profileImagePreview.src = '';
     profileAvatarPreview.style.background = color;
     profileAvatarPreview.textContent = profileName.value.charAt(0).toUpperCase() || '?';
@@ -1415,14 +1427,14 @@ function editProfile(i) {
   editingProfileIndex = i;
   currentProfileImage = null;
   choseColor = false;
-  profileImagePreview.style.display = 'none';
+  profileImagePreview.classList.add('hidden');
   profileImagePreview.src = '';
   if (i === -1) {
     profileEditTitle.textContent = 'NUEVO PERFIL';
     profileName.value = '';
     profileAvatarPreview.style.background = COLORS[0];
     profileAvatarPreview.textContent = '?';
-    deleteProfileBtn.style.display = 'none';
+    deleteProfileBtn.classList.add('hidden');
     saveProfileBtn.disabled = true;
     saveProfileBtn.classList.remove('ready');
     document.querySelectorAll('.color-option')[0].click();
@@ -1432,14 +1444,14 @@ function editProfile(i) {
     if (profiles[i].image) {
       currentProfileImage = profiles[i].image;
       profileImagePreview.src = profiles[i].image;
-      profileImagePreview.style.display = 'block';
+      profileImagePreview.classList.remove('hidden');
       profileAvatarPreview.textContent = '';
       profileAvatarPreview.style.background = 'transparent';
     } else {
       profileAvatarPreview.style.background = profiles[i].color || COLORS[0];
       profileAvatarPreview.textContent = profiles[i].name.charAt(0).toUpperCase();
     }
-    deleteProfileBtn.style.display = 'block';
+    deleteProfileBtn.classList.remove('hidden');
     saveProfileBtn.disabled = false;
     saveProfileBtn.classList.add('ready');
     COLORS.forEach((c, idx) => {
