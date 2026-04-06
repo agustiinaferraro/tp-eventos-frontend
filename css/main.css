@@ -114,7 +114,7 @@ body, html {
 
 #bar.green {
   background: linear-gradient(90deg, #00ff88, #00ffcc);
-  box-shadow: 0 0 20px #00ff88;
+  box-shadow: 0 0 20px #00ff88, 0 0 40px rgba(0, 255, 136, 0.5);
   animation: bar-glow 0.5s ease-in-out infinite alternate;
 }
 
@@ -179,6 +179,10 @@ body, html {
 .milestone-orange { color: #ff6b00; }
 .milestone-yellow { color: #ffdd00; }
 .milestone-green { color: #00ff88; }
+
+.milestone-orange-medium { color: #ff6b00; }
+.milestone-yellow-medium { color: #ffdd00; }
+.milestone-green-medium { color: #00ff88; }
 
 .boost-overlay {
   @apply fixed inset-0 hidden items-center justify-center bg-black/85 z-[2000];
