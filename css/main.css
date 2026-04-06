@@ -114,8 +114,23 @@ body, html {
 
 #bar.green {
   background: linear-gradient(90deg, #00ff88, #00ffcc);
-  box-shadow: 0 0 20px #00ff88, 0 0 40px rgba(0, 255, 136, 0.5);
+  box-shadow: 0 0 20px #00ff88;
   animation: bar-glow 0.5s ease-in-out infinite alternate;
+}
+
+#progressLabels {
+  position: relative;
+  height: 1.5rem;
+  width: 100%;
+  margin-bottom: 0.25rem;
+}
+
+#progressLabels span {
+  position: absolute;
+  transform: translateX(-50%);
+  font-size: 0.6rem;
+  color: #9ca3af;
+  white-space: nowrap;
 }
 
 @keyframes bar-glow {
