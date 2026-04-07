@@ -265,7 +265,7 @@ export default function ProfileEditScreen() {
           <img src={image} alt="Preview" className="w-full h-full object-cover rounded-full" />
         ) : (
           // Si no hay imagen, mostramos la inicial
-          <span style={{ color: choseColor ? color : '#222', textShadow: '2px 2px 4px rgba(0,0,0,0.9)' }}>
+          <span className="text-white" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.9)' }}>
             {name.charAt(0).toUpperCase() || '?'}
           </span>
         )}
