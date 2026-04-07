@@ -27,7 +27,6 @@
   let sensorInitTime = 0;
   let sensorInitComplete = false;
   let isFirstReading = true;
-  let isConnected = false;
   let pendingEnergy = 0;
 
   const OFFLINE_KEY = 'pendingEnergy_' + salaParam;
@@ -82,6 +81,14 @@
     updateOfflineIndicator();
   }
 
+  function trySendEnergy(energy) {
+    if (socket.connected) {
+      socket.emit("energy", { energy: energy });
+    } else {
+      savePendingEnergy(energy);
+    }
+  }
+
   const boostOverlay = document.getElementById("boostOverlay");
   const boostTargetEl = document.getElementById("boostTarget");
   const unlockEffects = document.getElementById("unlockEffects");
@@ -133,14 +140,12 @@
   updateOfflineIndicator();
 
   socket.on("connect", () => {
-    isConnected = true;
     connectionStatus.classList.add("connected");
     connectionText.textContent = "CONECTADO";
     setTimeout(sendPendingEnergy, 500);
   });
 
   socket.on("disconnect", () => {
-    isConnected = false;
     connectionStatus.classList.remove("connected");
     connectionText.textContent = "SIN CONEXIÓN";
     updateOfflineIndicator();
@@ -418,17 +423,12 @@
 
       if (movementConsecutiveCount >= 1) {
         const energyToSend = boostMultiplier;
-        
-        if (isConnected) {
-          socket.emit("energy", { energy: energyToSend });
-        } else {
-          savePendingEnergy(energyToSend);
-        }
+        trySendEnergy(energyToSend);
 
         if (nearThresholdActive) {
           myRepetitions = Math.min(movementConsecutiveCount, 5);
           thresholdCount.textContent = `Repeticiones: ${myRepetitions}/5`;
-          if (isConnected) {
+          if (socket.connected) {
             socket.emit("doGesture", { gesture: "pump" });
           }
         }
@@ -456,14 +456,10 @@
   document.addEventListener("keydown", (e) => {
     if (e.key === "r" || e.key === "R") socket.emit("reset");
     if (e.key === "1") {
-      if (isConnected) socket.emit("doGesture", { gesture: "pump" });
+      if (socket.connected) socket.emit("doGesture", { gesture: "pump" });
     }
     if (e.key === "2") {
-      if (isConnected) {
-        socket.emit("energy", { energy: 50 });
-      } else {
-        savePendingEnergy(50);
-      }
+      trySendEnergy(50);
     }
   });
 })();
