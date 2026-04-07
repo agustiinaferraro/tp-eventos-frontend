@@ -77,18 +77,16 @@ export default function ProfileEditScreen() {
     const saved = localStorage.getItem('profiles_' + user.uid)
     if (saved) {
       const cached = JSON.parse(saved)
-      // Las imágenes tendrán 'CACHED' como marcador, las dejamos como null
       setProfiles(cached.map(p => ({
         name: p.name,
         color: p.color,
         image: null
       })))
     }
-  }
     
     // Si estamos editando (no creando), precargamos los datos del perfil
-    if (!isNew && localProfiles[editingIndex]) {
-      const p = localProfiles[editingIndex]
+    if (!isNew && profiles[editingIndex]) {
+      const p = profiles[editingIndex]
       setName(p.name)
       if (p.image) {
         setImage(p.image)
@@ -97,8 +95,6 @@ export default function ProfileEditScreen() {
         setColor(p.color || COLORS[0])
         setChoseColor(true)
       }
-      // Actualizamos profiles con la imagen para que handleSave funcione
-      setProfiles(localProfiles)
     }
   }
 
