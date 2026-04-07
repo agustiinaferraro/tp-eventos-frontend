@@ -48,6 +48,8 @@ export default function ProfilesScreen() {
   // FUNCIÓN: CARGAR PERFILES
   // =====================
   const loadProfiles = async () => {
+    if (!user?.uid) return
+    
     // Primero intentamos cargar desde localStorage (cache local)
     // Usamos el ID del usuario como clave para guardar sus perfiles
     const saved = localStorage.getItem('profiles_' + user.uid)

@@ -61,6 +61,8 @@ export default function ProfileEditScreen() {
   // FUNCIÓN: CARGAR PERFIL A EDITAR
   // =====================
   const loadCurrentProfile = async () => {
+    if (!user?.uid) return
+    
     // Cargamos perfiles desde localStorage
     const saved = localStorage.getItem('profiles_' + user.uid)
     let localProfiles = saved ? JSON.parse(saved) : []
