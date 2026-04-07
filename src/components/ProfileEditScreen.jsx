@@ -36,8 +36,6 @@ export default function ProfileEditScreen() {
   // Si editingIndex es -1, estamos creando un perfil nuevo
   // Si editingIndex >= 0, estamos editando un perfil existente
   const isNew = editingIndex === -1
-  
-  console.log('editingIndex:', editingIndex, 'isNew:', isNew, 'state:', location.state)
 
   // =====================
   // ESTADOS
@@ -85,15 +83,12 @@ export default function ProfileEditScreen() {
     if (!user?.uid) return
     
     try {
-      console.log('Cargando perfiles del backend...')
       const data = await apiGet(`/api/users/${user.uid}/profiles`)
       if (data.profiles) {
         setProfiles(data.profiles)
         return
       }
-    } catch (e) {
-      console.error('Error cargando del backend:', e.message)
-    }
+    } catch (e) {}
     
     // Si falla el backend, intentamos localStorage (sin imágenes)
     const saved = localStorage.getItem('profiles_' + user.uid)
@@ -116,23 +111,16 @@ export default function ProfileEditScreen() {
     const profilesForCache = newProfiles.map(p => ({
       name: p.name,
       color: p.color,
-      image: p.image ? 'CACHED' : null  // Marcador, no guardamos el base64 completo
+      image: p.image ? 'CACHED' : null
     }))
     
     try {
       localStorage.setItem('profiles_' + user.uid, JSON.stringify(profilesForCache))
-      console.log('Cache guardado en localStorage')
-    } catch (e) {
-      console.log('localStorage lleno, continuando sin cache')
-    }
+    } catch (e) {}
     
     try {
-      console.log('Guardando en backend...')
       await apiPost(`/api/users/${user.uid}/profiles`, { profiles: newProfiles })
-      console.log('Guardado en backend exitoso')
-    } catch (err) {
-      console.error('Error backend:', err.message)
-    }
+    } catch (err) {}
   }
 
   // =====================
@@ -161,14 +149,11 @@ export default function ProfileEditScreen() {
       newProfiles[editingIndex] = profileData
     }
     
-    console.log('Guardando perfil:', profileData)
-    
     try {
       await saveProfiles(newProfiles)
       navigate('/profiles')
     } catch (err) {
-      console.error('Error al guardar:', err)
-      alert('Error al guardar: ' + err.message)
+      alert('Error al guardar perfil')
     } finally {
       setIsSaving(false)
     }

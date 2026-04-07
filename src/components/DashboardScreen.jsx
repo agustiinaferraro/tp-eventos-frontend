@@ -71,25 +71,18 @@ export default function DashboardScreen() {
   // FUNCIÓN: CARGAR SALAS
   // =====================
   const loadSalas = async () => {
-    if (!user?.uid) {
-      console.log('No hay user.uid, saltando carga de salas')
-      return
-    }
+    if (!user?.uid) return
     
     const profile = JSON.parse(localStorage.getItem('currentProfile') || '{}')
     const saved = localStorage.getItem('salas_' + user.uid + '_' + profile.name)
     let localSalas = saved ? JSON.parse(saved) : []
     
-    console.log('Cargando salas para uid:', user.uid)
     try {
       const data = await apiGet(`/api/users/${user.uid}/salas`)
-      console.log('Salas del backend:', data)
       if (data.salas) {
         localSalas = data.salas
       }
-    } catch (e) {
-      console.error('Error cargando salas:', e)
-    }
+    } catch (e) {}
     
     setSalas(localSalas)
   }
@@ -102,13 +95,9 @@ export default function DashboardScreen() {
     setSalas(newSalas)
     localStorage.setItem('salas_' + user.uid + '_' + profile.name, JSON.stringify(newSalas))
     
-    console.log('Guardando salas para uid:', user.uid)
     try {
-      const result = await apiPost(`/api/users/${user.uid}/salas`, { salas: newSalas })
-      console.log('Salas guardadas:', result)
-    } catch (e) {
-      console.error('Error guardando salas:', e)
-    }
+      await apiPost(`/api/users/${user.uid}/salas`, { salas: newSalas })
+    } catch (e) {}
   }
 
   // =====================
