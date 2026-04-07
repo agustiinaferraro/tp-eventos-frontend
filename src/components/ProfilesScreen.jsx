@@ -145,7 +145,7 @@ export default function ProfilesScreen() {
             {/* Avatar circular del perfil */}
             <div
               className={`w-24 h-24 md:w-32 md:h-32 rounded-full border-4 ${manageMode ? 'border-zinc-500' : 'border-zinc-600'} flex items-center justify-center text-4xl md:text-5xl transition-all hover:border-green-400 hover:scale-110 relative`}
-              style={{ background: profile.color || '#222' }}  // Color de fondo o gris por defecto
+              style={{ background: profile.color || '#222' }}
             >
               {/* Si tiene imagen, mostramos la imagen */}
               {profile.image ? (
@@ -155,17 +155,19 @@ export default function ProfilesScreen() {
                   alt={profile.name}
                 />
               ) : (
-                // Si no tiene imagen, mostramos la inicial del nombre
                 <span className="text-white drop-shadow-[2px_2px_4px_rgba(0,0,0,0.9)]">
-                  {profile.name.charAt(0).toUpperCase()}  {/* Primera letra en mayúscula */}
+                  {profile.name.charAt(0).toUpperCase()}
                 </span>
               )}
               
-              {/* En modo gestión, mostramos el ícono de editar (lápiz) */}
+              {/* Overlay negro translúcido + lápiz - siempre visible en manageMode */}
               {manageMode && (
-                <span className="absolute inset-0 flex items-center justify-center text-4xl opacity-0 hover:opacity-100 z-10">
-                  &#9998;  {/* Código HTML para el ícono de lápiz */}
-                </span>
+                <>
+                  <div className="absolute inset-0 bg-black/60 rounded-full z-10"></div>
+                  <span className="absolute inset-0 flex items-center justify-center text-4xl text-white z-20">
+                    &#9998;
+                  </span>
+                </>
               )}
             </div>
             
