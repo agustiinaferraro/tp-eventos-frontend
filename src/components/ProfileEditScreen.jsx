@@ -45,6 +45,7 @@ export default function ProfileEditScreen() {
   const [image, setImage] = useState(null)       // Imagen del perfil (base64)
   const [choseColor, setChoseColor] = useState(false)  // Si el usuario eligió un color
   const [profiles, setProfiles] = useState([])    // Lista de todos los perfiles
+  const [isSaving, setIsSaving] = useState(false) // Para evitar múltiples guards
   
   // useRef para manipular el input de archivo directamente
   const fileInputRef = useRef(null)
@@ -53,8 +54,27 @@ export default function ProfileEditScreen() {
   // EFECTO: CARGAR PERFIL EXISTENTE
   // =====================
   useEffect(() => {
+    if (!user?.uid) return
     loadCurrentProfile()
-  }, [])  // Array vacío = solo se ejecuta al montar el componente
+  }, [user])
+
+  // =====================
+  // EFECTO: CUANDO CARGA PERFILES, PRECARGAR DATOS
+  // =====================
+  useEffect(() => {
+    if (isNew || profiles.length === 0) return
+    if (!profiles[editingIndex]) return
+    
+    const p = profiles[editingIndex]
+    setName(p.name || '')
+    if (p.image) {
+      setImage(p.image)
+      setChoseColor(false)
+    } else {
+      setColor(p.color || COLORS[0])
+      setChoseColor(true)
+    }
+  }, [profiles, editingIndex, isNew])
 
   // =====================
   // FUNCIÓN: CARGAR PERFIL A EDITAR
@@ -82,19 +102,6 @@ export default function ProfileEditScreen() {
         color: p.color,
         image: null
       })))
-    }
-    
-    // Si estamos editando (no creando), precargamos los datos del perfil
-    if (!isNew && profiles[editingIndex]) {
-      const p = profiles[editingIndex]
-      setName(p.name)
-      if (p.image) {
-        setImage(p.image)
-        setChoseColor(false)
-      } else {
-        setColor(p.color || COLORS[0])
-        setChoseColor(true)
-      }
     }
   }
 
@@ -130,46 +137,38 @@ export default function ProfileEditScreen() {
   // FUNCIÓN: GUARDAR PERFIL
   // =====================
   const handleSave = async () => {
+    if (isSaving) return
     if (!user?.uid) {
       alert('No hay usuario logueado')
       return
     }
     
-    // Construimos el objeto del perfil
+    setIsSaving(true)
+    
     const profileData = {
-      name: name.trim(),  // trim() elimina espacios al inicio y final
-      
-      // Lógica para el color:
-      // - Si eligió un color específicamente, usar ese color
-      // - Si tiene imagen, el color es null
-      // - Si es nuevo y no tiene imagen, usar el color por defecto
-      // - Si está editando, mantener el color original
+      name: name.trim(),
       color: choseColor ? color : (image ? null : (isNew ? color : profiles[editingIndex]?.color)),
-      
-      image: image  // La imagen en base64 o null
+      image: image
     }
     
-    // Copiamos el array de perfiles
     let newProfiles = [...profiles]
     
     if (isNew) {
-      // Modo creación: agregamos al final
       newProfiles.push(profileData)
     } else {
-      // Modo edición: reemplazamos en la posición del índice
       newProfiles[editingIndex] = profileData
     }
     
     console.log('Guardando perfil:', profileData)
-    console.log('Array completo:', newProfiles)
     
     try {
-      // Guardamos y navegamos de vuelta a la lista de perfiles
       await saveProfiles(newProfiles)
       navigate('/profiles')
     } catch (err) {
       console.error('Error al guardar:', err)
       alert('Error al guardar: ' + err.message)
+    } finally {
+      setIsSaving(false)
     }
   }
 
@@ -177,12 +176,17 @@ export default function ProfileEditScreen() {
   // FUNCIÓN: ELIMINAR PERFIL
   // =====================
   const handleDelete = async () => {
+    if (isSaving) return
     if (confirm('¿Eliminar este perfil?')) {
+      setIsSaving(true)
       let newProfiles = [...profiles]
-      // splice(index, 1) elimina 1 elemento en esa posición
       newProfiles.splice(editingIndex, 1)
-      await saveProfiles(newProfiles)
-      navigate('/profiles')
+      try {
+        await saveProfiles(newProfiles)
+        navigate('/profiles')
+      } finally {
+        setIsSaving(false)
+      }
     }
   }
 
@@ -392,16 +396,17 @@ export default function ProfileEditScreen() {
       <button
         className="w-full max-w-md mt-3 mb-3 bg-transparent border-2 border-green-600 text-green-600 text-base py-4 px-10 rounded-lg cursor-pointer tracking-wider transition-all hover:bg-green-600 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
         onClick={handleSave}
-        disabled={!name.trim()}  // Deshabilitado si el nombre está vacío
+        disabled={!name.trim() || isSaving}
       >
-        Guardar
+        {isSaving ? 'Guardando...' : 'Guardar'}
       </button>
       
       {/* Botón eliminar (solo visible al editar, no al crear) */}
       {!isNew && (
         <button
-          className="w-full max-w-md mt-3 bg-transparent border-2 border-red-700 text-red-700 text-base py-4 px-10 rounded-lg cursor-pointer tracking-wider transition-all hover:bg-red-700 hover:text-white"
+          className="w-full max-w-md mt-3 bg-transparent border-2 border-red-700 text-red-700 text-base py-4 px-10 rounded-lg cursor-pointer tracking-wider transition-all hover:bg-red-700 hover:text-white disabled:opacity-50"
           onClick={handleDelete}
+          disabled={isSaving}
         >
           Eliminar perfil
         </button>
