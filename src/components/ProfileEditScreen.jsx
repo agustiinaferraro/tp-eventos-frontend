@@ -36,6 +36,8 @@ export default function ProfileEditScreen() {
   // Si editingIndex es -1, estamos creando un perfil nuevo
   // Si editingIndex >= 0, estamos editando un perfil existente
   const isNew = editingIndex === -1
+  
+  console.log('editingIndex:', editingIndex, 'isNew:', isNew, 'state:', location.state)
 
   // =====================
   // ESTADOS
