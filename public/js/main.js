@@ -43,7 +43,6 @@
 
   function sendPendingEnergy() {
     const pending = getPendingEnergy();
-    console.log("sendPendingEnergy called. Pending:", pending);
     if (pending > 0) {
       const syncing = document.getElementById("syncingEnergy");
       const offline = document.getElementById("offlineEnergy");
@@ -53,7 +52,6 @@
         syncing.textContent = "🔄 Enviando " + pending + " puntos...";
       }
       
-      console.log("Emitiendo energía pendiente:", pending);
       socket.emit("energy", { energy: pending });
       
       setTimeout(() => {
@@ -80,16 +78,13 @@
   function savePendingEnergy(energy) {
     pendingEnergy += energy;
     localStorage.setItem(OFFLINE_KEY, pendingEnergy.toString());
-    console.log("Guardé energía:", pendingEnergy);
     updateOfflineIndicator();
   }
 
   function trySendEnergy(energy) {
     savePendingEnergy(energy);
-    console.log("Intentando enviar energía:", energy, "Socket connected:", socket.connected);
     if (socket.connected) {
       socket.emit("energy", { energy: energy });
-      console.log("Enviado!");
     }
   }
 
@@ -156,7 +151,6 @@
   socket.on("connect", () => {
     connectionStatus.classList.add("connected");
     connectionText.textContent = "CONECTADO";
-    console.log("Conectado! Enviando energía pendiente...");
     sendPendingEnergy();
   });
 
