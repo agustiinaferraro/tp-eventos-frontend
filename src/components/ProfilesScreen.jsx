@@ -132,14 +132,14 @@ export default function ProfilesScreen() {
       </h1>
       
       {/* Grid de perfiles (2 columnas en móvil, 3 en desktop) */}
-      <div className="grid grid-cols-2 md:grid-cols-7 gap-8 max-w-6xl mt-10 mx-auto justify-center">
+      <div className="flex flex-wrap justify-center gap-8 max-w-6xl mt-10 mx-auto">
         
         {/* Recorremos cada perfil y lo mostramos */}
         {profiles.map((profile, i) => (
           // key={i} es el índice, necesario para React
           <div
             key={i}
-            className={`flex flex-col items-center cursor-pointer transition-all hover:scale-105 ${manageMode ? 'opacity-80' : ''}`}
+            className={`flex flex-col items-center cursor-pointer transition-all hover:scale-105 w-28 md:w-32 ${manageMode ? 'opacity-80' : ''}`}
             onClick={() => handleSelectProfile(i)}  // Al tocar, seleccionamos/editamos
           >
             {/* Avatar circular del perfil */}
@@ -178,7 +178,7 @@ export default function ProfilesScreen() {
         
         {/* Tarjeta para agregar nuevo perfil */}
         <div
-          className="flex flex-col items-center cursor-pointer"
+          className="flex flex-col items-center cursor-pointer w-28 md:w-32"
           onClick={() => navigate('/profiles/edit', { state: { index: -1 } })}
           // index: -1 significa "nuevo perfil" (no estamos editando ninguno existente)
         >
