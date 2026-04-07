@@ -83,6 +83,7 @@ export default function ProfileEditScreen() {
       setName(p.name)
       if (p.image) {
         setImage(p.image)
+        setChoseColor(false)
       } else {
         setColor(p.color || COLORS[0])
         setChoseColor(true)
