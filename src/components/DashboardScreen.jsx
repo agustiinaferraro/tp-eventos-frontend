@@ -54,6 +54,8 @@ export default function DashboardScreen() {
   // EFECTO: CARGAR DATOS AL MONTAR
   // =====================
   useEffect(() => {
+    if (!user?.uid) return
+    
     // Cargamos el perfil actual de localStorage
     const saved = localStorage.getItem('currentProfile')
     if (saved) setCurrentProfile(JSON.parse(saved))
@@ -63,7 +65,7 @@ export default function DashboardScreen() {
     
     // Cargamos las cuentas guardadas
     loadSavedAccounts()
-  }, [])  // Solo se ejecuta al montar
+  }, [user])  // Se ejecuta cuando user cambia
 
   // =====================
   // FUNCIÓN: CARGAR SALAS
