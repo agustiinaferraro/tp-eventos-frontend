@@ -43,6 +43,12 @@ export default function DashboardScreen() {
   
   // savedAccounts: cuentas guardadas en localStorage para quick switch
   const [savedAccounts, setSavedAccounts] = useState([])
+  
+  // showCreateSalaModal: si el modal de crear sala está visible
+  const [showCreateSalaModal, setShowCreateSalaModal] = useState(false)
+  
+  // newSalaName: nombre de la sala que se está creando
+  const [newSalaName, setNewSalaName] = useState('')
 
   // =====================
   // EFECTO: CARGAR DATOS AL MONTAR
@@ -124,13 +130,17 @@ export default function DashboardScreen() {
   // FUNCIÓN: CREAR NUEVA SALA
   // =====================
   const handleCreateSala = () => {
-    // prompt() muestra un diálogo para que el usuario ingrese texto
-    const name = prompt('Nombre del artista o banda:')
-    
+    setNewSalaName('')
+    setShowCreateSalaModal(true)
+  }
+  
+  const confirmCreateSala = () => {
+    const name = newSalaName.trim()
     if (name) {
-      // Creamos la sala con nombre y un ID único (timestamp)
       const newSalas = [...salas, { name, id: Date.now() }]
       saveSalas(newSalas)
+      setShowCreateSalaModal(false)
+      setNewSalaName('')
     }
   }
 
@@ -327,6 +337,47 @@ export default function DashboardScreen() {
           >
             Cerrar todas las sesiones
           </button>
+        </div>
+      )}
+      
+      {/* ===================== */}
+      {/* MODAL: CREAR SALA */}
+      {/* ===================== */}
+      {showCreateSalaModal && (
+        <div
+          className="fixed inset-0 bg-black/90 z-50 flex flex-col items-center justify-center p-5"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setShowCreateSalaModal(false)
+          }}
+        >
+          <h2 className="text-2xl text-green-400 tracking-widest mb-8">NUEVA SALA</h2>
+          
+          <input
+            type="text"
+            className="w-full max-w-md bg-zinc-900 border-2 border-zinc-700 text-white text-center text-lg p-4 rounded-lg outline-none focus:border-green-400 mb-6 placeholder-zinc-500"
+            placeholder="Nombre del artista o banda"
+            value={newSalaName}
+            onChange={(e) => setNewSalaName(e.target.value)}
+            onKeyDown={(e) => e.key === 'Enter' && confirmCreateSala()}
+            autoFocus
+            maxLength={30}
+          />
+          
+          <div className="flex gap-4 w-full max-w-md">
+            <button
+              className="flex-1 bg-transparent border-2 border-zinc-600 text-zinc-400 py-4 rounded-lg cursor-pointer tracking-wider transition-all hover:border-white hover:text-white"
+              onClick={() => setShowCreateSalaModal(false)}
+            >
+              Cancelar
+            </button>
+            <button
+              className="flex-1 bg-green-600 text-white py-4 rounded-lg cursor-pointer tracking-wider transition-all hover:bg-green-500 disabled:opacity-50 disabled:cursor-not-allowed"
+              onClick={confirmCreateSala}
+              disabled={!newSalaName.trim()}
+            >
+              Crear
+            </button>
+          </div>
         </div>
       )}
     </div>
