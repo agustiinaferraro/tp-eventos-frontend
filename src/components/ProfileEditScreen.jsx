@@ -254,57 +254,97 @@ export default function ProfileEditScreen() {
       // facingMode: 'user' = cámara frontal
       const stream = await navigator.mediaDevices.getUserMedia({
         video: { facingMode: 'user' },
-        audio: false  // No necesitamos audio
+        audio: false
       })
       
       // Creamos un elemento de video dinámicamente
       const video = document.createElement('video')
-      video.srcObject = stream  // Conectamos el stream de la cámara
+      video.srcObject = stream
       video.className = 'fixed top-0 left-0 w-full h-full z-[9999] bg-black object-cover'
-      video.play()  // Empezamos a reproducir
-      
-      // Agregamos el video al body para que se vea
+      video.play()
       document.body.appendChild(video)
       
       // Botón para capturar la foto
       const captureBtn = document.createElement('button')
       captureBtn.className = 'fixed bottom-10 left-1/2 -translate-x-1/2 z-[10000] w-20 h-20 rounded-full bg-white border-none cursor-pointer text-4xl'
+      captureBtn.textContent = '📷'
       document.body.appendChild(captureBtn)
       
       // Botón para cerrar la cámara
       const closeBtn = document.createElement('button')
       closeBtn.className = 'fixed top-5 right-5 z-[10001] w-12 h-12 rounded-full bg-white/20 text-white text-xl border-none cursor-pointer'
+      closeBtn.textContent = '✕'
       document.body.appendChild(closeBtn)
-
-      // Función de limpieza: cierra la cámara y elimina los elementos
+      
+      let currentPhoto = null
+      
+      // Función de limpieza completa
       const cleanup = () => {
-        stream.getTracks().forEach(t => t.stop())  // Detiene todos los tracks de video
+        stream.getTracks().forEach(t => t.stop())
         document.body.removeChild(video)
         document.body.removeChild(captureBtn)
         document.body.removeChild(closeBtn)
+        if (currentPhoto) {
+          document.body.removeChild(currentPhoto.canvas)
+          document.body.removeChild(currentPhoto.confirmBtn)
+          document.body.removeChild(currentPhoto.cancelBtn)
+        }
       }
       
-      // Al cerrar, llamamos cleanup
       closeBtn.onclick = cleanup
       
-      // Al capturar, tomamos la foto
+      // Al capturar, tomamos la foto y mostramos previsualización
       captureBtn.onclick = () => {
-        // Creamos un canvas (lienzo) para dibujar la imagen
         const canvas = document.createElement('canvas')
-        canvas.width = video.videoWidth   // Ancho del video
-        canvas.height = video.videoHeight  // Alto del video
-        
-        // Dibujamos el frame actual del video en el canvas
+        canvas.width = video.videoWidth
+        canvas.height = video.videoHeight
         canvas.getContext('2d').drawImage(video, 0, 0)
         
-        // Convertimos el canvas a imagen JPEG en base64
-        setChoseColor(false)
-        setImage(canvas.toDataURL('image/jpeg'))
+        currentPhoto = {
+          canvas: canvas,
+          dataUrl: canvas.toDataURL('image/jpeg')
+        }
         
-        cleanup()  // Limpiamos todo
+        // Ocultamos video y capture button
+        video.style.display = 'none'
+        captureBtn.style.display = 'none'
+        
+        // Mostramos la foto capturada
+        canvas.className = 'fixed top-0 left-0 w-full h-full z-[9999] bg-black object-cover'
+        document.body.appendChild(canvas)
+        
+        // Botón confirmar (tilde)
+        const confirmBtn = document.createElement('button')
+        confirmBtn.className = 'fixed bottom-10 right-10 z-[10001] w-16 h-16 rounded-full bg-green-600 border-none cursor-pointer text-white text-3xl'
+        confirmBtn.textContent = '✓'
+        document.body.appendChild(confirmBtn)
+        currentPhoto.confirmBtn = confirmBtn
+        
+        // Botón cancelar (tacho)
+        const cancelBtn = document.createElement('button')
+        cancelBtn.className = 'fixed bottom-10 left-10 z-[10001] w-16 h-16 rounded-full bg-red-600 border-none cursor-pointer text-white text-3xl'
+        cancelBtn.textContent = '✕'
+        document.body.appendChild(cancelBtn)
+        currentPhoto.cancelBtn = cancelBtn
+        
+        // Confirmar: acepta la foto y cierra
+        confirmBtn.onclick = () => {
+          setChoseColor(false)
+          setImage(currentPhoto.dataUrl)
+          cleanup()
+        }
+        
+        // Cancelar: descarta la foto y sigue con la cámara
+        cancelBtn.onclick = () => {
+          document.body.removeChild(canvas)
+          document.body.removeChild(confirmBtn)
+          document.body.removeChild(cancelBtn)
+          currentPhoto = null
+          video.style.display = 'block'
+          captureBtn.style.display = 'block'
+        }
       }
     } catch (err) {
-      // Si hay error (no hay cámara, no dio permisos, etc)
       alert('No se pudo acceder a la cámara')
     }
   }
