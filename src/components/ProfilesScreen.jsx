@@ -192,20 +192,10 @@ export default function ProfilesScreen() {
       {/* Botón para alternar modo gestión */}
       <button
         className="bg-transparent border-none text-green-400 text-sm cursor-pointer mt-12 tracking-wider transition-all hover:text-green-300 hover:scale-105 active:scale-95"
-        onClick={() => setManageMode(!manageMode)}  // Alterna entre true/false
+        onClick={() => setManageMode(!manageMode)}
       >
         {manageMode ? 'Listo' : 'Gestionar perfiles'}
       </button>
-      
-      {/* Botón para eliminar (solo visible en modo gestión si hay perfiles) */}
-      {manageMode && profiles.length > 0 && (
-        <button
-          className="w-full max-w-md mt-5 bg-transparent border-2 border-red-700 text-red-700 text-base py-4 px-10 rounded-lg cursor-pointer tracking-wider transition-all hover:bg-red-700 hover:text-white"
-          onClick={() => handleDeleteProfile(0)}  // Elimina el primer perfil
-        >
-          Eliminar primer perfil
-        </button>
-      )}
     </div>
   )
 }
