@@ -259,7 +259,10 @@ export default function ProfileEditScreen() {
       </h1>
       
       {/* Avatar/Preview del perfil */}
-      <div className="w-28 h-28 md:w-32 md:h-32 rounded-full border-4 border-zinc-700 flex items-center justify-center text-5xl mb-6 bg-zinc-800 cursor-pointer overflow-hidden">
+      <div 
+        className="w-28 h-28 md:w-32 md:h-32 rounded-full border-4 border-zinc-700 flex items-center justify-center text-5xl mb-6 cursor-pointer overflow-hidden"
+        style={{ background: choseColor ? color : (image ? 'transparent' : '#222') }}
+      >
         {image ? (
           // Si hay imagen, la mostramos
           <img src={image} alt="Preview" className="w-full h-full object-cover rounded-full" />
