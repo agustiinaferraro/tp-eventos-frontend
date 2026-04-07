@@ -438,9 +438,19 @@ body, html {
   animation: pulse 1.5s infinite;
 }
 
+.syncing-energy {
+  @apply mt-2 text-blue-400 text-xs tracking-wider;
+  animation: pulse 0.8s infinite;
+}
+
 @keyframes pulse {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.5; }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
 .tilt-indicator {

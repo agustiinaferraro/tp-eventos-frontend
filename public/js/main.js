@@ -45,8 +45,22 @@
   function sendPendingEnergy() {
     const pending = getPendingEnergy();
     if (pending > 0) {
+      const syncing = document.getElementById("syncingEnergy");
+      const offline = document.getElementById("offlineEnergy");
+      if (offline) offline.classList.add("hidden");
+      if (syncing) {
+        syncing.classList.remove("hidden");
+        syncing.textContent = "🔄 Enviando " + pending + " puntos...";
+      }
+      
       socket.emit("energy", { energy: pending });
-      clearPendingEnergy();
+      
+      setTimeout(() => {
+        clearPendingEnergy();
+        if (syncing) {
+          syncing.classList.add("hidden");
+        }
+      }, 1000);
     }
   }
 
@@ -108,7 +122,12 @@
 
   const socket = io(SERVER_URL, {
     query: { room: salaParam },
-    transports: ['websocket', 'polling']
+    transports: ['websocket', 'polling'],
+    reconnection: true,
+    reconnectionAttempts: Infinity,
+    reconnectionDelay: 1000,
+    reconnectionDelayMax: 5000,
+    timeout: 20000
   });
 
   updateOfflineIndicator();
@@ -117,7 +136,7 @@
     isConnected = true;
     connectionStatus.classList.add("connected");
     connectionText.textContent = "CONECTADO";
-    sendPendingEnergy();
+    setTimeout(sendPendingEnergy, 500);
   });
 
   socket.on("disconnect", () => {
