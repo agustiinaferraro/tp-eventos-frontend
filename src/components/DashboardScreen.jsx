@@ -69,20 +69,25 @@ export default function DashboardScreen() {
   // FUNCIÓN: CARGAR SALAS
   // =====================
   const loadSalas = async () => {
-    // Obtenemos el perfil actual
-    const profile = JSON.parse(localStorage.getItem('currentProfile') || '{}')
+    if (!user?.uid) {
+      console.log('No hay user.uid, saltando carga de salas')
+      return
+    }
     
-    // La key en localStorage incluye: userId + nombre del perfil
-    // Así cada perfil tiene sus propias salas
+    const profile = JSON.parse(localStorage.getItem('currentProfile') || '{}')
     const saved = localStorage.getItem('salas_' + user.uid + '_' + profile.name)
     let localSalas = saved ? JSON.parse(saved) : []
     
+    console.log('Cargando salas para uid:', user.uid)
     try {
       const data = await apiGet(`/api/users/${user.uid}/salas`)
+      console.log('Salas del backend:', data)
       if (data.salas) {
         localSalas = data.salas
       }
-    } catch (e) {}
+    } catch (e) {
+      console.error('Error cargando salas:', e)
+    }
     
     setSalas(localSalas)
   }
@@ -95,9 +100,13 @@ export default function DashboardScreen() {
     setSalas(newSalas)
     localStorage.setItem('salas_' + user.uid + '_' + profile.name, JSON.stringify(newSalas))
     
+    console.log('Guardando salas para uid:', user.uid)
     try {
-      await apiPost(`/api/users/${user.uid}/salas`, { salas: newSalas })
-    } catch (e) {}
+      const result = await apiPost(`/api/users/${user.uid}/salas`, { salas: newSalas })
+      console.log('Salas guardadas:', result)
+    } catch (e) {
+      console.error('Error guardando salas:', e)
+    }
   }
 
   // =====================
