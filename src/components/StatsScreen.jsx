@@ -12,6 +12,14 @@ export default function StatsScreen() {
   const [selectedSala, setSelectedSala] = useState('')
   const [loading, setLoading] = useState(false)
 
+  useEffect(() => {
+    if (!selectedSala) return;
+    handleViewStats();
+    
+    const interval = setInterval(handleViewStats, 5000);
+    return () => clearInterval(interval);
+  }, [selectedSala]);
+
   const handleViewStats = async () => {
     if (!selectedSala.trim()) return
     setLoading(true)
@@ -64,7 +72,7 @@ export default function StatsScreen() {
 
       {stats && (
         <div className="w-full max-w-2xl">
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
             <div className="bg-zinc-900 border border-zinc-700 rounded-lg p-4 text-center">
               <p className="text-3xl text-green-400 font-bold">{stats.summary?.connections || 0}</p>
               <p className="text-xs text-zinc-500 mt-1">Entradas</p>
@@ -72,6 +80,10 @@ export default function StatsScreen() {
             <div className="bg-zinc-900 border border-zinc-700 rounded-lg p-4 text-center">
               <p className="text-3xl text-red-400 font-bold">{stats.summary?.disconnections || 0}</p>
               <p className="text-xs text-zinc-500 mt-1">Salidas</p>
+            </div>
+            <div className="bg-zinc-900 border border-zinc-700 rounded-lg p-4 text-center">
+              <p className="text-3xl text-blue-400 font-bold">{stats.summary?.activeConnections || 0}</p>
+              <p className="text-xs text-zinc-500 mt-1">Jugadores ahora</p>
             </div>
             <div className="bg-zinc-900 border border-zinc-700 rounded-lg p-4 text-center">
               <p className="text-3xl text-yellow-400 font-bold">{stats.summary?.totalEnergy || 0}</p>
