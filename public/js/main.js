@@ -32,14 +32,22 @@
 
   const OFFLINE_KEY = 'pendingEnergy_' + salaParam;
 
-  function savePendingEnergy(energy) {
-    pendingEnergy += energy;
-    localStorage.setItem(OFFLINE_KEY, pendingEnergy.toString());
+  function getPendingEnergy() {
+    return parseInt(localStorage.getItem(OFFLINE_KEY) || '0');
+  }
+
+  function clearPendingEnergy() {
+    pendingEnergy = 0;
+    localStorage.removeItem(OFFLINE_KEY);
     updateOfflineIndicator();
   }
 
-  function getPendingEnergy() {
-    return parseInt(localStorage.getItem(OFFLINE_KEY) || '0');
+  function sendPendingEnergy() {
+    const pending = getPendingEnergy();
+    if (pending > 0) {
+      socket.emit("energy", { energy: pending });
+      clearPendingEnergy();
+    }
   }
 
   function updateOfflineIndicator() {
@@ -52,6 +60,12 @@
     } else {
       indicator.classList.add("hidden");
     }
+  }
+
+  function savePendingEnergy(energy) {
+    pendingEnergy += energy;
+    localStorage.setItem(OFFLINE_KEY, pendingEnergy.toString());
+    updateOfflineIndicator();
   }
 
   const boostOverlay = document.getElementById("boostOverlay");
