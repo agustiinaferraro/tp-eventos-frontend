@@ -11,11 +11,10 @@ import React, { useState, useEffect, useRef } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 
 // useAuth: para obtener el usuario actual
-// db: instancia de Firestore
-import { useAuth, db } from '../context/AuthContext'
+import { useAuth } from '../context/AuthContext'
 
-// Funciones de Firestore
-import { doc, getDoc, setDoc } from 'firebase/firestore'
+// API del backend
+import { apiGet, apiPost } from '../utils/api'
 
 // COLORS: array de colores predefinidos desde constants
 import { COLORS } from '../constants'
@@ -63,15 +62,13 @@ export default function ProfileEditScreen() {
   const loadCurrentProfile = async () => {
     if (!user?.uid) return
     
-    // Cargamos perfiles desde localStorage
     const saved = localStorage.getItem('profiles_' + user.uid)
     let localProfiles = saved ? JSON.parse(saved) : []
     
     try {
-      // Intentamos cargar desde Firestore
-      const docSnap = await getDoc(doc(db, 'users', user.uid))
-      if (docSnap.exists() && docSnap.data().profiles) {
-        localProfiles = docSnap.data().profiles
+      const data = await apiGet(`/api/users/${user.uid}/profiles`)
+      if (data.profiles) {
+        localProfiles = data.profiles
       }
     } catch (e) {}
     
@@ -97,11 +94,16 @@ export default function ProfileEditScreen() {
   // FUNCIÓN: GUARDAR PERFILES
   // =====================
   const saveProfiles = async (newProfiles) => {
-    // Guarda en localStorage y Firestore
     localStorage.setItem('profiles_' + user.uid, JSON.stringify(newProfiles))
-    console.log('Guardando en Firestore...')
-    await setDoc(doc(db, 'users', user.uid), { profiles: newProfiles }, { merge: true })
-    console.log('Guardado en Firestore exitoso')
+    console.log('Guardado en localStorage')
+    
+    try {
+      console.log('Guardando en backend...')
+      await apiPost(`/api/users/${user.uid}/profiles`, { profiles: newProfiles })
+      console.log('Guardado en backend exitoso')
+    } catch (err) {
+      console.error('Error backend:', err.message)
+    }
   }
 
   // =====================

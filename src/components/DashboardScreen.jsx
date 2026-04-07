@@ -10,11 +10,10 @@ import { useNavigate } from 'react-router-dom'
 
 // useAuth: usuario actual
 // auth: instancia de Firebase Auth
-// db: instancia de Firestore
-import { useAuth, auth, db } from '../context/AuthContext'
+import { useAuth, auth } from '../context/AuthContext'
 
-// Funciones de Firestore para guardar/cargar datos
-import { doc, getDoc, setDoc } from 'firebase/firestore'
+// API del backend
+import { apiGet, apiPost } from '../utils/api'
 
 // signOut para cerrar sesión
 import { signOut } from 'firebase/auth'
@@ -73,16 +72,11 @@ export default function DashboardScreen() {
     let localSalas = saved ? JSON.parse(saved) : []
     
     try {
-      // Intentamos cargar desde Firestore
-      // La ruta es: /users/{userId}/profiles/{profileName}
-      const docSnap = await getDoc(doc(db, 'users', user.uid, 'profiles', profile.name))
-      
-      if (docSnap.exists() && docSnap.data().salas) {
-        localSalas = docSnap.data().salas
+      const data = await apiGet(`/api/users/${user.uid}/salas`)
+      if (data.salas) {
+        localSalas = data.salas
       }
-    } catch (e) {
-      // Si falla, usamos los datos locales
-    }
+    } catch (e) {}
     
     setSalas(localSalas)
   }
@@ -92,15 +86,12 @@ export default function DashboardScreen() {
   // =====================
   const saveSalas = async (newSalas) => {
     const profile = JSON.parse(localStorage.getItem('currentProfile') || '{}')
-    
-    // Actualizamos estado
     setSalas(newSalas)
-    
-    // Guardamos en localStorage
     localStorage.setItem('salas_' + user.uid + '_' + profile.name, JSON.stringify(newSalas))
     
-    // Guardamos en Firestore
-    await setDoc(doc(db, 'users', user.uid, 'profiles', profile.name), { salas: newSalas }, { merge: true })
+    try {
+      await apiPost(`/api/users/${user.uid}/salas`, { salas: newSalas })
+    } catch (e) {}
   }
 
   // =====================

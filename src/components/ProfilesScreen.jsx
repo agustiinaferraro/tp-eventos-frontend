@@ -9,14 +9,10 @@ import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 // useAuth nos da acceso al usuario actual
-// db es la instancia de Firestore (base de datos)
-import { useAuth, db } from '../context/AuthContext'
+import { useAuth } from '../context/AuthContext'
 
-// Funciones de Firestore:
-// - doc: crea una referencia a un documento específico
-// - getDoc: obtiene un documento de Firestore
-// - setDoc: guarda o actualiza un documento
-import { doc, getDoc, setDoc } from 'firebase/firestore'
+// API del backend
+import { apiGet, apiPost } from '../utils/api'
 
 // Componente principal de la pantalla de selección de perfiles
 export default function ProfilesScreen() {
@@ -50,46 +46,29 @@ export default function ProfilesScreen() {
   const loadProfiles = async () => {
     if (!user?.uid) return
     
-    // Primero intentamos cargar desde localStorage (cache local)
-    // Usamos el ID del usuario como clave para guardar sus perfiles
     const saved = localStorage.getItem('profiles_' + user.uid)
-    
-    // Parseamos el JSON o inicializamos array vacío
     let localProfiles = saved ? JSON.parse(saved) : []
     
     try {
-      // Intentamos cargar desde Firestore (base de datos en la nube)
-      // doc(db, 'users', user.uid) crea referencia a: /users/{userId}
-      const docSnap = await getDoc(doc(db, 'users', user.uid))
-      
-      // Si el documento existe y tiene un campo 'profiles'
-      if (docSnap.exists() && docSnap.data().profiles) {
-        // Usamos los perfiles de Firestore (la "verdadera" fuente)
-        localProfiles = docSnap.data().profiles
+      const data = await apiGet(`/api/users/${user.uid}/profiles`)
+      if (data.profiles) {
+        localProfiles = data.profiles
       }
-    } catch (e) {
-      // Si hay error (sin internet, etc), usamos los datos locales
-    }
+    } catch (e) {}
     
-    // Actualizamos el estado con los perfiles cargados
     setProfiles(localProfiles)
   }
 
   // =====================
   // FUNCIÓN: GUARDAR PERFILES
   // =====================
-  // Guarda en localStorage Y en Firestore
   const saveProfiles = async (newProfiles) => {
-    // Actualiza el estado local
     setProfiles(newProfiles)
-    
-    // Guarda en localStorage (cache)
     localStorage.setItem('profiles_' + user.uid, JSON.stringify(newProfiles))
     
-    // Guarda en Firestore (nube)
-    // { merge: true } significa: si existe, actualiza; si no, crea
-    // Evita sobrescribir otros datos del documento
-    await setDoc(doc(db, 'users', user.uid), { profiles: newProfiles }, { merge: true })
+    try {
+      await apiPost(`/api/users/${user.uid}/profiles`, { profiles: newProfiles })
+    } catch (e) {}
   }
 
   // =====================
