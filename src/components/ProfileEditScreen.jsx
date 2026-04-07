@@ -99,13 +99,20 @@ export default function ProfileEditScreen() {
   const saveProfiles = async (newProfiles) => {
     // Guarda en localStorage y Firestore
     localStorage.setItem('profiles_' + user.uid, JSON.stringify(newProfiles))
+    console.log('Guardando en Firestore...')
     await setDoc(doc(db, 'users', user.uid), { profiles: newProfiles }, { merge: true })
+    console.log('Guardado en Firestore exitoso')
   }
 
   // =====================
   // FUNCIÓN: GUARDAR PERFIL
   // =====================
   const handleSave = async () => {
+    if (!user?.uid) {
+      alert('No hay usuario logueado')
+      return
+    }
+    
     // Construimos el objeto del perfil
     const profileData = {
       name: name.trim(),  // trim() elimina espacios al inicio y final
@@ -131,9 +138,17 @@ export default function ProfileEditScreen() {
       newProfiles[editingIndex] = profileData
     }
     
-    // Guardamos y navegamos de vuelta a la lista de perfiles
-    await saveProfiles(newProfiles)
-    navigate('/profiles')
+    console.log('Guardando perfil:', profileData)
+    console.log('Array completo:', newProfiles)
+    
+    try {
+      // Guardamos y navegamos de vuelta a la lista de perfiles
+      await saveProfiles(newProfiles)
+      navigate('/profiles')
+    } catch (err) {
+      console.error('Error al guardar:', err)
+      alert('Error al guardar: ' + err.message)
+    }
   }
 
   // =====================
