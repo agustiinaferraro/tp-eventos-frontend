@@ -85,6 +85,7 @@ export default function ProfileEditScreen() {
         setImage(p.image)
       } else {
         setColor(p.color || COLORS[0])
+        setChoseColor(true)
       }
     }
   }
