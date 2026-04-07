@@ -82,12 +82,21 @@
   }
 
   function trySendEnergy(energy) {
+    savePendingEnergy(energy);
     if (socket.connected) {
       socket.emit("energy", { energy: energy });
-    } else {
-      savePendingEnergy(energy);
     }
   }
+
+  window.addEventListener('offline', () => {
+    connectionStatus.classList.remove("connected");
+    connectionText.textContent = "SIN CONEXIÓN";
+    updateOfflineIndicator();
+  });
+
+  window.addEventListener('online', () => {
+    updateOfflineIndicator();
+  });
 
   const boostOverlay = document.getElementById("boostOverlay");
   const boostTargetEl = document.getElementById("boostTarget");
