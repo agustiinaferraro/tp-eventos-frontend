@@ -27,6 +27,32 @@
   let sensorInitTime = 0;
   let sensorInitComplete = false;
   let isFirstReading = true;
+  let isConnected = false;
+  let pendingEnergy = 0;
+
+  const OFFLINE_KEY = 'pendingEnergy_' + salaParam;
+
+  function savePendingEnergy(energy) {
+    pendingEnergy += energy;
+    localStorage.setItem(OFFLINE_KEY, pendingEnergy.toString());
+  }
+
+  function getPendingEnergy() {
+    return parseInt(localStorage.getItem(OFFLINE_KEY) || '0');
+  }
+
+  function clearPendingEnergy() {
+    pendingEnergy = 0;
+    localStorage.removeItem(OFFLINE_KEY);
+  }
+
+  function sendPendingEnergy() {
+    const pending = getPendingEnergy();
+    if (pending > 0) {
+      socket.emit("energy", { energy: pending });
+      clearPendingEnergy();
+    }
+  }
 
   const boostOverlay = document.getElementById("boostOverlay");
   const boostTargetEl = document.getElementById("boostTarget");
@@ -72,13 +98,16 @@
   });
 
   socket.on("connect", () => {
+    isConnected = true;
     connectionStatus.classList.add("connected");
     connectionText.textContent = "CONECTADO";
+    sendPendingEnergy();
   });
 
   socket.on("disconnect", () => {
+    isConnected = false;
     connectionStatus.classList.remove("connected");
-    connectionText.textContent = "DESCONECTADO";
+    connectionText.textContent = "SIN CONEXIÓN";
   });
 
   if (titleEl) {
@@ -353,12 +382,19 @@
 
       if (movementConsecutiveCount >= 1) {
         const energyToSend = boostMultiplier;
-        socket.emit("energy", { energy: energyToSend });
+        
+        if (isConnected) {
+          socket.emit("energy", { energy: energyToSend });
+        } else {
+          savePendingEnergy(energyToSend);
+        }
 
         if (nearThresholdActive) {
           myRepetitions = Math.min(movementConsecutiveCount, 5);
           thresholdCount.textContent = `Repeticiones: ${myRepetitions}/5`;
-          socket.emit("doGesture", { gesture: "pump" });
+          if (isConnected) {
+            socket.emit("doGesture", { gesture: "pump" });
+          }
         }
       }
     }
@@ -383,7 +419,15 @@
 
   document.addEventListener("keydown", (e) => {
     if (e.key === "r" || e.key === "R") socket.emit("reset");
-    if (e.key === "1") socket.emit("doGesture", { gesture: "pump" });
-    if (e.key === "2") socket.emit("energy", { energy: 50 });
+    if (e.key === "1") {
+      if (isConnected) socket.emit("doGesture", { gesture: "pump" });
+    }
+    if (e.key === "2") {
+      if (isConnected) {
+        socket.emit("energy", { energy: 50 });
+      } else {
+        savePendingEnergy(50);
+      }
+    }
   });
 })();
