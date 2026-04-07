@@ -44,6 +44,9 @@ export default function DashboardScreen() {
   // savedAccounts: cuentas guardadas en localStorage para quick switch
   const [savedAccounts, setSavedAccounts] = useState([])
   
+  // searchSala: para buscar salas
+  const [searchSala, setSearchSala] = useState('')
+  
   // showCreateSalaModal: si el modal de crear sala está visible
   const [showCreateSalaModal, setShowCreateSalaModal] = useState(false)
   
@@ -238,15 +241,26 @@ export default function DashboardScreen() {
         MIS SALAS
       </h1>
       
-      <p className="text-xl text-white tracking-widest mb-10 w-full max-w-5xl px-2 uppercase">
+      <p className="text-xl text-white tracking-widest mb-6 w-full max-w-5xl px-2 uppercase">
         Salas activas
       </p>
+      
+      {/* Buscador de salas */}
+      <div className="w-full max-w-5xl mb-8">
+        <input
+          type="text"
+          className="w-full bg-zinc-900 border border-zinc-700 text-white text-center p-3 rounded-lg outline-none focus:border-green-400 placeholder-zinc-500"
+          placeholder="Buscar sala..."
+          value={searchSala}
+          onChange={(e) => setSearchSala(e.target.value)}
+        />
+      </div>
       
       {/* Grid de salas (1 columna en móvil, 3 en desktop) */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full max-w-5xl">
         
-        {/* Recorremos las salas y las mostramos */}
-        {salas.map((sala, i) => (
+        {/* Recorremos las salas y las mostramos (filtradas por búsqueda) */}
+        {salas.filter(s => s.name.toLowerCase().includes(searchSala.toLowerCase())).map((sala, i) => (
           <div
             key={sala.id || i}
             className="bg-zinc-900 border border-zinc-700 rounded-lg p-10 cursor-pointer transition-all hover:border-green-400 hover:scale-[1.02] relative"
@@ -280,14 +294,6 @@ export default function DashboardScreen() {
           <span className="text-sm mt-2">Nueva sala</span>
         </div>
       </div>
-
-      {/* Botón estadísticas */}
-      <button
-        className="mt-8 bg-zinc-900 border border-zinc-700 text-zinc-400 text-sm py-3 px-6 rounded-lg cursor-pointer tracking-wider transition-all hover:border-green-400 hover:text-green-400"
-        onClick={() => navigate('/stats')}
-      >
-        📊 Estadísticas
-      </button>
 
       {/* ===================== */}
       {/* MODAL: CAMBIAR CUENTA */}

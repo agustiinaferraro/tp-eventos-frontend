@@ -156,6 +156,14 @@ export default function SalaScreen() {
           🔗 LINK
         </button>
       </div>
+      
+      {/* Botón estadísticas */}
+      <button
+        className="mt-6 bg-zinc-900 border border-zinc-700 text-zinc-300 text-sm py-3 px-6 rounded-lg cursor-pointer tracking-wider transition-all hover:border-green-400 hover:text-green-400"
+        onClick={() => navigate('/stats', { state: { salaName: sala.name } })}
+      >
+        📊 ESTADÍSTICAS
+      </button>
 
       {/* ===================== */}
       {/* MODAL: CÓDIGO QR */}

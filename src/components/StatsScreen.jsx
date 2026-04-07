@@ -3,13 +3,14 @@
 // =====================
 
 import React, { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { apiGet } from '../utils/api'
 
 export default function StatsScreen() {
   const navigate = useNavigate()
+  const location = useLocation()
   const [stats, setStats] = useState(null)
-  const [selectedSala, setSelectedSala] = useState('')
+  const [selectedSala, setSelectedSala] = useState(location.state?.salaName || '')
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
