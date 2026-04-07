@@ -46,17 +46,24 @@ export default function ProfilesScreen() {
   const loadProfiles = async () => {
     if (!user?.uid) return
     
-    const saved = localStorage.getItem('profiles_' + user.uid)
-    let localProfiles = saved ? JSON.parse(saved) : []
-    
     try {
       const data = await apiGet(`/api/users/${user.uid}/profiles`)
       if (data.profiles) {
-        localProfiles = data.profiles
+        setProfiles(data.profiles)
+        return
       }
     } catch (e) {}
     
-    setProfiles(localProfiles)
+    // Si falla el backend, intentamos localStorage
+    const saved = localStorage.getItem('profiles_' + user.uid)
+    if (saved) {
+      const cached = JSON.parse(saved)
+      setProfiles(cached.map(p => ({
+        name: p.name,
+        color: p.color,
+        image: p.image === 'CACHED' ? null : p.image
+      })))
+    }
   }
 
   // =====================
@@ -64,10 +71,21 @@ export default function ProfilesScreen() {
   // =====================
   const saveProfiles = async (newProfiles) => {
     setProfiles(newProfiles)
-    localStorage.setItem('profiles_' + user.uid, JSON.stringify(newProfiles))
     
+    // Guardamos en backend
     try {
       await apiPost(`/api/users/${user.uid}/profiles`, { profiles: newProfiles })
+    } catch (e) {}
+    
+    // Guardamos cache en localStorage sin las imágenes completas
+    const profilesForCache = newProfiles.map(p => ({
+      name: p.name,
+      color: p.color,
+      image: p.image ? 'CACHED' : null
+    }))
+    
+    try {
+      localStorage.setItem('profiles_' + user.uid, JSON.stringify(profilesForCache))
     } catch (e) {}
   }
 

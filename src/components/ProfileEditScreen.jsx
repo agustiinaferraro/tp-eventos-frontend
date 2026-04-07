@@ -62,17 +62,29 @@ export default function ProfileEditScreen() {
   const loadCurrentProfile = async () => {
     if (!user?.uid) return
     
-    const saved = localStorage.getItem('profiles_' + user.uid)
-    let localProfiles = saved ? JSON.parse(saved) : []
-    
     try {
+      console.log('Cargando perfiles del backend...')
       const data = await apiGet(`/api/users/${user.uid}/profiles`)
       if (data.profiles) {
-        localProfiles = data.profiles
+        setProfiles(data.profiles)
+        return
       }
-    } catch (e) {}
+    } catch (e) {
+      console.error('Error cargando del backend:', e.message)
+    }
     
-    setProfiles(localProfiles)
+    // Si falla el backend, intentamos localStorage (sin imágenes)
+    const saved = localStorage.getItem('profiles_' + user.uid)
+    if (saved) {
+      const cached = JSON.parse(saved)
+      // Las imágenes tendrán 'CACHED' como marcador, las dejamos como null
+      setProfiles(cached.map(p => ({
+        name: p.name,
+        color: p.color,
+        image: null
+      })))
+    }
+  }
     
     // Si estamos editando (no creando), precargamos los datos del perfil
     if (!isNew && localProfiles[editingIndex]) {
@@ -94,8 +106,20 @@ export default function ProfileEditScreen() {
   // FUNCIÓN: GUARDAR PERFILES
   // =====================
   const saveProfiles = async (newProfiles) => {
-    localStorage.setItem('profiles_' + user.uid, JSON.stringify(newProfiles))
-    console.log('Guardado en localStorage')
+    // Solo guardamos en localStorage sin la imagen (para mostrar previews rápidamente)
+    // Las imágenes completas van al backend
+    const profilesForCache = newProfiles.map(p => ({
+      name: p.name,
+      color: p.color,
+      image: p.image ? 'CACHED' : null  // Marcador, no guardamos el base64 completo
+    }))
+    
+    try {
+      localStorage.setItem('profiles_' + user.uid, JSON.stringify(profilesForCache))
+      console.log('Cache guardado en localStorage')
+    } catch (e) {
+      console.log('localStorage lleno, continuando sin cache')
+    }
     
     try {
       console.log('Guardando en backend...')
