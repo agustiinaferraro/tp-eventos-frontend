@@ -63,29 +63,25 @@ export default function ProfileEditScreen() {
   const loadCurrentProfile = async () => {
     // Cargamos perfiles desde localStorage
     const saved = localStorage.getItem('profiles_' + user.uid)
-    const localProfiles = saved ? JSON.parse(saved) : []
+    let localProfiles = saved ? JSON.parse(saved) : []
     
     try {
       // Intentamos cargar desde Firestore
       const docSnap = await getDoc(doc(db, 'users', user.uid))
       if (docSnap.exists() && docSnap.data().profiles) {
-        setProfiles(docSnap.data().profiles)
-      } else {
-        setProfiles(localProfiles)
+        localProfiles = docSnap.data().profiles
       }
-    } catch (e) {
-      setProfiles(localProfiles)
-    }
+    } catch (e) {}
+    
+    setProfiles(localProfiles)
     
     // Si estamos editando (no creando), precargamos los datos del perfil
-    if (!isNew && profiles[editingIndex]) {
-      const p = profiles[editingIndex]
+    if (!isNew && localProfiles[editingIndex]) {
+      const p = localProfiles[editingIndex]
       setName(p.name)
       if (p.image) {
-        // Si tiene imagen, la cargamos
         setImage(p.image)
       } else {
-        // Si no tiene imagen pero tiene color, usamos ese color
         setColor(p.color || COLORS[0])
       }
     }
