@@ -88,6 +88,8 @@ export default function ProfileEditScreen() {
         setColor(p.color || COLORS[0])
         setChoseColor(true)
       }
+      // Actualizamos profiles con la imagen para que handleSave funcione
+      setProfiles(localProfiles)
     }
   }
 
@@ -155,13 +157,26 @@ export default function ProfileEditScreen() {
     
     if (!file) return  // Si no hay archivo, salimos
     
-    setChoseColor(false)  // Al seleccionar imagen, no está usando color
-    
     // FileReader permite leer archivos del sistema
     const reader = new FileReader()
     
     // Cuando termine de leer, guardamos el resultado (base64)
-    reader.onload = (ev) => setImage(ev.target.result)
+    reader.onload = (ev) => {
+      const newImage = ev.target.result
+      setImage(newImage)
+      setChoseColor(false)
+      
+      // También actualizamos el perfil en el array de profiles para edición
+      if (!isNew && profiles[editingIndex]) {
+        const updatedProfiles = [...profiles]
+        updatedProfiles[editingIndex] = {
+          ...updatedProfiles[editingIndex],
+          image: newImage,
+          color: null
+        }
+        setProfiles(updatedProfiles)
+      }
+    }
     
     // Iniciamos la lectura del archivo como Data URL (base64)
     reader.readAsDataURL(file)
@@ -171,9 +186,20 @@ export default function ProfileEditScreen() {
   // FUNCIÓN: SELECCIONAR COLOR
   // =====================
   const handleColorSelect = (c) => {
-    setChoseColor(true)   // Marcamos que eligió un color
-    setColor(c)           // Establecemos el color seleccionado
-    setImage(null)        // Limpiamos cualquier imagen (color e imagen son excluyentes)
+    setChoseColor(true)
+    setColor(c)
+    setImage(null)
+    
+    // También actualizamos el perfil en el array de profiles para edición
+    if (!isNew && profiles[editingIndex]) {
+      const updatedProfiles = [...profiles]
+      updatedProfiles[editingIndex] = {
+        ...updatedProfiles[editingIndex],
+        color: c,
+        image: null
+      }
+      setProfiles(updatedProfiles)
+    }
   }
 
   // =====================
