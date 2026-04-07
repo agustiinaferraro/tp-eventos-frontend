@@ -46,13 +46,18 @@ export default function ProfilesScreen() {
   const loadProfiles = async () => {
     if (!user?.uid) return
     
+    console.log('Cargando perfiles...')
+    
     try {
       const data = await apiGet(`/api/users/${user.uid}/profiles`)
+      console.log('Datos del backend:', data)
       if (data.profiles) {
         setProfiles(data.profiles)
         return
       }
-    } catch (e) {}
+    } catch (e) {
+      console.error('Error cargando del backend:', e.message)
+    }
     
     // Si falla el backend, intentamos localStorage
     const saved = localStorage.getItem('profiles_' + user.uid)
@@ -72,10 +77,15 @@ export default function ProfilesScreen() {
   const saveProfiles = async (newProfiles) => {
     setProfiles(newProfiles)
     
+    console.log('Guardando perfiles:', newProfiles)
+    
     // Guardamos en backend
     try {
-      await apiPost(`/api/users/${user.uid}/profiles`, { profiles: newProfiles })
-    } catch (e) {}
+      const result = await apiPost(`/api/users/${user.uid}/profiles`, { profiles: newProfiles })
+      console.log('Guardado exitoso:', result)
+    } catch (e) {
+      console.error('Error guardando en backend:', e.message)
+    }
     
     // Guardamos cache en localStorage sin las imágenes completas
     const profilesForCache = newProfiles.map(p => ({
