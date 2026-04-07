@@ -35,22 +35,22 @@
   function savePendingEnergy(energy) {
     pendingEnergy += energy;
     localStorage.setItem(OFFLINE_KEY, pendingEnergy.toString());
+    updateOfflineIndicator();
   }
 
   function getPendingEnergy() {
     return parseInt(localStorage.getItem(OFFLINE_KEY) || '0');
   }
 
-  function clearPendingEnergy() {
-    pendingEnergy = 0;
-    localStorage.removeItem(OFFLINE_KEY);
-  }
-
-  function sendPendingEnergy() {
+  function updateOfflineIndicator() {
+    const indicator = document.getElementById("offlineEnergy");
+    const count = document.getElementById("offlineEnergyCount");
     const pending = getPendingEnergy();
     if (pending > 0) {
-      socket.emit("energy", { energy: pending });
-      clearPendingEnergy();
+      count.textContent = pending;
+      indicator.classList.remove("hidden");
+    } else {
+      indicator.classList.add("hidden");
     }
   }
 
@@ -97,6 +97,8 @@
     transports: ['websocket', 'polling']
   });
 
+  updateOfflineIndicator();
+
   socket.on("connect", () => {
     isConnected = true;
     connectionStatus.classList.add("connected");
@@ -108,6 +110,7 @@
     isConnected = false;
     connectionStatus.classList.remove("connected");
     connectionText.textContent = "SIN CONEXIÓN";
+    updateOfflineIndicator();
   });
 
   if (titleEl) {

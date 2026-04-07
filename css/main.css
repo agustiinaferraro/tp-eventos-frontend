@@ -433,6 +433,16 @@ body, html {
   box-shadow: 0 0 10px #00ff88;
 }
 
+.offline-energy {
+  @apply mt-2 text-yellow-400 text-xs tracking-wider;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
 .tilt-indicator {
   @apply mt-5 flex flex-col items-center opacity-80 transition-opacity;
 }
