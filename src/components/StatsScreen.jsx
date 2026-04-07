@@ -64,18 +64,14 @@ export default function StatsScreen() {
 
       {stats && (
         <div className="w-full max-w-2xl">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
             <div className="bg-zinc-900 border border-zinc-700 rounded-lg p-4 text-center">
               <p className="text-3xl text-green-400 font-bold">{stats.summary?.connections || 0}</p>
-              <p className="text-xs text-zinc-500 mt-1">Conexiones</p>
+              <p className="text-xs text-zinc-500 mt-1">Entradas</p>
             </div>
             <div className="bg-zinc-900 border border-zinc-700 rounded-lg p-4 text-center">
               <p className="text-3xl text-red-400 font-bold">{stats.summary?.disconnections || 0}</p>
-              <p className="text-xs text-zinc-500 mt-1">Desconexiones</p>
-            </div>
-            <div className="bg-zinc-900 border border-zinc-700 rounded-lg p-4 text-center">
-              <p className="text-3xl text-blue-400 font-bold">{stats.summary?.currentUsers || 0}</p>
-              <p className="text-xs text-zinc-500 mt-1">Jugadores activos</p>
+              <p className="text-xs text-zinc-500 mt-1">Salidas</p>
             </div>
             <div className="bg-zinc-900 border border-zinc-700 rounded-lg p-4 text-center">
               <p className="text-3xl text-yellow-400 font-bold">{stats.summary?.totalEnergy || 0}</p>
