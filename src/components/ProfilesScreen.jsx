@@ -132,7 +132,7 @@ export default function ProfilesScreen() {
       </h1>
       
       {/* Grid de perfiles (2 columnas en móvil, 3 en desktop) */}
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-8 max-w-2xl w-full mt-10">
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-8 max-w-4xl w-full mt-10">
         
         {/* Recorremos cada perfil y lo mostramos */}
         {profiles.map((profile, i) => (
