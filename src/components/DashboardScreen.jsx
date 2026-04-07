@@ -281,6 +281,14 @@ export default function DashboardScreen() {
         </div>
       </div>
 
+      {/* Botón estadísticas */}
+      <button
+        className="mt-8 bg-zinc-900 border border-zinc-700 text-zinc-400 text-sm py-3 px-6 rounded-lg cursor-pointer tracking-wider transition-all hover:border-green-400 hover:text-green-400"
+        onClick={() => navigate('/stats')}
+      >
+        📊 Estadísticas
+      </button>
+
       {/* ===================== */}
       {/* MODAL: CAMBIAR CUENTA */}
       {/* ===================== */}
