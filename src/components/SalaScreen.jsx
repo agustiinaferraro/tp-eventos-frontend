@@ -74,7 +74,7 @@ export default function SalaScreen() {
           qrBox.innerHTML = ''  // Limpiamos QR anterior si existe
           
           // Construimos la URL para el QR
-          const url = getBaseUrl() + '/?sala=' + sala.name.toLowerCase().replace(/\s+/g, '-')
+          const url = getBaseUrl() + '/experiencia.html?sala=' + sala.name.toLowerCase().replace(/\s+/g, '-')
           
           // Generamos el código QR
           new QRCode(qrBox, {
@@ -94,7 +94,7 @@ export default function SalaScreen() {
   // =====================
   const copyLink = () => {
     // Construimos la URL
-    const url = getBaseUrl() + '/?sala=' + sala.name.toLowerCase().replace(/\s+/g, '-')
+    const url = getBaseUrl() + '/experiencia.html?sala=' + sala.name.toLowerCase().replace(/\s+/g, '-')
     
     // navigator.clipboard.writeText copia el texto al portapapeles
     navigator.clipboard.writeText(url).then(() => {
@@ -193,7 +193,7 @@ export default function SalaScreen() {
           
           {/* Link debajo del QR */}
           <p className="text-xs text-green-400 mt-2 tracking-wider text-center break-all px-5">
-            {getBaseUrl() + '/?sala=' + sala.name.toLowerCase().replace(/\s+/g, '-')}
+            {getBaseUrl() + '/experiencia.html?sala=' + sala.name.toLowerCase().replace(/\s+/g, '-')}
           </p>
         </div>
       )}
@@ -224,7 +224,7 @@ export default function SalaScreen() {
           <div className="w-full max-w-md bg-zinc-900 border border-zinc-800 rounded-lg p-5 mb-5">
             <p className="text-xs text-zinc-600 mb-2">Link para compartir</p>
             <p className="text-sm text-white break-all">
-              {getBaseUrl() + '/?sala=' + sala.name.toLowerCase().replace(/\s+/g, '-')}
+              {getBaseUrl() + '/experiencia.html?sala=' + sala.name.toLowerCase().replace(/\s+/g, '-')}
             </p>
           </div>
           
