@@ -7,7 +7,14 @@
   <link rel="stylesheet" href="./css/main.css">
   <script>
     if (!window.location.search.includes('sala=')) {
-      window.location.href = '/experiencia.html';
+      document.body.innerHTML = `
+        <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;background:#000;color:#fff;text-align:center;padding:20px;font-family:system-ui,sans-serif;">
+          <h1 style="font-size:2rem;margin-bottom:1rem;">🟠 Energía Colectiva</h1>
+          <p style="color:#888;margin-bottom:2rem;">Ingresá desde el Admin Panel o con un código QR.</p>
+          <a href="/" style="color:#22c55e;text-decoration:underline;">Ir al Admin Panel</a>
+        </div>
+      `;
+      throw new Error('No sala parameter');
     }
   </script>
 </head>
