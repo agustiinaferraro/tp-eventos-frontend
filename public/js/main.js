@@ -1,5 +1,11 @@
 (function() {
-  const salaParam = new URLSearchParams(window.location.search).get("sala") || "default";
+  const urlParams = new URLSearchParams(window.location.search);
+  const salaParam = urlParams.get("sala");
+  
+  if (!salaParam) {
+    return;
+  }
+  
   const SERVER_URL = "https://tp-eventos-backend-production.up.railway.app";
 
   let currentGesture = null;
