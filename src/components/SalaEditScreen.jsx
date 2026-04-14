@@ -2,7 +2,7 @@
 // SalaEditScreen.jsx - Editar Sala (nombre, color, imagen)
 // =====================
 
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 
@@ -12,6 +12,7 @@ export default function SalaEditScreen() {
   const { user } = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
+  const fileInputRef = useRef(null)
   
   const editingIndex = location.state?.index ?? -1
   const initialSala = location.state?.sala || {}
@@ -36,6 +37,92 @@ export default function SalaEditScreen() {
     reader.readAsDataURL(file)
   }
   
+  const handleCamera = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: 'user' },
+        audio: false
+      })
+      
+      const video = document.createElement('video')
+      video.srcObject = stream
+      video.className = 'fixed top-0 left-0 w-full h-full z-[9999] bg-black object-cover'
+      video.play()
+      document.body.appendChild(video)
+      
+      const captureBtn = document.createElement('button')
+      captureBtn.className = 'fixed bottom-10 left-1/2 -translate-x-1/2 z-[10000] w-20 h-20 rounded-full bg-white border-none cursor-pointer text-4xl'
+      captureBtn.textContent = '📷'
+      document.body.appendChild(captureBtn)
+      
+      const closeBtn = document.createElement('button')
+      closeBtn.className = 'fixed top-5 right-5 z-[10001] w-12 h-12 rounded-full bg-white/20 text-white text-xl border-none cursor-pointer'
+      closeBtn.textContent = '✕'
+      document.body.appendChild(closeBtn)
+      
+      let currentPhoto = null
+      
+      const cleanup = () => {
+        stream.getTracks().forEach(t => t.stop())
+        document.body.removeChild(video)
+        document.body.removeChild(captureBtn)
+        document.body.removeChild(closeBtn)
+        if (currentPhoto) {
+          document.body.removeChild(currentPhoto.canvas)
+          document.body.removeChild(currentPhoto.confirmBtn)
+          document.body.removeChild(currentPhoto.cancelBtn)
+        }
+      }
+      
+      closeBtn.onclick = cleanup
+      
+      captureBtn.onclick = () => {
+        const canvas = document.createElement('canvas')
+        canvas.width = video.videoWidth
+        canvas.height = video.videoHeight
+        canvas.getContext('2d').drawImage(video, 0, 0)
+        
+        currentPhoto = {
+          canvas: canvas,
+          dataUrl: canvas.toDataURL('image/jpeg')
+        }
+        
+        video.style.display = 'none'
+        captureBtn.style.display = 'none'
+        
+        canvas.className = 'fixed top-0 left-0 w-full h-full z-[9999] bg-black object-cover'
+        document.body.appendChild(canvas)
+        
+        const confirmBtn = document.createElement('button')
+        confirmBtn.className = 'fixed bottom-10 right-10 z-[10001] w-16 h-16 rounded-full bg-green-600 border-none cursor-pointer text-white text-3xl'
+        confirmBtn.textContent = '✓'
+        document.body.appendChild(confirmBtn)
+        
+        const cancelBtn = document.createElement('button')
+        cancelBtn.className = 'fixed bottom-10 left-10 z-[10001] w-16 h-16 rounded-full bg-red-600 border-none cursor-pointer text-white text-3xl'
+        cancelBtn.textContent = '✕'
+        document.body.appendChild(cancelBtn)
+        
+        confirmBtn.onclick = () => {
+          setChoseColor(false)
+          setImage(currentPhoto.dataUrl)
+          cleanup()
+        }
+        
+        cancelBtn.onclick = () => {
+          document.body.removeChild(canvas)
+          document.body.removeChild(confirmBtn)
+          document.body.removeChild(cancelBtn)
+          currentPhoto = null
+          video.style.display = 'block'
+          captureBtn.style.display = 'block'
+        }
+      }
+    } catch (err) {
+      setError('No se pudo acceder a la cámara')
+    }
+  }
+  
   const handleSave = async () => {
     if (!user?.uid) {
       setError('No hay usuario logueado')
@@ -50,10 +137,8 @@ export default function SalaEditScreen() {
     setIsSaving(true)
     setError('')
     
-    // Obtener salas actuales
     const savedSalas = localStorage.getItem('salas_' + user.uid)
     const currentProfile = JSON.parse(localStorage.getItem('currentProfile') || '{}')
-    const profileKey = currentProfile.name || 'default'
     const salas = savedSalas ? JSON.parse(savedSalas) : []
     
     const salaData = {
@@ -70,16 +155,12 @@ export default function SalaEditScreen() {
       newSalas[editingIndex] = salaData
     }
     
-    // Guardar en localStorage
     localStorage.setItem('salas_' + user.uid, JSON.stringify(newSalas))
     
-    // Intentar guardar en backend
     try {
       const { apiPost } = await import('../utils/api')
       await apiPost(`/api/users/${user.uid}/salas`, { salas: newSalas })
-    } catch (err) {
-      // Si falla el backend, ok - ya guardamos en localStorage
-    }
+    } catch (err) {}
     
     setIsSaving(false)
     navigate('/dashboard')
@@ -88,7 +169,6 @@ export default function SalaEditScreen() {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen w-full p-10">
       
-      {/* Botón volver atrás */}
       <button
         className="absolute top-8 left-8 text-5xl text-white bg-transparent border-none cursor-pointer hover:opacity-70"
         onClick={() => navigate('/dashboard')}
@@ -96,7 +176,6 @@ export default function SalaEditScreen() {
         ‹
       </button>
       
-      {/* Logo a la izquierda */}
       <div 
         className="absolute top-8 left-24 w-10 h-10 bg-green-600 rounded-full flex items-center justify-center cursor-pointer"
         onClick={() => navigate('/dashboard')}
@@ -114,9 +193,9 @@ export default function SalaEditScreen() {
       
       {/* Preview de la sala */}
       <div 
-        className="w-32 h-32 rounded-lg border-4 border-zinc-700 flex items-center justify-center text-4xl mb-6 cursor-pointer overflow-hidden"
+        className="w-32 h-32 rounded-lg border-4 border-zinc-700 flex items-center justify-center text-4xl mb-4 cursor-pointer overflow-hidden"
         style={{ background: choseColor ? color : (image ? 'transparent' : color) }}
-        onClick={() => document.getElementById('salaImageInput').click()}
+        onClick={() => fileInputRef.current?.click()}
       >
         {image ? (
           <img src={image} alt="Preview" className="w-full h-full object-cover rounded-lg" />
@@ -129,13 +208,39 @@ export default function SalaEditScreen() {
       
       <input
         type="file"
-        id="salaImageInput"
+        ref={fileInputRef}
         accept="image/*"
         className="hidden"
         onChange={handleImageSelect}
       />
       
-      <p className="text-sm text-zinc-500 mb-8">Tocá la imagen para cambiarla</p>
+      {/* Botones de imagen y cámara */}
+      <div className="flex gap-4 mb-8">
+        <button
+          className="bg-zinc-800 text-white px-4 py-2 rounded-lg text-sm"
+          onClick={() => fileInputRef.current?.click()}
+        >
+          📁 Galería
+        </button>
+        <button
+          className="bg-zinc-800 text-white px-4 py-2 rounded-lg text-sm"
+          onClick={handleCamera}
+        >
+          📷 Cámara
+        </button>
+      </div>
+      
+      {image && (
+        <button
+          className="text-zinc-500 text-sm mb-4 hover:text-white"
+          onClick={() => {
+            setImage(null)
+            setChoseColor(true)
+          }}
+        >
+          Quitar imagen
+        </button>
+      )}
       
       {/* Nombre */}
       <input
@@ -173,7 +278,6 @@ export default function SalaEditScreen() {
         {isSaving ? 'GUARDANDO...' : 'GUARDAR'}
       </button>
       
-      {/* Botón eliminar (solo si es edición) */}
       {!isNew && (
         <button
           className="w-full max-w-md bg-transparent border-2 border-red-600 text-red-600 py-3 rounded-lg cursor-pointer tracking-wider mt-4 hover:bg-red-600 hover:text-white"
