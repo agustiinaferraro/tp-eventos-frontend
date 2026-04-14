@@ -207,15 +207,20 @@ export default function DashboardScreen() {
     <div className="flex flex-col items-center min-h-screen w-full p-10">
       
       {/* ===================== */}
-      {/* HEADER CON PERFIL A LA DERECHA Y BUSCADOR CENTRADO */}
+      {/* HEADER CON LOGO, BUSCADOR Y PERFIL */}
       {/* ===================== */}
       <div className="w-full max-w-5xl flex justify-between items-center mb-8 relative">
         
-        {/* Espaço vacío a la izquierda */}
-        <div className="w-24"></div>
+        {/* Logo a la izquierda (clickeable -> Dashboard) */}
+        <div 
+          className="w-10 h-10 bg-green-600 rounded-full flex items-center justify-center cursor-pointer"
+          onClick={() => navigate('/dashboard')}
+        >
+          <span className="text-white font-bold text-xl">E</span>
+        </div>
         
         {/* Buscador de salas (CENTRADO) */}
-        <div className="flex-1 max-w-md">
+        <div className="flex-1 max-w-md mx-4">
           <div className="relative">
             <svg className="absolute left-2 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -285,7 +290,7 @@ export default function DashboardScreen() {
       {/* ===================== */}
       {/* TÍTULO Y LISTA DE SALAS */}
       {/* ===================== */}
-      <h1 className="text-4xl md:text-6xl tracking-widest text-green-400 mb-16 text-center w-full max-w-5xl">
+      <h1 className="text-4xl md:text-6xl tracking-widest text-green-400 mt-8 mb-16 text-center w-full max-w-5xl">
         MIS SALAS
       </h1>
       
