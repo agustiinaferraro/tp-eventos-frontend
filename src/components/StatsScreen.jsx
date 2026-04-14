@@ -74,8 +74,6 @@ export default function StatsScreen() {
       )}
 
       {stats && (
-
-      {stats && (
         <div className="w-full max-w-2xl">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
             <div className="bg-zinc-900 border border-zinc-700 rounded-lg p-4 text-center">
