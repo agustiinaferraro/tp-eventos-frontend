@@ -137,8 +137,9 @@ export default function SalaEditScreen() {
     setIsSaving(true)
     setError('')
     
-    const savedSalas = localStorage.getItem('salas_' + user.uid)
     const currentProfile = JSON.parse(localStorage.getItem('currentProfile') || '{}')
+    const profileKey = currentProfile.name || 'default'
+    const savedSalas = localStorage.getItem('salas_' + user.uid + '_' + profileKey)
     const salas = savedSalas ? JSON.parse(savedSalas) : []
     
     const salaData = {
@@ -155,7 +156,7 @@ export default function SalaEditScreen() {
       newSalas[editingIndex] = salaData
     }
     
-    localStorage.setItem('salas_' + user.uid, JSON.stringify(newSalas))
+    localStorage.setItem('salas_' + user.uid + '_' + profileKey, JSON.stringify(newSalas))
     
     try {
       const { apiPost } = await import('../utils/api')
@@ -283,11 +284,11 @@ export default function SalaEditScreen() {
           className="w-full max-w-md bg-transparent border-2 border-red-600 text-red-600 py-3 rounded-lg cursor-pointer tracking-wider mt-4 hover:bg-red-600 hover:text-white"
           onClick={() => {
             if (confirm('¿Eliminar esta sala?')) {
-              const savedSalas = localStorage.getItem('salas_' + user.uid)
+              const savedSalas = localStorage.getItem('salas_' + user.uid + '_' + profileKey)
               if (savedSalas) {
                 const salas = JSON.parse(savedSalas)
                 salas.splice(editingIndex, 1)
-                localStorage.setItem('salas_' + user.uid, JSON.stringify(salas))
+                localStorage.setItem('salas_' + user.uid + '_' + profileKey, JSON.stringify(salas))
               }
               navigate('/dashboard')
             }
