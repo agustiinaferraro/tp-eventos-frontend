@@ -20,6 +20,7 @@ import ProfilesScreen from './components/ProfilesScreen'  // Selector de perfile
 import ProfileEditScreen from './components/ProfileEditScreen'  // Crear/editar perfil
 import DashboardScreen from './components/DashboardScreen'    // Gestión de salas
 import SalaScreen from './components/SalaScreen'          // QR y compartir sala
+import SalaEditScreen from './components/SalaEditScreen'  // Editar sala
 import StatsScreen from './components/StatsScreen'        // Estadísticas de salas
 
 // Componente principal de la aplicación
@@ -45,6 +46,9 @@ function App() {
           
           {/* Ruta de sala: muestra QR y opciones de compartir */}
           <Route path="/sala" element={<SalaScreen />} />
+          
+          {/* Ruta para editar sala (nombre, color, imagen) */}
+          <Route path="/sala/edit" element={<SalaEditScreen />} />
           
           {/* Ruta de estadísticas */}
           <Route path="/stats" element={<StatsScreen />} />

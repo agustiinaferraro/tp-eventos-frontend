@@ -319,6 +319,17 @@ export default function DashboardScreen() {
               ×
             </button>
             
+            {/* Botón editar (lápiz) */}
+            <button
+              className="absolute top-4 right-12 bg-transparent border-none text-zinc-500 text-xl cursor-pointer transition-all hover:text-green-400 hover:scale-125"
+              onClick={(e) => {
+                e.stopPropagation()
+                navigate('/sala/edit', { state: { index: i, sala } })
+              }}
+            >
+              ✏️
+            </button>
+            
             {/* Nombre de la sala */}
             <p className="text-xl text-white mb-2">{sala.name.toUpperCase()}</p>
             
