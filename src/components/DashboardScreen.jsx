@@ -175,11 +175,22 @@ export default function DashboardScreen() {
     <div className="flex flex-col items-center min-h-screen w-full p-10">
       
       {/* ===================== */}
-      {/* HEADER CON USUARIO Y MENÚ (CENTRADO ARRIBA) */}
+      {/* HEADER CON USUARIO Y MENÚ (PERFIL A LA DERECHA) */}
       {/* ===================== */}
-      <div className="w-full max-w-5xl flex justify-center mb-8 relative">
+      <div className="w-full max-w-5xl flex justify-between items-center mb-8 relative">
         
-        {/* Menú del usuario (click para abrir dropdown) */}
+        {/* Buscador de salas (a la izquierda) */}
+        <div className="flex-1 max-w-xs">
+          <input
+            type="text"
+            className="w-full bg-zinc-900 border border-zinc-700 text-white text-center p-2 rounded-lg outline-none focus:border-green-400 placeholder-zinc-500 text-sm"
+            placeholder="Buscar sala..."
+            value={searchSala}
+            onChange={(e) => setSearchSala(e.target.value)}
+          />
+        </div>
+        
+        {/* Menú del usuario (a la derecha) */}
         <div
           className="flex items-center gap-4 cursor-pointer relative"
           onClick={() => setShowDropdown(!showDropdown)}
@@ -259,17 +270,6 @@ export default function DashboardScreen() {
       <p className="text-xl text-white tracking-widest mb-6 w-full max-w-5xl px-2 uppercase">
         Salas activas
       </p>
-      
-      {/* Buscador de salas */}
-      <div className="w-full max-w-5xl mb-8">
-        <input
-          type="text"
-          className="w-full bg-zinc-900 border border-zinc-700 text-white text-center p-3 rounded-lg outline-none focus:border-green-400 placeholder-zinc-500"
-          placeholder="Buscar sala..."
-          value={searchSala}
-          onChange={(e) => setSearchSala(e.target.value)}
-        />
-      </div>
       
       {/* Grid de salas (1 columna en móvil, 3 en desktop) */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full max-w-5xl">
