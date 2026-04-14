@@ -46,6 +46,7 @@ export default function ProfileEditScreen() {
   const [choseColor, setChoseColor] = useState(false)  // Si el usuario eligió un color
   const [profiles, setProfiles] = useState([])    // Lista de todos los perfiles
   const [isSaving, setIsSaving] = useState(false) // Para evitar múltiples guards
+  const [error, setError] = useState('')           // Mensaje de error
   
   // useRef para manipular el input de archivo directamente
   const fileInputRef = useRef(null)
@@ -129,7 +130,7 @@ export default function ProfileEditScreen() {
   const handleSave = async () => {
     if (isSaving) return
     if (!user?.uid) {
-      alert('No hay usuario logueado')
+      setError('No hay usuario logueado')
       return
     }
     
@@ -153,7 +154,7 @@ export default function ProfileEditScreen() {
       await saveProfiles(newProfiles)
       navigate('/profiles')
     } catch (err) {
-      alert('Error al guardar perfil')
+      setError('Error al guardar perfil. Intentá más tarde.')
     } finally {
       setIsSaving(false)
     }
@@ -330,7 +331,7 @@ export default function ProfileEditScreen() {
         }
       }
     } catch (err) {
-      alert('No se pudo acceder a la cámara')
+      setError('No se pudo acceder a la cámara')
     }
   }
 
@@ -349,9 +350,13 @@ export default function ProfileEditScreen() {
       </button>
       
       {/* Título dinámico según sea nuevo o edición */}
-      <h1 className="text-2xl md:text-4xl tracking-widest text-green-400 mb-16 text-center">
+      <h1 className="text-2xl md:text-4xl tracking-widest text-green-400 mb-4 text-center">
         {isNew ? 'NUEVO PERFIL' : 'EDITAR PERFIL'}
       </h1>
+      
+      {error && (
+        <p className="text-red-400 text-center mb-4">{error}</p>
+      )}
       
       {/* Avatar/Preview del perfil */}
       <div 

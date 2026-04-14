@@ -12,6 +12,7 @@ export default function StatsScreen() {
   const [stats, setStats] = useState(null)
   const [selectedSala, setSelectedSala] = useState(location.state?.salaName || '')
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
 
   useEffect(() => {
     if (!selectedSala) return;
@@ -24,11 +25,12 @@ export default function StatsScreen() {
   const handleViewStats = async () => {
     if (!selectedSala.trim()) return
     setLoading(true)
+    setError('')
     try {
       const data = await apiGet(`/api/stats/${selectedSala}`)
       setStats(data)
     } catch (e) {
-      alert('Error al cargar estadísticas')
+      setError('No se pudieron cargar las estadísticas. Intentá más tarde.')
     }
     setLoading(false)
   }
@@ -69,6 +71,10 @@ export default function StatsScreen() {
             {loading ? '...' : 'Ver'}
           </button>
         </div>
+        
+        {error && (
+          <p className="text-red-400 text-center mb-4">{error}</p>
+        )}
       </div>
 
       {stats && (
