@@ -52,6 +52,9 @@ export default function DashboardScreen() {
   
   // newSalaName: nombre de la sala que se está creando
   const [newSalaName, setNewSalaName] = useState('')
+  
+  // profiles: todos los perfiles del usuario (para editar)
+  const [profiles, setProfiles] = useState([])
 
   // =====================
   // EFECTO: CARGAR DATOS AL MONTAR
@@ -68,7 +71,36 @@ export default function DashboardScreen() {
     
     // Cargamos las cuentas guardadas
     loadSavedAccounts()
+    
+    // Cargamos los perfiles
+    loadProfiles()
   }, [user])  // Se ejecuta cuando user cambia
+
+  // =====================
+  // FUNCIÓN: CARGAR PERFILES
+  // =====================
+  const loadProfiles = async () => {
+    if (!user?.uid) return
+    
+    try {
+      const data = await apiGet(`/api/users/${user.uid}/profiles`)
+      if (data.profiles) {
+        setProfiles(data.profiles)
+        return
+      }
+    } catch (e) {}
+    
+    // Si falla el backend, intentamos localStorage
+    const saved = localStorage.getItem('profiles_' + user.uid)
+    if (saved) {
+      const cached = JSON.parse(saved)
+      setProfiles(cached.map(p => ({
+        name: p.name,
+        color: p.color,
+        image: p.image === 'CACHED' ? null : p.image
+      })))
+    }
+  }
 
   // =====================
   // FUNCIÓN: CARGAR SALAS
@@ -175,11 +207,30 @@ export default function DashboardScreen() {
     <div className="flex flex-col items-center min-h-screen w-full p-10">
       
       {/* ===================== */}
-      {/* HEADER CON BUSCADOR Y PERFIL */}
+      {/* HEADER CON PERFIL A LA DERECHA Y BUSCADOR CENTRADO */}
       {/* ===================== */}
       <div className="w-full max-w-5xl flex justify-between items-center mb-8 relative">
         
-        {/* Menú del usuario (a la izquierda) */}
+        {/* Espaço vacío a la izquierda */}
+        <div className="w-24"></div>
+        
+        {/* Buscador de salas (CENTRADO) */}
+        <div className="flex-1 max-w-md">
+          <div className="relative">
+            <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-zinc-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+            <input
+              type="text"
+              className="w-full bg-zinc-900 border border-zinc-700 text-white text-center pl-10 p-2 rounded-lg outline-none focus:border-green-400 placeholder-zinc-500 text-sm"
+              placeholder="Buscar sala..."
+              value={searchSala}
+              onChange={(e) => setSearchSala(e.target.value)}
+            />
+          </div>
+        </div>
+        
+        {/* Menú del usuario (A LA DERECHA) */}
         <div
           className="flex items-center gap-4 cursor-pointer relative"
           onClick={() => setShowDropdown(!showDropdown)}
@@ -197,18 +248,19 @@ export default function DashboardScreen() {
           <span className="text-zinc-500 text-xl">▼</span>
           
           {showDropdown && (
-            <div className="absolute top-full left-0 mt-4 bg-zinc-800 border border-zinc-700 rounded-lg py-2 min-w-48 z-50 shadow-xl">
+            <div className="absolute top-full right-0 mt-4 bg-zinc-800 border border-zinc-700 rounded-lg py-2 min-w-48 z-50 shadow-xl">
               <div
                 className="px-5 py-3 text-white cursor-pointer hover:bg-zinc-700 tracking-wider text-center border border-zinc-700 rounded-md mx-2 mb-2 flex items-center justify-center gap-2"
                 onClick={() => {
                   setShowDropdown(false)
-                  navigate('/profiles')
+                  const index = profiles.findIndex(p => p.name === currentProfile?.name)
+                  navigate('/profiles/edit', { state: { index } })
                 }}
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
                 </svg>
-                Gestionar perfiles
+                Editar perfil
               </div>
               <div
                 className="px-5 py-3 text-white cursor-pointer hover:bg-zinc-700 tracking-wider text-center border border-zinc-700 rounded-md mx-2 mb-2"
@@ -228,25 +280,6 @@ export default function DashboardScreen() {
             </div>
           )}
         </div>
-        
-        {/* Buscador de salas (CENTRADO) */}
-        <div className="flex-1 max-w-md mx-4">
-          <div className="relative">
-            <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-zinc-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
-            <input
-              type="text"
-              className="w-full bg-zinc-900 border border-zinc-700 text-white text-center pl-10 p-2 rounded-lg outline-none focus:border-green-400 placeholder-zinc-500 text-sm"
-              placeholder="Buscar sala..."
-              value={searchSala}
-              onChange={(e) => setSearchSala(e.target.value)}
-            />
-          </div>
-        </div>
-        
-        {/* Espaço vacío a la derecha para balance */}
-        <div className="w-24"></div>
       </div>
       
       {/* ===================== */}
