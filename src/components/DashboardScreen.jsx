@@ -175,9 +175,9 @@ export default function DashboardScreen() {
     <div className="flex flex-col items-center min-h-screen w-full p-10">
       
       {/* ===================== */}
-      {/* HEADER CON USUARIO Y MENÚ */}
+      {/* HEADER CON USUARIO Y MENÚ (CENTRADO ARRIBA) */}
       {/* ===================== */}
-      <div className="w-full max-w-5xl flex justify-start mb-8 relative">
+      <div className="w-full max-w-5xl flex justify-center mb-8 relative">
         
         {/* Menú del usuario (click para abrir dropdown) */}
         <div
