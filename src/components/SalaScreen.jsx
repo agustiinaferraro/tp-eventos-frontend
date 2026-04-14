@@ -114,7 +114,17 @@ export default function SalaScreen() {
   // RENDERIZADO
   // =====================
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen w-full p-10">
+    <div 
+      className="flex flex-col items-center justify-center min-h-screen w-full p-10"
+      style={{
+        background: sala?.image ? `url(${sala.image}) center/cover no-repeat` : sala?.color || '#000'
+      }}
+    >
+      {/* Overlay oscuro */}
+      <div className="absolute inset-0 bg-black/70 z-0"></div>
+      
+      {/* Contenido relativo para estar arriba del overlay */}
+      <div className="relative z-10 w-full max-w-md flex flex-col items-center">
       
       {/* Botón volver atrás */}
       <button
@@ -258,6 +268,7 @@ export default function SalaScreen() {
           )}
         </div>
       )}
+      </div>
     </div>
   )
 }
