@@ -123,12 +123,9 @@ export default function SalaScreen() {
       {/* Overlay oscuro */}
       <div className="absolute inset-0 bg-black/70 z-0"></div>
       
-      {/* Contenido relativo para estar arriba del overlay */}
-      <div className="relative z-10 w-full max-w-md flex flex-col items-center">
-      
       {/* Botón volver atrás */}
       <button
-        className="absolute top-8 left-8 text-5xl text-white bg-transparent border-none cursor-pointer hover:opacity-70"
+        className="absolute top-8 left-8 text-5xl text-white bg-transparent border-none cursor-pointer hover:opacity-70 z-20"
         onClick={() => navigate('/dashboard')}
       >
         ‹
@@ -136,11 +133,14 @@ export default function SalaScreen() {
       
       {/* Logo a la izquierda */}
       <div 
-        className="absolute top-8 left-24 w-10 h-10 bg-green-600 rounded-full flex items-center justify-center cursor-pointer"
+        className="absolute top-8 left-24 w-10 h-10 bg-green-600 rounded-full flex items-center justify-center cursor-pointer z-20"
         onClick={() => navigate('/dashboard')}
       >
         <span className="text-white font-bold text-xl">E</span>
       </div>
+      
+      {/* Contenido relativo para estar arriba del overlay */}
+      <div className="relative z-10 w-full max-w-md flex flex-col items-center">
       
       {/* Título con el nombre de la sala */}
       <h1 className="text-2xl md:text-4xl tracking-widest text-green-400 mb-16 text-center">
