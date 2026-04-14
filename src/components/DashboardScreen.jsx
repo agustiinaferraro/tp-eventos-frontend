@@ -305,9 +305,14 @@ export default function DashboardScreen() {
         {salas.filter(s => s.name.toLowerCase().includes(searchSala.toLowerCase())).map((sala, i) => (
           <div
             key={sala.id || i}
-            className="bg-zinc-900 border border-zinc-700 rounded-lg p-10 cursor-pointer transition-all hover:border-green-400 hover:scale-[1.02] relative"
+            className="bg-zinc-900 border border-zinc-700 rounded-lg p-10 cursor-pointer transition-all hover:border-green-400 hover:scale-[1.02] relative overflow-hidden"
+            style={{
+              background: sala.image ? `url(${sala.image}) center/cover no-repeat` : sala.color || '#18181b'
+            }}
             onClick={() => openSala(sala)}
           >
+            {/* Overlay oscuro para que se lea el texto */}
+            <div className="absolute inset-0 bg-black/50"></div>
             {/* Botón eliminar (X) en la esquina */}
             <button
               className="absolute top-4 right-4 bg-transparent border-none text-zinc-500 text-2xl cursor-pointer transition-all hover:text-red-500 hover:scale-125"
@@ -331,10 +336,10 @@ export default function DashboardScreen() {
             </button>
             
             {/* Nombre de la sala */}
-            <p className="text-xl text-white mb-2">{sala.name.toUpperCase()}</p>
+            <p className="text-xl text-white mb-2 relative z-10">{sala.name.toUpperCase()}</p>
             
             {/* Estado */}
-            <p className="text-base text-zinc-400">Sala activa</p>
+            <p className="text-base text-zinc-400 relative z-10">Sala activa</p>
           </div>
         ))}
         
