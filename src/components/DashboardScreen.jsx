@@ -202,35 +202,21 @@ export default function DashboardScreen() {
 
   // =====================
   // RENDERIZADO
-// =====================
+  // =====================
   return (
-    <div className={`flex flex-col items-center min-h-screen w-full p-10 ${sala?.image ? '' : ''}`}
-      style={{
-        background: salas.some(s => s.image) ? 'transparent' : 'transparent'
-      }}
-    >
+    <div className="flex flex-col items-center min-h-screen w-full p-10">
       
       {/* ===================== */}
-      {/* HEADER CON BACK, LOGO, BUSCADOR Y PERFIL */}
+      {/* HEADER CON LOGO, BUSCADOR Y PERFIL */}
       {/* ===================== */}
-      <div className={`w-full max-w-5xl flex justify-between items-center mb-8 relative ${salas.length > 0 && salas[0]?.image ? 'bg-black/50 -mx-10 -mt-10 p-10 rounded-lg' : ''}`}>
+      <div className="w-full max-w-5xl flex justify-between items-center mb-8 relative">
         
-        {/* Back y Logo a la izquierda */}
-        <div className='flex items-center gap-2'>
-          <button
-            className='text-4xl text-white bg-transparent border-none cursor-pointer hover:opacity-70'
-            onClick={() => navigate('/profiles')}
-          >
-            ‹
-          </button>
-          
-          {/* Logo a la izquierda (clickeable -> Dashboard) */}
-          <div 
-            className='w-10 h-10 bg-green-600 rounded-full flex items-center justify-center cursor-pointer'
-            onClick={() => navigate('/dashboard')}
-          >
-            <span className='text-white font-bold text-xl'>E</span>
-          </div>
+        {/* Logo a la izquierda (clickeable -> Dashboard) */}
+        <div 
+          className="w-10 h-10 bg-green-600 rounded-full flex items-center justify-center cursor-pointer"
+          onClick={() => navigate('/dashboard')}
+        >
+          <span className="text-white font-bold text-xl">E</span>
         </div>
         
         {/* Buscador de salas (CENTRADO) */}
