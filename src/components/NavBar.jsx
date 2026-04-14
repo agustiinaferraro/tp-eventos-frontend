@@ -6,7 +6,7 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 
-export default function NavBar({ showSearch = true, searchValue = '', onSearchChange = () => {}, salas = [] }) {
+export default function NavBar({ showSearch = false, searchValue = '', onSearchChange = () => {} }) {
   const navigate = useNavigate()
   const { user } = useAuth()
   const [showDropdown, setShowDropdown] = useState(false)
@@ -14,24 +14,14 @@ export default function NavBar({ showSearch = true, searchValue = '', onSearchCh
   const currentProfile = JSON.parse(localStorage.getItem('currentProfile') || '{}')
   
   return (
-    <nav className='w-full max-w-5xl flex justify-between items-center mb-8 relative'>
+    <nav className='w-full max-w-5xl flex justify-between items-center relative z-20'>
       
-      {/* Back y Logo a la izquierda */}
-      <div className='flex items-center gap-2'>
-        <button
-          className='text-4xl text-white bg-transparent border-none cursor-pointer hover:opacity-70'
-          onClick={() => navigate('/profiles')}
-        >
-          ‹
-        </button>
-        
-        {/* Logo (clickeable -> Dashboard) */}
-        <div 
-          className='w-10 h-10 bg-green-600 rounded-full flex items-center justify-center cursor-pointer'
-          onClick={() => navigate('/dashboard')}
-        >
-          <span className='text-white font-bold text-xl'>E</span>
-        </div>
+      {/* Logo a la izquierda (clickeable -> Dashboard) */}
+      <div 
+        className='w-10 h-10 bg-green-600 rounded-full flex items-center justify-center cursor-pointer'
+        onClick={() => navigate('/dashboard')}
+      >
+        <span className='text-white font-bold text-xl'>E</span>
       </div>
       
       {/* Buscador de salas (CENTRADO) - solo si showSearch es true */}
@@ -85,10 +75,7 @@ export default function NavBar({ showSearch = true, searchValue = '', onSearchCh
             </div>
             <div
               className='px-5 py-3 text-white cursor-pointer hover:bg-zinc-700 tracking-wider text-center border border-zinc-700 rounded-md mx-2 mb-2'
-              onClick={() => {
-                setShowDropdown(false)
-                setShowDropdown(true) // TODO: implementar cambio de cuenta
-              }}
+              onClick={() => setShowDropdown(false)}
             >
               Cambiar cuenta
             </div>

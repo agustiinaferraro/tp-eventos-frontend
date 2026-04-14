@@ -11,6 +11,10 @@ import { useNavigate } from 'react-router-dom'
 // getBaseUrl: función para obtener la URL base de la experiencia
 import { getBaseUrl } from '../constants'
 
+// NavBar y BackButton
+import NavBar from './NavBar'
+import BackButton from './BackButton'
+
 // Componente principal de la pantalla de sala
 export default function SalaScreen() {
   // Navegación
@@ -110,37 +114,25 @@ export default function SalaScreen() {
   // =====================
   if (!sala) return null
 
-  // =====================
+// =====================
   // RENDERIZADO
   // =====================
   return (
     <div 
-      className="flex flex-col items-center justify-center min-h-screen w-full p-10"
+      className='flex flex-col items-center justify-center min-h-screen w-full p-10'
       style={{
         background: sala?.image ? `url(${sala.image}) center/cover no-repeat` : sala?.color || '#000'
       }}
     >
       {/* Overlay oscuro */}
-      <div className="absolute inset-0 bg-black/70 z-0"></div>
+      <div className='absolute inset-0 bg-black/70 z-0'></div>
       
-      {/* Botón volver atrás */}
-      <button
-        className="absolute top-8 left-8 text-5xl text-white bg-transparent border-none cursor-pointer hover:opacity-70 z-20"
-        onClick={() => navigate('/dashboard')}
-      >
-        ‹
-      </button>
-      
-      {/* Logo a la izquierda */}
-      <div 
-        className="absolute top-8 left-24 w-10 h-10 bg-green-600 rounded-full flex items-center justify-center cursor-pointer z-20"
-        onClick={() => navigate('/dashboard')}
-      >
-        <span className="text-white font-bold text-xl">E</span>
-      </div>
+      {/* NavBar y BackButton */}
+      <NavBar />
+      <BackButton onClick={() => navigate('/dashboard')} />
       
       {/* Contenido relativo para estar arriba del overlay */}
-      <div className="relative z-10 w-full max-w-md flex flex-col items-center">
+      <div className='relative z-10 w-full max-w-md flex flex-col items-center'>
       
       {/* Título con el nombre de la sala */}
       <h1 className="text-2xl md:text-4xl tracking-widest text-green-400 mb-16 text-center">
