@@ -18,7 +18,7 @@ export default function BackButton({ onClick }) {
   
   return (
     <button
-      className='absolute text-5xl text-white bg-transparent border-none cursor-pointer hover:opacity-70 active:opacity-50 z-20'
+      className='absolute text-5xl text-white bg-transparent border-none cursor-pointer hover:opacity-70 active:opacity-50 hover:scale-110 active:scale-90 transition-transform z-20'
       style={{ left: '2rem', top: '6rem' }}
       onClick={handleClick}
     >
