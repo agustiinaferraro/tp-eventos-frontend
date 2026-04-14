@@ -124,6 +124,14 @@ export default function SalaScreen() {
         ‹
       </button>
       
+      {/* Logo a la izquierda */}
+      <div 
+        className="absolute top-8 left-24 w-10 h-10 bg-green-600 rounded-full flex items-center justify-center cursor-pointer"
+        onClick={() => navigate('/dashboard')}
+      >
+        <span className="text-white font-bold text-xl">E</span>
+      </div>
+      
       {/* Título con el nombre de la sala */}
       <h1 className="text-2xl md:text-4xl tracking-widest text-green-400 mb-16 text-center">
         {sala.name.toUpperCase()}

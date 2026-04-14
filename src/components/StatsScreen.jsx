@@ -42,40 +42,38 @@ export default function StatsScreen() {
   return (
     <div className="flex flex-col items-center min-h-screen w-full p-10">
       
+      {/* Botón volver atrás */}
       <button
         className="absolute top-8 left-8 text-5xl text-white bg-transparent border-none cursor-pointer hover:opacity-70"
-        onClick={() => navigate('/dashboard')}
+        onClick={() => navigate(-1)}
       >
         ‹
       </button>
       
-      <h1 className="text-2xl md:text-4xl tracking-widest text-green-400 mb-12 text-center">
+      {/* Logo a la izquierda */}
+      <div 
+        className="absolute top-8 left-24 w-10 h-10 bg-green-600 rounded-full flex items-center justify-center cursor-pointer"
+        onClick={() => navigate('/dashboard')}
+      >
+        <span className="text-white font-bold text-xl">E</span>
+      </div>
+      
+      {/* Título y contenido */}
+      <h1 className="text-2xl md:text-4xl tracking-widest text-green-400 mb-4 text-center">
         ESTADÍSTICAS
       </h1>
+      
+      {selectedSala && (
+        <p className="text-xl text-white tracking-widest mb-8 text-center uppercase">
+          {selectedSala}
+        </p>
+      )}
+      
+      {error && (
+        <p className="text-red-400 text-center mb-4">{error}</p>
+      )}
 
-      <div className="w-full max-w-md mb-8">
-        <div className="flex gap-3">
-          <input
-            type="text"
-            className="flex-1 bg-zinc-900 border-2 border-zinc-700 text-white text-center p-4 rounded-lg outline-none focus:border-green-400 placeholder-zinc-500"
-            placeholder="Nombre de la sala"
-            value={selectedSala}
-            onChange={(e) => setSelectedSala(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && handleViewStats()}
-          />
-          <button
-            className="bg-green-600 text-white px-6 py-4 rounded-lg cursor-pointer hover:bg-green-500 disabled:opacity-50"
-            onClick={handleViewStats}
-            disabled={loading || !selectedSala.trim()}
-          >
-            {loading ? '...' : 'Ver'}
-          </button>
-        </div>
-        
-        {error && (
-          <p className="text-red-400 text-center mb-4">{error}</p>
-        )}
-      </div>
+      {stats && (
 
       {stats && (
         <div className="w-full max-w-2xl">

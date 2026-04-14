@@ -349,6 +349,14 @@ export default function ProfileEditScreen() {
         ‹
       </button>
       
+      {/* Logo a la izquierda */}
+      <div 
+        className="absolute top-8 left-24 w-10 h-10 bg-green-600 rounded-full flex items-center justify-center cursor-pointer"
+        onClick={() => navigate('/dashboard')}
+      >
+        <span className="text-white font-bold text-xl">E</span>
+      </div>
+      
       {/* Título dinámico según sea nuevo o edición */}
       <h1 className="text-2xl md:text-4xl tracking-widest text-green-400 mb-4 text-center">
         {isNew ? 'NUEVO PERFIL' : 'EDITAR PERFIL'}
