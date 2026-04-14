@@ -211,6 +211,21 @@ export default function DashboardScreen() {
           {showDropdown && (
             <div className="absolute top-full left-0 mt-4 bg-zinc-800 border border-zinc-700 rounded-lg py-2 min-w-48 z-50 shadow-xl">
               
+              {/* Opción: Editar perfil */}
+              <div
+                className="px-5 py-3 text-white cursor-pointer hover:bg-zinc-700 tracking-wider text-center border border-zinc-700 rounded-md mx-2 mb-2 flex items-center justify-center gap-2"
+                onClick={() => {
+                  setShowDropdown(false)
+                  const index = profiles.findIndex(p => p.name === currentProfile?.name)
+                  navigate('/profiles/edit', { state: { index } })
+                }}
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                </svg>
+                Editar perfil
+              </div>
+              
               {/* Opción: Cambiar cuenta */}
               <div
                 className="px-5 py-3 text-white cursor-pointer hover:bg-zinc-700 tracking-wider text-center border border-zinc-700 rounded-md mx-2 mb-2"
