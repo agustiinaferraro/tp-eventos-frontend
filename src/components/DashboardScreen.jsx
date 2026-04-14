@@ -220,14 +220,14 @@ export default function DashboardScreen() {
         </div>
         
         {/* Buscador de salas (CENTRADO) */}
-        <div className="flex-1 max-w-sm mx-4">
+        <div className="flex-1 max-w-xs mx-4">
           <div className="relative">
-            <svg className="absolute left-2 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="absolute left-1 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
             <input
               type="text"
-              className="w-full bg-zinc-900 border border-zinc-700 text-white text-center pl-8 p-2 rounded-lg outline-none focus:border-green-400 placeholder-zinc-500 text-sm"
+              className="w-full bg-zinc-900 border border-zinc-700 text-white text-center pl-6 p-2 rounded-lg outline-none focus:border-green-400 placeholder-zinc-500 text-sm"
               placeholder="Buscar sala..."
               value={searchSala}
               onChange={(e) => setSearchSala(e.target.value)}
