@@ -64,13 +64,13 @@ export default function StatsScreen() {
       </h1>
       
       {selectedSala && (
-        <p className="text-xl text-white tracking-widest mb-8 text-center uppercase">
+        <p className="text-2xl text-white tracking-widest mt-4 mb-8 text-center uppercase">
           {selectedSala}
         </p>
       )}
       
       {error && (
-        <p className="text-red-400 text-center mb-4">{error}</p>
+        <p className="text-lg text-red-400 text-center mb-4">{error}</p>
       )}
 
       {stats && (
