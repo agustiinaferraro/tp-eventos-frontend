@@ -59,7 +59,14 @@ return (
       
       <NavBar />
       <div className="pointer-events-none w-full max-w-5xl">
-        <BackButton onClick={() => navigate(-1)} />
+        <BackButton onClick={() => {
+          const savedSala = localStorage.getItem('currentSala')
+          if (savedSala) {
+            navigate('/sala')
+          } else {
+            navigate('/dashboard')
+          }
+        }} />
       </div>
       
       {/* Título y contenido */}
