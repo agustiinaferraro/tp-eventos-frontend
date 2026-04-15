@@ -9,17 +9,17 @@ import { signOut } from 'firebase/auth'
 
 export default function NavBar({ showSearch = true, searchValue = '', onSearchChange = () => {} }) {
   const navigate = useNavigate()
-  const { user, profiles, currentProfile } = useAuth()
+  const { user, profiles, currentProfile: authCurrentProfile } = useAuth()
   const [showDropdown, setShowDropdown] = useState(false)
   const [showSwitchModal, setShowSwitchModal] = useState(false)
   
-  const currentProfile = JSON.parse(localStorage.getItem('currentProfile') || '{}')
+  const currentProfile = authCurrentProfile || JSON.parse(localStorage.getItem('currentProfile') || '{}')
   const currentSala = JSON.parse(localStorage.getItem('currentSala') || 'null')
   const savedAccounts = JSON.parse(localStorage.getItem('savedAccounts') || '[]')
   
   const handleEditCurrentProfile = (e) => {
     e.stopPropagation()
-    const currentProfileData = currentProfile || JSON.parse(localStorage.getItem('currentProfile') || '{}')
+    const profileToEdit = currentProfile || JSON.parse(localStorage.getItem('currentProfile') || '{}')
     let profilesData = profiles
     
     if (!profilesData || profilesData.length === 0) {
@@ -27,7 +27,7 @@ export default function NavBar({ showSearch = true, searchValue = '', onSearchCh
       profilesData = saved ? JSON.parse(saved) : []
     }
     
-    const index = profilesData.findIndex(p => p.name === currentProfileData.name)
+    const index = profilesData.findIndex(p => p.name === profileToEdit.name)
     setShowDropdown(false)
     navigate('/profiles/edit', { state: { index: index >= 0 ? index : 0 } })
   }
