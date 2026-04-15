@@ -14,6 +14,7 @@ export default function StatsScreen() {
   const location = useLocation()
   const [stats, setStats] = useState(null)
   const [selectedSala, setSelectedSala] = useState(location.state?.salaName || '')
+  const [salaData, setSalaData] = useState(location.state?.salaData || null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
@@ -43,27 +44,39 @@ export default function StatsScreen() {
   }
 
 return (
-    <div className='flex flex-col items-center min-h-screen w-full p-10 pt-24'>
+    <div className='flex flex-col items-center min-h-screen w-full p-10 pt-24 relative'>
+      {/* Fondo con brillo */}
+      <div 
+        className="absolute inset-0 -z-10"
+        style={{
+          background: salaData?.image ? `url(${salaData.image}) center/cover no-repeat` : salaData?.color || '#000',
+          filter: salaData?.brightness ? `brightness(${salaData.brightness}%)` : undefined
+        }}
+      />
+      
+      {/* Overlay oscuro */}
+      <div className="absolute inset-0 bg-black/70 z-0"></div>
+      
       <NavBar />
       <BackButton onClick={() => navigate(-1)} />
       
       {/* Título y contenido */}
-      <h1 className="text-2xl md:text-4xl tracking-widest text-green-400 mb-4 text-center">
+      <h1 className="text-2xl md:text-4xl tracking-widest text-green-400 mb-4 text-center relative z-10">
         ESTADÍSTICAS
       </h1>
       
       {selectedSala && (
-        <p className="text-3xl text-white tracking-widest mt-8 mb-12 text-center uppercase">
+        <p className="text-3xl text-white tracking-widest mt-8 mb-12 text-center uppercase relative z-10">
           {selectedSala}
         </p>
       )}
       
       {error && (
-        <p className="text-xl text-red-400 text-center mb-8">{error}</p>
+        <p className="text-xl text-red-400 text-center mb-8 relative z-10">{error}</p>
       )}
 
       {stats && (
-        <div className="w-full max-w-2xl">
+        <div className="w-full max-w-2xl relative z-10">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
             <div className="bg-zinc-900 border border-zinc-700 rounded-lg p-4 text-center">
               <p className="text-3xl text-green-400 font-bold">{stats.summary?.connections || 0}</p>

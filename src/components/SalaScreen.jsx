@@ -118,13 +118,16 @@ export default function SalaScreen() {
   // RENDERIZADO
   // =====================
   return (
-    <div 
-      className='flex flex-col items-center min-h-screen w-full p-10'
-      style={{
-        background: sala?.image ? `url(${sala.image}) center/cover no-repeat` : sala?.color || '#000',
-        filter: sala?.brightness ? `brightness(${sala.brightness}%)` : undefined
-      }}
-    >
+    <div className='flex flex-col items-center min-h-screen w-full p-10 relative'>
+      {/* Fondo con brillo */}
+      <div 
+        className="absolute inset-0 -z-10"
+        style={{
+          background: sala?.image ? `url(${sala.image}) center/cover no-repeat` : sala?.color || '#000',
+          filter: sala?.brightness ? `brightness(${sala.brightness}%)` : undefined
+        }}
+      />
+      
       {/* Overlay oscuro */}
       <div className='absolute inset-0 bg-black/70 z-0'></div>
       
@@ -173,7 +176,7 @@ export default function SalaScreen() {
       {/* Botón estadísticas */}
       <button
         className="mt-6 bg-zinc-900 border border-zinc-700 text-zinc-300 text-sm py-3 px-6 rounded-lg cursor-pointer tracking-wider transition-all hover:border-green-400 hover:text-green-400"
-        onClick={() => navigate('/stats', { state: { salaName: sala.name } })}
+        onClick={() => navigate('/stats', { state: { salaName: sala.name, salaData: sala } })}
       >
         📊 ESTADÍSTICAS
       </button>
