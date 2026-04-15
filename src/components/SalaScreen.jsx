@@ -13,7 +13,6 @@ import { getBaseUrl } from '../constants'
 
 // NavBar y BackButton
 import NavBar from './NavBar'
-import BackButton from './BackButton'
 
 // Componente principal de la pantalla de sala
 export default function SalaScreen() {
@@ -133,9 +132,6 @@ export default function SalaScreen() {
       
       {/* NavBar */}
       <NavBar />
-      
-      {/* BackButton - en su propio div */}
-      <BackButton onClick={() => navigate('/dashboard')} />
       
       {/* Contenido relativo para estar arriba del overlay */}
       <div className='relative z-10 w-full max-w-md flex flex-col items-center'>
