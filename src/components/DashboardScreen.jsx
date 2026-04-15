@@ -20,6 +20,7 @@ import { signOut } from 'firebase/auth'
 
 // NavBar component
 import NavBar from './NavBar'
+import BackButton from './BackButton'
 
 // Componente principal del dashboard
 export default function DashboardScreen() {
@@ -216,6 +217,9 @@ export default function DashboardScreen() {
         onSearchChange={setSearchSala}
         profiles={profiles}
       />
+      
+      {/* BackButton a Profiles */}
+      <BackButton onClick={() => navigate('/profiles')} />
       
       {/* ===================== */}
       {/* TÍTULO Y LISTA DE SALAS */}
