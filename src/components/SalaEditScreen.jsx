@@ -174,7 +174,7 @@ export default function SalaEditScreen() {
   }
   
 return (
-    <div className='flex flex-col items-center min-h-screen w-full p-10 pt-24 relative'>
+    <div className='flex flex-col items-center min-h-screen w-full p-10 relative'>
       {/* Fondo con brillo */}
       <div 
         className="absolute inset-0 -z-10"
