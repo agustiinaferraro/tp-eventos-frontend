@@ -232,18 +232,6 @@ return (
         </button>
       </div>
       
-      {image && (
-        <button
-          className="text-zinc-500 text-sm mb-4 hover:text-white relative z-10"
-          onClick={() => {
-            setImage(null)
-            setChoseColor(true)
-          }}
-        >
-          Quitar imagen
-        </button>
-      )}
-      
       {/* Control de brillo - tanto para imagen como para color */}
       {(image || choseColor) && (
         <div className="w-full max-w-md mb-8 relative z-10">
