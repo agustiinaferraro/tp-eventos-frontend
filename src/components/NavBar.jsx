@@ -23,7 +23,6 @@ export default function NavBar({ showSearch = true, searchValue = '', onSearchCh
     const saved = localStorage.getItem('profiles_' + user?.uid)
     const profilesData = saved ? JSON.parse(saved) : []
     const index = profilesData.findIndex(p => p.name === profileToEdit.name)
-    alert('index: ' + index + ' profilesData: ' + JSON.stringify(profilesData))
     setShowDropdown(false)
     navigate('/profiles/edit', { state: { index: index >= 0 ? index : 0 } })
   }
