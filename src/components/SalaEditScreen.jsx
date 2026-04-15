@@ -189,14 +189,7 @@ return (
       
       <NavBar />
       <div className="pointer-events-none w-full max-w-5xl">
-        <BackButton onClick={() => {
-          const savedSala = localStorage.getItem('currentSala')
-          if (savedSala) {
-            navigate('/sala')
-          } else {
-            navigate('/dashboard')
-          }
-        }} />
+        <BackButton onClick={() => navigate(-1)} />
       </div>
       
       <h1 className="text-2xl md:text-4xl tracking-widest text-green-400 mb-4 text-center relative z-10">

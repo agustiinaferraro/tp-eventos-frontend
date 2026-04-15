@@ -59,7 +59,7 @@ return (
       
       <NavBar />
       <div className="pointer-events-none w-full max-w-5xl">
-        <BackButton onClick={() => navigate('/sala')} />
+        <BackButton onClick={() => navigate(-1)} />
       </div>
       
       {/* Título y contenido */}
