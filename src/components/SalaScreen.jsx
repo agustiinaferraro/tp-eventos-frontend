@@ -21,13 +21,16 @@ export default function SalaScreen() {
   // Navegación
   const navigate = useNavigate()
 
-  // =====================
-  // ESTADOS
-  // =====================
-  // sala: los datos de la sala seleccionada (nombre, id)
-  const [sala, setSala] = useState(null)
-  
-  // showQR: si el modal de QR está visible
+// =====================
+// ESTADOS
+// =====================
+// sala: los datos de la sala seleccionada (nombre, id)
+const [sala, setSala] = useState(null)
+
+// profiles: los perfiles del usuario (para editar perfil desde NavBar)
+const [profiles, setProfiles] = useState([])
+
+// showQR: si el modal de QR está visible
   const [showQR, setShowQR] = useState(false)
   
   // showCopy: si el modal de copiar link está visible
@@ -36,16 +39,22 @@ export default function SalaScreen() {
   // copySuccess: si el link se copió exitosamente (para mostrar feedback)
   const [copySuccess, setCopySuccess] = useState(false)
 
-  // =====================
-  // EFECTO: CARGAR SALA DE LOCALSTORAGE
-  // =====================
-  useEffect(() => {
-    // Cuando entra a esta pantalla, carga la sala que guardamos en DashboardScreen
-    const saved = localStorage.getItem('currentSala')
-    if (saved) {
-      setSala(JSON.parse(saved))
-    }
-  }, [])
+// =====================
+// EFECTO: CARGAR SALA DE LOCALSTORAGE
+// =====================
+useEffect(() => {
+  // Cuando entra a esta pantalla, carga la sala que guardamos en DashboardScreen
+  const saved = localStorage.getItem('currentSala')
+  if (saved) {
+    setSala(JSON.parse(saved))
+  }
+  
+  // Cargamos los perfiles para el NavBar
+  const savedProfiles = localStorage.getItem('profiles_' + user?.uid)
+  if (savedProfiles) {
+    setProfiles(JSON.parse(savedProfiles))
+  }
+}, [])
 
   // =====================
   // FUNCIÓN: IR A LA EXPERIENCIA
@@ -133,7 +142,7 @@ export default function SalaScreen() {
       <div className='absolute inset-0 bg-black/70 z-0'></div>
       
       {/* NavBar - solo cuando no está el QR */}
-      {!showQR && <NavBar />}
+      {!showQR && <NavBar profiles={profiles} />}
       
       {/* BackButton - solo cuando no está el QR */}
       {!showQR && <BackButton onClick={() => navigate('/dashboard')} />}
