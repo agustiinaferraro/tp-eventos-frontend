@@ -25,7 +25,7 @@ import BackButton from './BackButton'
 // Componente principal
 export default function ProfileEditScreen() {
   // Obtenemos el usuario actual
-  const { user } = useAuth()
+  const { user, setCurrentProfile } = useAuth()
   
   // Hooks para navegación
   const navigate = useNavigate()
@@ -155,6 +155,19 @@ export default function ProfileEditScreen() {
     
     try {
       await saveProfiles(newProfiles)
+      
+      // Actualizar currentProfile si es el perfil actual
+      const currentFromStorage = JSON.parse(localStorage.getItem('currentProfile') || '{}')
+      if (currentFromStorage.name === name.trim()) {
+        const updatedCurrent = { 
+          ...currentFromStorage, 
+          color: choseColor ? color : (image ? null : (isNew ? color : profiles[editingIndex]?.color)),
+          image 
+        }
+        localStorage.setItem('currentProfile', JSON.stringify(updatedCurrent))
+        setCurrentProfile(updatedCurrent)
+      }
+      
       navigate('/profiles')
     } catch (err) {
       setError('Error al guardar perfil. Intentá más tarde.')
