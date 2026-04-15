@@ -173,13 +173,16 @@ export default function SalaEditScreen() {
   }
   
 return (
-    <div 
-      className='flex flex-col items-center min-h-screen w-full p-10 pt-24'
-      style={{
-        background: image ? `url(${image}) center/cover no-repeat` : (choseColor ? color : '#000'),
-        filter: `brightness(${brightness}%)`
-      }}
-    >
+    <div className='flex flex-col items-center min-h-screen w-full p-10 pt-24 relative'>
+      {/* Fondo con brillo */}
+      <div 
+        className="absolute inset-0 -z-10"
+        style={{
+          background: image ? `url(${image}) center/cover no-repeat` : (choseColor ? color : '#000'),
+          filter: `brightness(${brightness}%)`
+        }}
+      />
+      
       <NavBar />
       <BackButton onClick={() => navigate('/dashboard')} />
       
