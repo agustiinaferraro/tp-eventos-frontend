@@ -27,11 +27,6 @@ export default function QRModal({ sala, show, onClose }) {
   
   if (!show) return null
   
-  const handleCopyLink = () => {
-    const url = getBaseUrl() + '/experiencia.html?sala=' + sala.name.toLowerCase().replace(/\s+/g, '-')
-    navigator.clipboard.writeText(url)
-  }
-  
   return (
     <div
       className="fixed inset-0 flex flex-col items-center justify-center z-[2000] p-5 overflow-y-auto"
@@ -46,14 +41,6 @@ export default function QRModal({ sala, show, onClose }) {
         }}
       />
       <div className="absolute inset-0 bg-black/70 -z-10"></div>
-      
-      {/* Botón cerrar */}
-      <button
-        className="absolute top-5 right-5 bg-transparent border-none text-white text-3xl cursor-pointer hover:text-green-400 z-10"
-        onClick={onClose}
-      >
-        ×
-      </button>
       
       {/* Título de la sala */}
       <p
