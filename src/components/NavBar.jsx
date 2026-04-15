@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth, auth } from '../context/AuthContext'
 import { signOut } from 'firebase/auth'
 
-export default function NavBar({ showSearch = true, searchValue = '', onSearchChange = () => {}, profiles = [] }) {
+export default function NavBar({ showSearch = true, searchValue = '', onSearchChange = () => {} }) {
   const navigate = useNavigate()
   const { user } = useAuth()
   const [showDropdown, setShowDropdown] = useState(false)
@@ -16,6 +16,7 @@ export default function NavBar({ showSearch = true, searchValue = '', onSearchCh
   const currentProfile = JSON.parse(localStorage.getItem('currentProfile') || '{}')
   const currentSala = JSON.parse(localStorage.getItem('currentSala') || 'null')
   const savedAccounts = JSON.parse(localStorage.getItem('savedAccounts') || '[]')
+  const profiles = JSON.parse(localStorage.getItem('profiles_' + user?.uid) || '[]')
   
   const handleEditCurrentProfile = () => {
     const currentProfileData = JSON.parse(localStorage.getItem('currentProfile') || '{}')

@@ -27,9 +27,6 @@ export default function SalaScreen() {
 // sala: los datos de la sala seleccionada (nombre, id)
 const [sala, setSala] = useState(null)
 
-// profiles: los perfiles del usuario (para editar perfil desde NavBar)
-const [profiles, setProfiles] = useState([])
-
 // showQR: si el modal de QR está visible
   const [showQR, setShowQR] = useState(false)
   
@@ -47,12 +44,6 @@ useEffect(() => {
   const saved = localStorage.getItem('currentSala')
   if (saved) {
     setSala(JSON.parse(saved))
-  }
-  
-  // Cargamos los perfiles para el NavBar
-  const savedProfiles = localStorage.getItem('profiles_' + user?.uid)
-  if (savedProfiles) {
-    setProfiles(JSON.parse(savedProfiles))
   }
 }, [])
 
@@ -142,7 +133,7 @@ useEffect(() => {
       <div className='absolute inset-0 bg-black/70 z-0'></div>
       
       {/* NavBar - solo cuando no está el QR */}
-      {!showQR && <NavBar profiles={profiles} />}
+      {!showQR && <NavBar />}
       
       {/* BackButton - solo cuando no está el QR */}
       {!showQR && <BackButton onClick={() => navigate('/dashboard')} />}

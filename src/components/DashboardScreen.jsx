@@ -215,7 +215,6 @@ export default function DashboardScreen() {
         showSearch={true}
         searchValue={searchSala}
         onSearchChange={setSearchSala}
-        profiles={profiles}
       />
       
       {/* BackButton a Profiles */}
