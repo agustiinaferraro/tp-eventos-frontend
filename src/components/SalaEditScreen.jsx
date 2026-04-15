@@ -184,6 +184,9 @@ return (
         }}
       />
       
+      {/* Overlay oscuro */}
+      <div className="absolute inset-0 bg-black/70 -z-10"></div>
+      
       <NavBar />
       <BackButton onClick={() => navigate('/dashboard')} />
       
