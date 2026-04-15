@@ -176,10 +176,15 @@ return (
     <div 
       className='flex flex-col items-center min-h-screen w-full p-10 pt-24'
       style={{
-        background: image ? `url(${image}) center/cover no-repeat` : (choseColor ? color : '#000'),
-        filter: `brightness(${brightness}%)`
+        background: image ? `url(${image}) center/cover no-repeat` : (choseColor ? color : '#000')
       }}
     >
+      {/* Overlay para el brillo solo afecta al fondo */}
+      <div 
+        className="absolute inset-0 z-0"
+        style={{ filter: `brightness(${brightness}%)` }}
+      ></div>
+      
       <NavBar />
       <BackButton onClick={() => navigate('/dashboard')} />
       
