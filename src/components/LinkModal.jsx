@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getBaseUrl } from '../constants'
+import NavBar from './NavBar'
+import BackButton from './BackButton'
 
 export default function LinkModal() {
   const navigate = useNavigate()
@@ -22,16 +24,6 @@ export default function LinkModal() {
     })
   }
   
-  const goBack = () => {
-    const cameFrom = localStorage.getItem('cameFrom')
-    localStorage.removeItem('cameFrom')
-    if (cameFrom === 'dashboard') {
-      navigate('/dashboard')
-    } else {
-      navigate('/profiles')
-    }
-  }
-  
   return (
     <div className="flex flex-col items-center min-h-screen w-full p-10 relative">
       {/* Fondo con brillo */}
@@ -44,12 +36,17 @@ export default function LinkModal() {
       />
       <div className="absolute inset-0 bg-black/70 -z-10"></div>
       
-      <p className="text-green-400 tracking-widest mb-8 text-center text-xl">
+      <NavBar />
+      <div className="pointer-events-none w-full max-w-5xl">
+        <BackButton onClick={() => navigate('/sala')} />
+      </div>
+      
+      <p className="text-green-400 tracking-widest mb-8 text-center text-xl mt-8 relative z-10">
         COPIAR LINK
       </p>
       
       {/* Box con el link */}
-      <div className="w-full max-w-md bg-zinc-900 border border-zinc-800 rounded-lg p-5 mb-5">
+      <div className="w-full max-w-md bg-zinc-900 border border-zinc-800 rounded-lg p-5 mb-5 relative z-10">
         <p className="text-xs text-zinc-600 mb-2">Link para compartir</p>
         <p className="text-sm text-white break-all">
           {url}
@@ -58,7 +55,7 @@ export default function LinkModal() {
       
       {/* Botón copiar */}
       <button
-        className="w-full max-w-md bg-transparent border-2 border-green-400 text-white text-base py-4 px-10 rounded-lg cursor-pointer tracking-wider transition-all hover:bg-green-600 hover:border-green-600"
+        className="w-full max-w-md bg-transparent border-2 border-green-400 text-white text-base py-4 px-10 rounded-lg cursor-pointer tracking-wider transition-all hover:bg-green-600 hover:border-green-600 relative z-10"
         onClick={copyLink}
       >
         COPIAR
@@ -66,16 +63,8 @@ export default function LinkModal() {
       
       {/* Feedback de éxito */}
       {copySuccess && (
-        <p className="text-green-400 text-sm mt-3">¡Copiado!</p>
+        <p className="text-green-400 text-sm mt-3 relative z-10">¡Copiado!</p>
       )}
-      
-      {/* Botón volver */}
-      <button
-        className="mt-8 text-zinc-500 hover:text-white"
-        onClick={goBack}
-      >
-        ← VOLVER
-      </button>
     </div>
   )
 }
