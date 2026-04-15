@@ -6,7 +6,7 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 
-export default function NavBar({ showSearch = false, searchValue = '', onSearchChange = () => {}, profiles = [] }) {
+export default function NavBar({ showSearch = false, searchValue = '', onSearchChange = () => {}, profiles = [], onSwitchAccount = () => {} }) {
   const navigate = useNavigate()
   const { user } = useAuth()
   const [showDropdown, setShowDropdown] = useState(false)
@@ -81,7 +81,7 @@ export default function NavBar({ showSearch = false, searchValue = '', onSearchC
               className='px-5 py-3 text-white cursor-pointer hover:bg-zinc-700 tracking-wider text-center border border-zinc-700 rounded-md mx-2 mb-2'
               onClick={() => {
                 setShowDropdown(false)
-                navigate('/profiles')
+                onSwitchAccount()
               }}
             >
               Cambiar cuenta
