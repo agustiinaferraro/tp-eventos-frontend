@@ -134,6 +134,9 @@ export default function SalaScreen() {
       {/* NavBar */}
       <NavBar />
       
+      {/* BackButton */}
+      <BackButton onClick={() => navigate('/dashboard')} />
+      
       {/* Contenido relativo para estar arriba del overlay */}
       <div className='relative z-10 w-full max-w-md flex flex-col items-center'>
       
