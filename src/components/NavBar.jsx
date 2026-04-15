@@ -83,11 +83,16 @@ export default function NavBar({ showSearch = true, searchValue = '', onSearchCh
           setShowDropdown(!showDropdown)
         }}
       >
-        <div className='w-10 h-10 bg-zinc-800 rounded-full flex items-center justify-center text-green-400 overflow-hidden'>
+        <div 
+          className='w-10 h-10 rounded-full flex items-center justify-center overflow-hidden'
+          style={{ backgroundColor: currentProfile?.color || '#3f3f46' }}
+        >
           {currentProfile?.image ? (
             <img src={currentProfile.image} alt={currentProfile.name} className='w-full h-full object-cover' />
           ) : (
-            currentProfile?.name?.charAt(0).toUpperCase()
+            <span className='text-white text-lg font-bold' style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.8)' }}>
+              {currentProfile?.name?.charAt(0).toUpperCase()}
+            </span>
           )}
         </div>
         <span className='text-base text-zinc-300 tracking-widest'>
