@@ -92,13 +92,6 @@ export default function SalaEditScreen() {
         canvas.height = video.videoHeight
         canvas.getContext('2d').drawImage(video, 0, 0)
         
-        currentPhoto = {
-          canvas: canvas,
-          dataUrl: canvas.toDataURL('image/jpeg'),
-          confirmBtn: confirmBtn,
-          cancelBtn: cancelBtn
-        }
-        
         video.style.display = 'none'
         captureBtn.style.display = 'none'
         
@@ -114,6 +107,13 @@ export default function SalaEditScreen() {
         cancelBtn.className = 'fixed bottom-10 left-10 z-[10001] w-16 h-16 rounded-full bg-red-600 border-none cursor-pointer text-white text-3xl'
         cancelBtn.textContent = '✕'
         document.body.appendChild(cancelBtn)
+        
+        currentPhoto = {
+          canvas: canvas,
+          dataUrl: canvas.toDataURL('image/jpeg'),
+          confirmBtn: confirmBtn,
+          cancelBtn: cancelBtn
+        }
         
         confirmBtn.onclick = () => {
           setChoseColor(false)

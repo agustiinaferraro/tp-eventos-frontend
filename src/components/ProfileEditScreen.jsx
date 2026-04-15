@@ -322,13 +322,6 @@ export default function ProfileEditScreen() {
         canvas.height = video.videoHeight
         canvas.getContext('2d').drawImage(video, 0, 0)
         
-        currentPhoto = {
-          canvas: canvas,
-          dataUrl: canvas.toDataURL('image/jpeg'),
-          confirmBtn: confirmBtn,
-          cancelBtn: cancelBtn
-        }
-        
         // Ocultamos video y capture button
         video.style.display = 'none'
         captureBtn.style.display = 'none'
@@ -348,6 +341,13 @@ export default function ProfileEditScreen() {
         cancelBtn.className = 'fixed bottom-10 left-10 z-[10001] w-16 h-16 rounded-full bg-red-600 border-none cursor-pointer text-white text-3xl'
         cancelBtn.textContent = '✕'
         document.body.appendChild(cancelBtn)
+        
+        currentPhoto = {
+          canvas: canvas,
+          dataUrl: canvas.toDataURL('image/jpeg'),
+          confirmBtn: confirmBtn,
+          cancelBtn: cancelBtn
+        }
         
         // Confirmar: acepta la foto y cierra
         confirmBtn.onclick = () => {
