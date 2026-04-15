@@ -12,7 +12,7 @@ import { useNavigate } from 'react-router-dom'
 import { getBaseUrl } from '../constants'
 
 // NavBar y BackButton
-// import NavBar from './NavBar'
+import NavBar from './NavBar'
 import BackButton from './BackButton'
 
 // Componente principal de la pantalla de sala
@@ -130,6 +130,9 @@ export default function SalaScreen() {
       
       {/* Overlay oscuro */}
       <div className='absolute inset-0 bg-black/70 z-0'></div>
+      
+      {/* NavBar */}
+      <NavBar />
       
       {/* Contenido relativo para estar arriba del overlay */}
       <div className='relative z-10 w-full max-w-md flex flex-col items-center'>
