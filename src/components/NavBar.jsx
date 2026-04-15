@@ -18,14 +18,15 @@ export default function NavBar({ showSearch = true, searchValue = '', onSearchCh
   const savedAccounts = JSON.parse(localStorage.getItem('savedAccounts') || '[]')
   
   const handleEditCurrentProfile = () => {
-    console.log(' currentProfile:', currentProfile)
-    console.log(' profiles:', profiles)
     const currentProfileData = currentProfile || JSON.parse(localStorage.getItem('currentProfile') || '{}')
-    console.log(' currentProfileData:', currentProfileData)
-    const profilesData = (profiles && profiles.length > 0) ? profiles : JSON.parse(localStorage.getItem('profiles_' + user?.uid) || '[]')
-    console.log(' profilesData:', profilesData)
+    let profilesData = profiles
+    
+    if (!profilesData || profilesData.length === 0) {
+      const saved = localStorage.getItem('profiles_' + user?.uid)
+      profilesData = saved ? JSON.parse(saved) : []
+    }
+    
     const index = profilesData.findIndex(p => p.name === currentProfileData.name)
-    console.log(' index:', index)
     setShowDropdown(false)
     navigate('/profiles/edit', { state: { index: index >= 0 ? index : 0 } })
   }
