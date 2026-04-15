@@ -158,6 +158,8 @@ export default function ProfileEditScreen() {
       
       // Actualizar currentProfile si es el perfil actual
       const currentFromStorage = JSON.parse(localStorage.getItem('currentProfile') || '{}')
+      const currentSala = JSON.parse(localStorage.getItem('currentSala') || 'null')
+      
       if (currentFromStorage.name === name.trim()) {
         const updatedCurrent = { 
           ...currentFromStorage, 
@@ -166,7 +168,13 @@ export default function ProfileEditScreen() {
         }
         localStorage.setItem('currentProfile', JSON.stringify(updatedCurrent))
         setCurrentProfile(updatedCurrent)
-        navigate('/dashboard')
+        
+        // Si estábamos en una sala, volver a la sala
+        if (currentSala?.name) {
+          navigate('/sala')
+        } else {
+          navigate('/dashboard')
+        }
       } else {
         navigate('/profiles')
       }
