@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth, auth } from '../context/AuthContext'
 import { signOut } from 'firebase/auth'
 
-export default function NavBar({ showSearch = false, searchValue = '', onSearchChange = () => {}, profiles = [] }) {
+export default function NavBar({ showSearch = true, searchValue = '', onSearchChange = () => {}, profiles = [] }) {
   const navigate = useNavigate()
   const { user } = useAuth()
   const [showDropdown, setShowDropdown] = useState(false)
