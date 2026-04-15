@@ -119,7 +119,7 @@ export default function SalaScreen() {
   // =====================
   return (
     <div 
-      className='flex flex-col items-center justify-center min-h-screen w-full p-10'
+      className='flex flex-col items-center min-h-screen w-full p-10'
       style={{
         background: sala?.image ? `url(${sala.image}) center/cover no-repeat` : sala?.color || '#000'
       }}
@@ -127,8 +127,10 @@ export default function SalaScreen() {
       {/* Overlay oscuro */}
       <div className='absolute inset-0 bg-black/70 z-0'></div>
       
-      {/* NavBar y BackButton */}
+      {/* NavBar */}
       <NavBar />
+      
+      {/* BackButton - en su propio div */}
       <BackButton onClick={() => navigate('/dashboard')} />
       
       {/* Contenido relativo para estar arriba del overlay */}

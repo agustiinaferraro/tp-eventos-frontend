@@ -8,8 +8,9 @@ import React, { useState, useEffect } from 'react'
 // useNavigate para navegar entre pantallas
 import { useNavigate } from 'react-router-dom'
 
-// useAuth nos da acceso al usuario actual
 import { useAuth } from '../context/AuthContext'
+
+import NavBar from './NavBar'
 
 // API del backend
 import { apiGet, apiPost } from '../utils/api'
@@ -120,17 +121,9 @@ export default function ProfilesScreen() {
   // =====================
   // RENDERIZADO
   // =====================
-  return (
-    // Contenedor centrado en la pantalla
-    <div className="flex flex-col items-center justify-center min-h-screen w-full p-10">
-      
-      {/* Logo a la izquierda */}
-      <div 
-        className="absolute top-8 left-8 w-10 h-10 bg-green-600 rounded-full flex items-center justify-center cursor-pointer"
-        onClick={() => navigate('/dashboard')}
-      >
-        <span className="text-white font-bold text-xl">E</span>
-      </div>
+return (
+    <div className='flex flex-col items-center min-h-screen w-full p-10 pt-24'>
+      <NavBar />
       
       {/* Título */}
       <h1 className="text-2xl md:text-4xl tracking-widest text-green-400 mb-16 text-center">

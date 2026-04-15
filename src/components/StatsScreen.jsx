@@ -6,6 +6,9 @@ import React, { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { apiGet } from '../utils/api'
 
+import NavBar from './NavBar'
+import BackButton from './BackButton'
+
 export default function StatsScreen() {
   const navigate = useNavigate()
   const location = useLocation()
@@ -39,24 +42,10 @@ export default function StatsScreen() {
     return new Date(date).toLocaleString('es-AR')
   }
 
-  return (
-    <div className="flex flex-col items-center min-h-screen w-full p-10">
-      
-      {/* Botón volver atrás */}
-      <button
-        className="absolute top-8 left-8 text-5xl text-white bg-transparent border-none cursor-pointer hover:opacity-70"
-        onClick={() => navigate(-1)}
-      >
-        ‹
-      </button>
-      
-      {/* Logo a la izquierda */}
-      <div 
-        className="absolute top-8 left-24 w-10 h-10 bg-green-600 rounded-full flex items-center justify-center cursor-pointer"
-        onClick={() => navigate('/dashboard')}
-      >
-        <span className="text-white font-bold text-xl">E</span>
-      </div>
+return (
+    <div className='flex flex-col items-center min-h-screen w-full p-10 pt-24'>
+      <NavBar />
+      <BackButton onClick={() => navigate(-1)} />
       
       {/* Título y contenido */}
       <h1 className="text-2xl md:text-4xl tracking-widest text-green-400 mb-4 text-center">

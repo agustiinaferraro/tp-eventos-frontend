@@ -6,6 +6,9 @@ import React, { useState, useRef } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 
+import NavBar from './NavBar'
+import BackButton from './BackButton'
+
 const COLORS = ['#22c55e', '#ef4444', '#3b82f6', '#f59e0b', '#8b5cf6', '#ec4899', '#14b8a6', '#f97316']
 
 export default function SalaEditScreen() {
@@ -167,22 +170,10 @@ export default function SalaEditScreen() {
     navigate('/dashboard')
   }
   
-  return (
-    <div className="flex flex-col items-center justify-center min-h-screen w-full p-10">
-      
-      <button
-        className="absolute top-8 left-8 text-5xl text-white bg-transparent border-none cursor-pointer hover:opacity-70"
-        onClick={() => navigate('/dashboard')}
-      >
-        ‹
-      </button>
-      
-      <div 
-        className="absolute top-8 left-24 w-10 h-10 bg-green-600 rounded-full flex items-center justify-center cursor-pointer"
-        onClick={() => navigate('/dashboard')}
-      >
-        <span className="text-white font-bold text-xl">E</span>
-      </div>
+return (
+    <div className='flex flex-col items-center min-h-screen w-full p-10 pt-24'>
+      <NavBar />
+      <BackButton onClick={() => navigate('/dashboard')} />
       
       <h1 className="text-2xl md:text-4xl tracking-widest text-green-400 mb-4 text-center">
         {isNew ? 'NUEVA SALA' : 'EDITAR SALA'}

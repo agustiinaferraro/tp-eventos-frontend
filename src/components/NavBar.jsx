@@ -6,12 +6,19 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 
-export default function NavBar({ showSearch = false, searchValue = '', onSearchChange = () => {} }) {
+export default function NavBar({ showSearch = false, searchValue = '', onSearchChange = () => {}, profiles = [] }) {
   const navigate = useNavigate()
   const { user } = useAuth()
   const [showDropdown, setShowDropdown] = useState(false)
   
   const currentProfile = JSON.parse(localStorage.getItem('currentProfile') || '{}')
+  
+  const handleEditCurrentProfile = () => {
+    const currentProfileData = JSON.parse(localStorage.getItem('currentProfile') || '{}')
+    const index = profiles.findIndex(p => p.name === currentProfileData.name)
+    setShowDropdown(false)
+    navigate('/profiles/edit', { state: { index: index >= 0 ? index : 0 } })
+  }
   
   return (
     <nav className='w-full max-w-5xl flex justify-between items-center relative z-20'>
@@ -63,14 +70,20 @@ export default function NavBar({ showSearch = false, searchValue = '', onSearchC
           <div className='absolute top-full right-0 mt-4 bg-zinc-800 border border-zinc-700 rounded-lg py-2 min-w-48 z-50 shadow-xl'>
             <div
               className='px-5 py-3 text-white cursor-pointer hover:bg-zinc-700 tracking-wider text-center border border-zinc-700 rounded-md mx-2 mb-2 flex items-center justify-center gap-2'
+              onClick={handleEditCurrentProfile}
+            >
+              <svg className='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z' />
+              </svg>
+              Editar perfil
+            </div>
+            <div
+              className='px-5 py-3 text-white cursor-pointer hover:bg-zinc-700 tracking-wider text-center border border-zinc-700 rounded-md mx-2 mb-2'
               onClick={() => {
                 setShowDropdown(false)
                 navigate('/profiles')
               }}
             >
-              <svg className='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-                <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z' />
-              </svg>
               Gestionar perfiles
             </div>
             <div
