@@ -17,9 +17,9 @@ export default function BackButton({ onClick }) {
   }
   
   return (
-    <div className='w-full max-w-5xl flex justify-between items-center relative z-20'>
+    <div className='w-full max-w-5xl flex justify-between items-center relative z-20' style={{ marginTop: '1rem' }}>
       <button
-        className='text-5xl text-white bg-transparent border-none cursor-pointer hover:opacity-70 active:opacity-50 hover:scale-110 active:scale-90 transition-transform'
+        className='text-6xl text-white bg-transparent border-none cursor-pointer hover:opacity-70 active:opacity-50 hover:scale-110 active:scale-90 transition-transform ml-2'
         onClick={handleClick}
       >
         ‹
