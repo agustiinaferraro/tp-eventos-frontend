@@ -73,8 +73,12 @@ export default function SalaEditScreen() {
         document.body.removeChild(closeBtn)
         if (currentPhoto) {
           document.body.removeChild(currentPhoto.canvas)
-          document.body.removeChild(currentPhoto.confirmBtn)
-          document.body.removeChild(currentPhoto.cancelBtn)
+          if (currentPhoto.confirmBtn && currentPhoto.confirmBtn.parentNode) {
+            document.body.removeChild(currentPhoto.confirmBtn)
+          }
+          if (currentPhoto.cancelBtn && currentPhoto.cancelBtn.parentNode) {
+            document.body.removeChild(currentPhoto.cancelBtn)
+          }
         }
       }
       
@@ -88,7 +92,9 @@ export default function SalaEditScreen() {
         
         currentPhoto = {
           canvas: canvas,
-          dataUrl: canvas.toDataURL('image/jpeg')
+          dataUrl: canvas.toDataURL('image/jpeg'),
+          confirmBtn: confirmBtn,
+          cancelBtn: cancelBtn
         }
         
         video.style.display = 'none'
