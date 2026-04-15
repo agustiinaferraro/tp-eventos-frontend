@@ -187,9 +187,19 @@ export default function SalaScreen() {
       {showQR && (
         // Overlay que cubre toda la pantalla
         <div
-          className="fixed inset-0 bg-zinc-950 flex flex-col items-center justify-center z-[2000] p-5 overflow-y-auto"
+          className="fixed inset-0 flex flex-col items-center justify-center z-[2000] p-5 overflow-y-auto"
           onClick={() => setShowQR(false)}  // Click fuera cierra
         >
+          {/* Fondo con brillo */}
+          <div 
+            className="absolute inset-0 -z-10"
+            style={{
+              background: sala?.image ? `url(${sala.image}) center/cover no-repeat` : sala?.color || '#000',
+              filter: sala?.brightness ? `brightness(${sala.brightness}%)` : undefined
+            }}
+          />
+          <div className="absolute inset-0 bg-black/70 -z-10"></div>
+          
           {/* Título de la sala */}
           <p
             className="text-xl text-green-400 mb-6 tracking-widest text-center"
@@ -228,9 +238,19 @@ export default function SalaScreen() {
       {showCopy && (
         // Overlay oscuro
         <div
-          className="fixed inset-0 bg-black/90 z-50 flex flex-col items-center justify-center p-5"
+          className="fixed inset-0 flex flex-col items-center justify-center z-50 p-5"
           onClick={() => setShowCopy(false)}  // Click fuera cierra
         >
+          {/* Fondo con brillo */}
+          <div 
+            className="absolute inset-0 -z-10"
+            style={{
+              background: sala?.image ? `url(${sala.image}) center/cover no-repeat` : sala?.color || '#000',
+              filter: sala?.brightness ? `brightness(${sala.brightness}%)` : undefined
+            }}
+          />
+          <div className="absolute inset-0 bg-black/70 -z-10"></div>
+          
           {/* Botón cerrar */}
           <button
             className="absolute top-5 right-5 bg-transparent border-none text-zinc-500 text-2xl cursor-pointer hover:text-white"
