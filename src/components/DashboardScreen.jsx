@@ -218,7 +218,7 @@ export default function DashboardScreen() {
       />
       
       {/* BackButton a Profiles */}
-      <div className="pointer-events-none">
+      <div className="pointer-events-none w-full max-w-5xl">
         <BackButton onClick={() => navigate('/profiles')} />
       </div>
       

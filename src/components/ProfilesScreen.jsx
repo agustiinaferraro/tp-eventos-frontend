@@ -123,7 +123,7 @@ export default function ProfilesScreen() {
   // =====================
 return (
     <div className='flex flex-col items-center min-h-screen w-full p-10 pt-24'>
-      <div className="pointer-events-none">
+      <div className="pointer-events-none w-full max-w-5xl">
         <BackButton onClick={() => navigate('/')} />
       </div>
       
