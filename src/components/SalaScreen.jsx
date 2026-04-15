@@ -14,6 +14,7 @@ import { getBaseUrl } from '../constants'
 // NavBar y BackButton
 import NavBar from './NavBar'
 import BackButton from './BackButton'
+import QRModal from './QRModal'
 
 // Componente principal de la pantalla de sala
 export default function SalaScreen() {
@@ -184,53 +185,11 @@ export default function SalaScreen() {
       {/* ===================== */}
       {/* MODAL: CÓDIGO QR */}
       {/* ===================== */}
-      {showQR && (
-        // Overlay que cubre toda la pantalla
-        <div
-          className="fixed inset-0 flex flex-col items-center justify-center z-[2000] p-5 overflow-y-auto"
-          onClick={() => setShowQR(false)}  // Click fuera cierra
-        >
-          {/* Fondo con brillo */}
-          <div 
-            className="absolute inset-0 -z-10"
-            style={{
-              background: sala?.image ? `url(${sala.image}) center/cover no-repeat` : sala?.color || '#000',
-              filter: sala?.brightness ? `brightness(${sala.brightness}%)` : undefined
-            }}
-          />
-          <div className="absolute inset-0 bg-black/70 -z-10"></div>
-          
-          {/* Título de la sala */}
-          <p
-            className="text-xl text-green-400 mb-6 tracking-widest text-center"
-            style={{ textShadow: '0 0 15px rgba(0, 255, 136, 0.5)' }}
-          >
-            {sala.name.toUpperCase()}
-          </p>
-          
-          {/* Contenedor del QR (fondo blanco para mejor scan) */}
-          <div className="bg-white rounded-xl p-3 shadow-[0_0_30px_rgba(0,255,136,0.3)] max-w-[220px] w-full">
-            {/* Este div será llenado por la librería QRCode */}
-            <div id="qrCodeBox"></div>
-          </div>
-          
-          {/* Advertencia si estamos en localhost */}
-          <p className="text-xs text-red-500 mt-4 tracking-wider">
-            {/* Solo muestra el warning si la URL contiene 'localhost' */}
-            {getBaseUrl().includes('localhost') && '⚠ localhost no funciona en celulares'}
-          </p>
-          
-          {/* Instrucciones */}
-          <p className="text-sm text-zinc-500 mt-6 tracking-wider text-center">
-            ESCANEÁ PARA VIVIR LA EXPERIENCIA
-          </p>
-          
-          {/* Link debajo del QR */}
-          <p className="text-xs text-green-400 mt-2 tracking-wider text-center break-all px-5">
-            {getBaseUrl() + '/experiencia.html?sala=' + sala.name.toLowerCase().replace(/\s+/g, '-')}
-          </p>
-        </div>
-      )}
+      <QRModal 
+        sala={sala} 
+        show={showQR} 
+        onClose={() => setShowQR(false)} 
+      />
 
       {/* ===================== */}
       {/* MODAL: COPIAR LINK */}
