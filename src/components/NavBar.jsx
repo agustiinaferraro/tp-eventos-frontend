@@ -9,7 +9,7 @@ import { signOut } from 'firebase/auth'
 
 export default function NavBar({ showSearch = true, searchValue = '', onSearchChange = () => {} }) {
   const navigate = useNavigate()
-  const { user, profiles } = useAuth()
+  const { user, profiles, currentProfile } = useAuth()
   const [showDropdown, setShowDropdown] = useState(false)
   const [showSwitchModal, setShowSwitchModal] = useState(false)
   
@@ -18,8 +18,9 @@ export default function NavBar({ showSearch = true, searchValue = '', onSearchCh
   const savedAccounts = JSON.parse(localStorage.getItem('savedAccounts') || '[]')
   
   const handleEditCurrentProfile = () => {
-    const currentProfileData = JSON.parse(localStorage.getItem('currentProfile') || '{}')
-    const index = profiles.findIndex(p => p.name === currentProfileData.name)
+    const currentProfileData = currentProfile || JSON.parse(localStorage.getItem('currentProfile') || '{}')
+    const profilesData = profiles?.length > 0 ? profiles : JSON.parse(localStorage.getItem('profiles_' + user?.uid) || '[]')
+    const index = profilesData.findIndex(p => p.name === currentProfileData.name)
     setShowDropdown(false)
     navigate('/profiles/edit', { state: { index: index >= 0 ? index : 0 } })
   }
