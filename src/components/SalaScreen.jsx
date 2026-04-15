@@ -139,11 +139,12 @@ useEffect(() => {
       {!showQR && (
         <div className="pointer-events-none w-full max-w-5xl">
           <BackButton onClick={() => {
-          const savedSala = localStorage.getItem('currentSala')
-          if (savedSala) {
-            navigate('/sala')
-          } else {
+          const cameFrom = localStorage.getItem('cameFrom')
+          localStorage.removeItem('cameFrom')
+          if (cameFrom === 'dashboard') {
             navigate('/dashboard')
+          } else {
+            navigate('/profiles')
           }
         }} />
         </div>

@@ -200,6 +200,7 @@ export default function DashboardScreen() {
   const openSala = (sala) => {
     // Guardamos la sala seleccionada en localStorage
     localStorage.setItem('currentSala', JSON.stringify(sala))
+    localStorage.setItem('cameFrom', 'dashboard')
     // Navegamos a la pantalla de la sala
     navigate('/sala')
   }
