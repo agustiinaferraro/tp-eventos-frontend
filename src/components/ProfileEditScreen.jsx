@@ -50,6 +50,7 @@ export default function ProfileEditScreen() {
   const [profiles, setProfiles] = useState([])    // Lista de todos los perfiles
   const [isSaving, setIsSaving] = useState(false) // Para evitar múltiples guards
   const [error, setError] = useState('')           // Mensaje de error
+  const [salaData, setSalaData] = useState(null) // Datos de la sala para el fondo
   
   // useRef para manipular el input de archivo directamente
   const fileInputRef = useRef(null)
@@ -60,6 +61,10 @@ export default function ProfileEditScreen() {
   useEffect(() => {
     if (!user?.uid) return
     loadCurrentProfile()
+    
+    // Cargamos la sala para el fondo
+    const savedSala = localStorage.getItem('currentSala')
+    if (savedSala) setSalaData(JSON.parse(savedSala))
   }, [user])
 
   // =====================
@@ -364,7 +369,19 @@ export default function ProfileEditScreen() {
   // RENDERIZADO
   // =====================
 return (
-    <div className='flex flex-col items-center min-h-screen w-full p-10'>
+    <div className='flex flex-col items-center min-h-screen w-full p-10 relative'>
+      {/* Fondo con brillo */}
+      <div 
+        className="absolute inset-0 -z-10"
+        style={{
+          background: salaData?.image ? `url(${salaData.image}) center/cover no-repeat` : salaData?.color || '#000',
+          filter: salaData?.brightness ? `brightness(${salaData.brightness}%)` : undefined
+        }}
+      />
+      
+      {/* Overlay oscuro */}
+      <div className="absolute inset-0 bg-black/70 -z-10"></div>
+      
       <NavBar />
       <div className="pointer-events-none w-full max-w-5xl">
         <BackButton onClick={() => navigate('/profiles')} />
