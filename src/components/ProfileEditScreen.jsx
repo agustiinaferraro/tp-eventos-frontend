@@ -166,9 +166,10 @@ export default function ProfileEditScreen() {
         }
         localStorage.setItem('currentProfile', JSON.stringify(updatedCurrent))
         setCurrentProfile(updatedCurrent)
+        navigate('/dashboard')
+      } else {
+        navigate('/profiles')
       }
-      
-      navigate('/profiles')
     } catch (err) {
       setError('Error al guardar perfil. Intentá más tarde.')
     } finally {
