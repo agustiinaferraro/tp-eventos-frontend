@@ -132,11 +132,11 @@ export default function SalaScreen() {
       {/* Overlay oscuro */}
       <div className='absolute inset-0 bg-black/70 z-0'></div>
       
-      {/* NavBar */}
-      <NavBar />
+      {/* NavBar - solo cuando no está el QR */}
+      {!showQR && <NavBar />}
       
-      {/* BackButton */}
-      <BackButton onClick={() => navigate('/dashboard')} />
+      {/* BackButton - solo cuando no está el QR */}
+      {!showQR && <BackButton onClick={() => navigate('/dashboard')} />}
       
       {/* Contenido relativo para estar arriba del overlay */}
       <div className='relative z-10 w-full max-w-md flex flex-col items-center'>
