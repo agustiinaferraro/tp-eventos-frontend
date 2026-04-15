@@ -173,21 +173,27 @@ export default function SalaEditScreen() {
   }
   
 return (
-    <div className='flex flex-col items-center min-h-screen w-full p-10 pt-24'>
+    <div 
+      className='flex flex-col items-center min-h-screen w-full p-10 pt-24'
+      style={{
+        background: image ? `url(${image}) center/cover no-repeat` : (choseColor ? color : '#000'),
+        filter: `brightness(${brightness}%)`
+      }}
+    >
       <NavBar />
       <BackButton onClick={() => navigate('/dashboard')} />
       
-      <h1 className="text-2xl md:text-4xl tracking-widest text-green-400 mb-4 text-center">
+      <h1 className="text-2xl md:text-4xl tracking-widest text-green-400 mb-4 text-center relative z-10">
         {isNew ? 'NUEVA SALA' : 'EDITAR SALA'}
       </h1>
       
       {error && (
-        <p className="text-lg text-red-400 text-center mb-4">{error}</p>
+        <p className="text-lg text-red-400 text-center mb-4 relative z-10">{error}</p>
       )}
       
       {/* Preview de la sala */}
       <div 
-        className="w-32 h-32 rounded-lg border-4 border-zinc-700 flex items-center justify-center text-4xl mb-4 cursor-pointer overflow-hidden"
+        className="w-32 h-32 rounded-lg border-4 border-zinc-700 flex items-center justify-center text-4xl mb-4 cursor-pointer overflow-hidden relative z-10"
         style={{ 
           background: choseColor ? color : (image ? 'transparent' : color),
           filter: `brightness(${brightness}%)`
@@ -212,7 +218,7 @@ return (
       />
       
       {/* Botones de imagen y cámara */}
-      <div className="flex gap-4 mb-8">
+      <div className="flex gap-4 mb-8 relative z-10">
         <button
           className="bg-zinc-800 text-white px-4 py-2 rounded-lg text-sm"
           onClick={() => fileInputRef.current?.click()}
@@ -229,7 +235,7 @@ return (
       
       {image && (
         <button
-          className="text-zinc-500 text-sm mb-4 hover:text-white"
+          className="text-zinc-500 text-sm mb-4 hover:text-white relative z-10"
           onClick={() => {
             setImage(null)
             setChoseColor(true)
@@ -241,7 +247,7 @@ return (
       
       {/* Control de brillo - tanto para imagen como para color */}
       {(image || choseColor) && (
-        <div className="w-full max-w-md mb-8">
+        <div className="w-full max-w-md mb-8 relative z-10">
           <p className="text-zinc-400 mb-2 text-center">Brillo</p>
           <input
             type="range"
@@ -261,7 +267,7 @@ return (
       {/* Nombre */}
       <input
         type="text"
-        className="w-full max-w-md bg-zinc-900 border-2 border-zinc-700 text-white text-center p-4 rounded-lg outline-none focus:border-green-400 placeholder-zinc-500 mb-8"
+        className="w-full max-w-md bg-zinc-900/80 border-2 border-zinc-700 text-white text-center p-4 rounded-lg outline-none focus:border-green-400 placeholder-zinc-500 mb-8 relative z-10"
         placeholder="Nombre de la sala"
         value={name}
         onChange={(e) => setName(e.target.value)}
@@ -269,8 +275,8 @@ return (
       />
       
       {/* Colores */}
-      <p className="text-zinc-400 mb-4">O elegí un color:</p>
-      <div className="flex gap-3 mb-8 flex-wrap justify-center">
+      <p className="text-zinc-400 mb-4 relative z-10">O elegí un color:</p>
+      <div className="flex gap-3 mb-8 flex-wrap justify-center relative z-10">
         {COLORS.map((c) => (
           <div
             key={c}
@@ -287,7 +293,7 @@ return (
       
       {/* Botón guardar */}
       <button
-        className="w-full max-w-md bg-green-600 text-white py-4 rounded-lg cursor-pointer tracking-wider transition-all hover:bg-green-500 disabled:opacity-50"
+        className="w-full max-w-md bg-green-600 text-white py-4 rounded-lg cursor-pointer tracking-wider transition-all hover:bg-green-500 disabled:opacity-50 relative z-10"
         onClick={handleSave}
         disabled={isSaving || !name.trim()}
       >
@@ -296,7 +302,7 @@ return (
       
       {!isNew && (
         <button
-          className="w-full max-w-md bg-transparent border-2 border-red-600 text-red-600 py-3 rounded-lg cursor-pointer tracking-wider mt-4 hover:bg-red-600 hover:text-white"
+          className="w-full max-w-md bg-transparent border-2 border-red-600 text-red-600 py-3 rounded-lg cursor-pointer tracking-wider mt-4 hover:bg-red-600 hover:text-white relative z-10"
           onClick={() => {
             if (confirm('¿Eliminar esta sala?')) {
               const savedSalas = localStorage.getItem('salas_' + user.uid + '_' + profileKey)
