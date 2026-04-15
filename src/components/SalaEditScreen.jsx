@@ -169,7 +169,8 @@ export default function SalaEditScreen() {
     } catch (err) {}
     
     setIsSaving(false)
-    navigate('/dashboard')
+    localStorage.setItem('currentSala', JSON.stringify(salaData))
+    navigate('/sala')
   }
   
 return (
