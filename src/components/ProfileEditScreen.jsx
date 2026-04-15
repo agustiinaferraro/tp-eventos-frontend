@@ -384,7 +384,14 @@ return (
       
       <NavBar />
       <div className="pointer-events-none w-full max-w-5xl">
-        <BackButton onClick={() => navigate('/profiles')} />
+        <BackButton onClick={() => {
+          const savedSala = localStorage.getItem('currentSala')
+          if (savedSala) {
+            navigate('/sala')
+          } else {
+            navigate('/profiles')
+          }
+        }} />
       </div>
       
       {/* Título dinámico según sea nuevo o edición */}
