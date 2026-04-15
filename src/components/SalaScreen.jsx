@@ -30,9 +30,6 @@ const [sala, setSala] = useState(null)
 // showQR: si el modal de QR está visible
   const [showQR, setShowQR] = useState(false)
   
-  // showCopy: si el modal de copiar link está visible
-  const [showCopy, setShowCopy] = useState(false)
-  
   // copySuccess: si el link se copió exitosamente (para mostrar feedback)
   const [copySuccess, setCopySuccess] = useState(false)
 
@@ -180,7 +177,7 @@ useEffect(() => {
         {/* Botón Link */}
         <button
           className="flex-1 bg-zinc-900 border border-zinc-700 text-zinc-300 text-sm py-3 px-5 rounded-lg cursor-pointer tracking-wider transition-all hover:border-green-400 hover:text-green-400 hover:scale-105"
-          onClick={() => setShowCopy(true)}
+          onClick={() => navigate('/link')}
         >
           🔗 LINK
         </button>
@@ -203,60 +200,6 @@ useEffect(() => {
         onClose={() => setShowQR(false)} 
       />
 
-      {/* ===================== */}
-      {/* MODAL: COPIAR LINK */}
-      {/* ===================== */}
-      {showCopy && (
-        // Overlay oscuro
-        <div
-          className="fixed inset-0 flex flex-col items-center justify-center z-50 p-5"
-          onClick={() => setShowCopy(false)}  // Click fuera cierra
-        >
-          {/* Fondo con brillo */}
-          <div 
-            className="absolute inset-0 -z-10"
-            style={{
-              background: sala?.image ? `url(${sala.image}) center/cover no-repeat` : sala?.color || '#000',
-              filter: sala?.brightness ? `brightness(${sala.brightness}%)` : undefined
-            }}
-          />
-          <div className="absolute inset-0 bg-black/70 -z-10"></div>
-          
-          {/* Botón cerrar */}
-          <button
-            className="absolute top-5 right-5 bg-transparent border-none text-zinc-500 text-2xl cursor-pointer hover:text-white"
-            onClick={() => setShowCopy(false)}
-          >
-            ×
-          </button>
-          
-          {/* Título */}
-          <p className="text-green-400 tracking-widest mb-8 text-center">
-            COPIAR LINK
-          </p>
-          
-          {/* Box con el link */}
-          <div className="w-full max-w-md bg-zinc-900 border border-zinc-800 rounded-lg p-5 mb-5">
-            <p className="text-xs text-zinc-600 mb-2">Link para compartir</p>
-            <p className="text-sm text-white break-all">
-              {getBaseUrl() + '/experiencia.html?sala=' + sala.name.toLowerCase().replace(/\s+/g, '-')}
-            </p>
-          </div>
-          
-          {/* Botón copiar */}
-          <button
-            className="w-full max-w-md bg-transparent border-2 border-green-400 text-white text-base py-4 px-10 rounded-lg cursor-pointer tracking-wider transition-all hover:bg-green-600 hover:border-green-600"
-            onClick={copyLink}
-          >
-            COPIAR
-          </button>
-          
-          {/* Feedback de éxito */}
-          {copySuccess && (
-            <p className="text-green-400 text-sm mt-3">¡Copiado!</p>
-          )}
-        </div>
-      )}
       </div>
     </div>
   )

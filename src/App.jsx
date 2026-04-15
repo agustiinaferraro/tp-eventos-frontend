@@ -21,6 +21,7 @@ import ProfileEditScreen from './components/ProfileEditScreen'  // Crear/editar 
 import DashboardScreen from './components/DashboardScreen'    // Gestión de salas
 import SalaScreen from './components/SalaScreen'          // QR y compartir sala
 import SalaEditScreen from './components/SalaEditScreen'  // Editar sala
+import LinkModal from './components/LinkModal'              // Modal de copiar link
 import StatsScreen from './components/StatsScreen'        // Estadísticas de salas
 
 // Componente principal de la aplicación
@@ -52,6 +53,9 @@ function App() {
           
           {/* Ruta de estadísticas */}
           <Route path="/stats" element={<StatsScreen />} />
+          
+          {/* Ruta de link para compartir (pantalla independiente) */}
+          <Route path="/link" element={<LinkModal />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>
