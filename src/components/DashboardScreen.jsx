@@ -218,7 +218,9 @@ export default function DashboardScreen() {
       />
       
       {/* BackButton a Profiles */}
-      <BackButton onClick={() => navigate('/profiles')} />
+      <div className="pointer-events-none">
+        <BackButton onClick={() => navigate('/profiles')} />
+      </div>
       
       {/* ===================== */}
       {/* TÍTULO Y LISTA DE SALAS */}
