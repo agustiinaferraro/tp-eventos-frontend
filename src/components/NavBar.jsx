@@ -19,17 +19,8 @@ export default function NavBar({ showSearch = true, searchValue = '', onSearchCh
   
   const handleEditCurrentProfile = (e) => {
     e.stopPropagation()
-    const profileToEdit = currentProfile || JSON.parse(localStorage.getItem('currentProfile') || '{}')
-    let profilesData = profiles
-    
-    if (!profilesData || profilesData.length === 0) {
-      const saved = localStorage.getItem('profiles_' + user?.uid)
-      profilesData = saved ? JSON.parse(saved) : []
-    }
-    
-    const index = profilesData.findIndex(p => p.name === profileToEdit.name)
     setShowDropdown(false)
-    navigate('/profiles/edit', { state: { index: index >= 0 ? index : 0 } })
+    navigate('/profiles')
   }
   
   const handleEditSala = () => {
