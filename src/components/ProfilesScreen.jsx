@@ -123,7 +123,6 @@ export default function ProfilesScreen() {
   // =====================
 return (
     <div className='flex flex-col items-center min-h-screen w-full p-10 pt-24'>
-      <NavBar />
       
       {/* Título */}
       <h1 className="text-2xl md:text-4xl tracking-widest text-green-400 mb-16 text-center">
