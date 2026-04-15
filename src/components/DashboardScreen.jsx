@@ -257,13 +257,15 @@ export default function DashboardScreen() {
             
             {/* Botón editar (lápiz) */}
             <button
-              className="absolute top-4 right-12 bg-transparent border-none text-zinc-500 text-xl cursor-pointer transition-all hover:text-green-400 hover:scale-125"
+              className="absolute top-4 right-12 bg-transparent border-none text-zinc-500 cursor-pointer transition-all hover:text-green-400 hover:scale-125"
               onClick={(e) => {
                 e.stopPropagation()
                 navigate('/sala/edit', { state: { index: i, sala } })
               }}
             >
-              ✏️
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+              </svg>
             </button>
             
             {/* Nombre de la sala */}
