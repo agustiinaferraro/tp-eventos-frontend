@@ -65,6 +65,8 @@ export default function SalaEditScreen() {
       document.body.appendChild(closeBtn)
       
       let currentPhoto = null
+      let confirmBtn = null
+      let cancelBtn = null
       
       const cleanup = () => {
         stream.getTracks().forEach(t => t.stop())
@@ -103,12 +105,12 @@ export default function SalaEditScreen() {
         canvas.className = 'fixed top-0 left-0 w-full h-full z-[9999] bg-black object-cover'
         document.body.appendChild(canvas)
         
-        const confirmBtn = document.createElement('button')
+        confirmBtn = document.createElement('button')
         confirmBtn.className = 'fixed bottom-10 right-10 z-[10001] w-16 h-16 rounded-full bg-green-600 border-none cursor-pointer text-white text-3xl'
         confirmBtn.textContent = '✓'
         document.body.appendChild(confirmBtn)
         
-        const cancelBtn = document.createElement('button')
+        cancelBtn = document.createElement('button')
         cancelBtn.className = 'fixed bottom-10 left-10 z-[10001] w-16 h-16 rounded-full bg-red-600 border-none cursor-pointer text-white text-3xl'
         cancelBtn.textContent = '✕'
         document.body.appendChild(cancelBtn)

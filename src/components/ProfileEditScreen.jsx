@@ -293,8 +293,10 @@ export default function ProfileEditScreen() {
       document.body.appendChild(closeBtn)
       
       let currentPhoto = null
+      let confirmBtn = null
+      let cancelBtn = null
       
-      // Función de limpieza completa
+      // Función de limpeza completa
       const cleanup = () => {
         stream.getTracks().forEach(t => t.stop())
         document.body.removeChild(video)
@@ -336,18 +338,16 @@ export default function ProfileEditScreen() {
         document.body.appendChild(canvas)
         
         // Botón confirmar (tilde)
-        const confirmBtn = document.createElement('button')
+        confirmBtn = document.createElement('button')
         confirmBtn.className = 'fixed bottom-10 right-10 z-[10001] w-16 h-16 rounded-full bg-green-600 border-none cursor-pointer text-white text-3xl'
         confirmBtn.textContent = '✓'
         document.body.appendChild(confirmBtn)
-        currentPhoto.confirmBtn = confirmBtn
         
         // Botón cancelar (tacho)
-        const cancelBtn = document.createElement('button')
+        cancelBtn = document.createElement('button')
         cancelBtn.className = 'fixed bottom-10 left-10 z-[10001] w-16 h-16 rounded-full bg-red-600 border-none cursor-pointer text-white text-3xl'
         cancelBtn.textContent = '✕'
         document.body.appendChild(cancelBtn)
-        currentPhoto.cancelBtn = cancelBtn
         
         // Confirmar: acepta la foto y cierra
         confirmBtn.onclick = () => {
