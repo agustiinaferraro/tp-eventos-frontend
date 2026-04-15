@@ -150,7 +150,7 @@ export default function SalaEditScreen() {
       name: name.trim(),
       color: choseColor ? color : (image ? null : (isNew ? color : (salas[editingIndex]?.color || COLORS[0]))),
       image: image,
-      brightness: image ? brightness : null,
+      brightness: brightness,
       id: initialSala.id || Date.now()
     }
     
@@ -228,34 +228,34 @@ return (
       </div>
       
       {image && (
-        <>
-          <button
-            className="text-zinc-500 text-sm mb-4 hover:text-white"
-            onClick={() => {
-              setImage(null)
-              setChoseColor(true)
-            }}
-          >
-            Quitar imagen
-          </button>
-          
-          {/* Control de brillo */}
-          <div className="w-full max-w-md mb-8">
-            <p className="text-zinc-400 mb-2 text-center">Brillo</p>
-            <input
-              type="range"
-              min="20"
-              max="150"
-              value={brightness}
-              onChange={(e) => setBrightness(Number(e.target.value))}
-              className="w-full h-2 bg-zinc-700 rounded-lg appearance-none cursor-pointer"
-            />
-            <div className="flex justify-between text-xs text-zinc-500 mt-1">
-              <span>Más oscuro</span>
-              <span>Más claro</span>
-            </div>
+        <button
+          className="text-zinc-500 text-sm mb-4 hover:text-white"
+          onClick={() => {
+            setImage(null)
+            setChoseColor(true)
+          }}
+        >
+          Quitar imagen
+        </button>
+      )}
+      
+      {/* Control de brillo - tanto para imagen como para color */}
+      {(image || choseColor) && (
+        <div className="w-full max-w-md mb-8">
+          <p className="text-zinc-400 mb-2 text-center">Brillo</p>
+          <input
+            type="range"
+            min="20"
+            max="150"
+            value={brightness}
+            onChange={(e) => setBrightness(Number(e.target.value))}
+            className="w-full h-2 bg-zinc-700 rounded-lg appearance-none cursor-pointer"
+          />
+          <div className="flex justify-between text-xs text-zinc-500 mt-1">
+            <span>Más oscuro</span>
+            <span>Más claro</span>
           </div>
-        </>
+        </div>
       )}
       
       {/* Nombre */}
