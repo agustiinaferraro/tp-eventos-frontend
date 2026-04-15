@@ -176,15 +176,10 @@ return (
     <div 
       className='flex flex-col items-center min-h-screen w-full p-10 pt-24'
       style={{
-        background: image ? `url(${image}) center/cover no-repeat` : (choseColor ? color : '#000')
+        background: image ? `url(${image}) center/cover no-repeat` : (choseColor ? color : '#000'),
+        filter: `brightness(${brightness}%)`
       }}
     >
-      {/* Overlay para el brillo solo afecta al fondo */}
-      <div 
-        className="absolute inset-0 z-0"
-        style={{ filter: `brightness(${brightness}%)` }}
-      ></div>
-      
       <NavBar />
       <BackButton onClick={() => navigate('/dashboard')} />
       
@@ -195,24 +190,6 @@ return (
       {error && (
         <p className="text-lg text-red-400 text-center mb-4 relative z-10">{error}</p>
       )}
-      
-      {/* Preview de la sala */}
-      <div 
-        className="w-32 h-32 rounded-lg border-4 border-zinc-700 flex items-center justify-center text-4xl mb-4 cursor-pointer overflow-hidden relative z-10"
-        style={{ 
-          background: choseColor ? color : (image ? 'transparent' : color),
-          filter: `brightness(${brightness}%)`
-        }}
-        onClick={() => fileInputRef.current?.click()}
-      >
-        {image ? (
-          <img src={image} alt="Preview" className="w-full h-full object-cover rounded-lg" />
-        ) : (
-          <span className="text-white" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.9)' }}>
-            {name.charAt(0).toUpperCase() || '?'}
-          </span>
-        )}
-      </div>
       
       <input
         type="file"
