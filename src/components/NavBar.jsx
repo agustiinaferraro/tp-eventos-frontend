@@ -17,7 +17,7 @@ export default function NavBar({ showSearch = true, searchValue = '', onSearchCh
   const currentSala = JSON.parse(localStorage.getItem('currentSala') || 'null')
   const savedAccounts = JSON.parse(localStorage.getItem('savedAccounts') || '[]')
   
-  const handleEditCurrentProfile = (e) => {
+  const handleEditCurrentProfile = () => {
     const profileToEdit = JSON.parse(localStorage.getItem('currentProfile') || '{}')
     const saved = localStorage.getItem('profiles_' + user?.uid)
     const profilesData = saved ? JSON.parse(saved) : []
@@ -99,9 +99,9 @@ export default function NavBar({ showSearch = true, searchValue = '', onSearchCh
           <div className='absolute top-full right-0 mt-4 bg-zinc-800 border border-zinc-700 rounded-lg py-2 min-w-48 z-50 shadow-xl'>
             <div
               className='px-5 py-3 text-white cursor-pointer hover:bg-zinc-700 tracking-wider text-center border border-zinc-700 rounded-md mx-2 mb-2 flex items-center justify-center gap-2'
-              onClick={(e) => {
+              onMouseDown={(e) => {
                 e.stopPropagation()
-                handleEditCurrentProfile(e)
+                handleEditCurrentProfile()
               }}
             >
               <svg className='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
@@ -112,7 +112,7 @@ export default function NavBar({ showSearch = true, searchValue = '', onSearchCh
             {currentSala && (
 <div
               className='px-5 py-3 text-white cursor-pointer hover:bg-zinc-700 tracking-wider text-center border border-zinc-700 rounded-md mx-2 mb-2 flex items-center justify-center gap-2'
-              onClick={(e) => {
+              onMouseDown={(e) => {
                 e.stopPropagation()
                 handleEditSala()
               }}
@@ -125,7 +125,7 @@ export default function NavBar({ showSearch = true, searchValue = '', onSearchCh
             )}
             <div
               className='px-5 py-3 text-white cursor-pointer hover:bg-zinc-700 tracking-wider text-center border border-zinc-700 rounded-md mx-2 mb-2'
-              onClick={(e) => {
+              onMouseDown={(e) => {
                 e.stopPropagation()
                 setShowDropdown(false)
                 setShowSwitchModal(true)
@@ -135,7 +135,7 @@ export default function NavBar({ showSearch = true, searchValue = '', onSearchCh
             </div>
             <div
               className='px-5 py-3 text-white cursor-pointer hover:bg-zinc-700 tracking-wider text-center'
-              onClick={(e) => {
+              onMouseDown={(e) => {
                 e.stopPropagation()
                 handleLogout()
               }}
