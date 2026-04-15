@@ -215,7 +215,6 @@ export default function DashboardScreen() {
         searchValue={searchSala}
         onSearchChange={setSearchSala}
         profiles={profiles}
-        onSwitchAccount={() => setShowSwitchModal(true)}
       />
       
       {/* ===================== */}

@@ -4,15 +4,17 @@
 
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useAuth } from '../context/AuthContext'
+import { useAuth, auth } from '../context/AuthContext'
+import { signOut } from 'firebase/auth'
 
-export default function NavBar({ showSearch = false, searchValue = '', onSearchChange = () => {}, profiles = [], onSwitchAccount = () => {} }) {
+export default function NavBar({ showSearch = false, searchValue = '', onSearchChange = () => {}, profiles = [] }) {
   const navigate = useNavigate()
   const { user } = useAuth()
   const [showDropdown, setShowDropdown] = useState(false)
   
   const currentProfile = JSON.parse(localStorage.getItem('currentProfile') || '{}')
   const currentSala = JSON.parse(localStorage.getItem('currentSala') || 'null')
+  const savedAccounts = JSON.parse(localStorage.getItem('savedAccounts') || '[]')
   
   const handleEditCurrentProfile = () => {
     const currentProfileData = JSON.parse(localStorage.getItem('currentProfile') || '{}')
@@ -26,6 +28,19 @@ export default function NavBar({ showSearch = false, searchValue = '', onSearchC
     if (currentSala) {
       navigate('/sala/edit', { state: { index: 0, sala: currentSala } })
     }
+  }
+  
+  const handleSwitchAccount = async (email) => {
+    await signOut(auth)
+    localStorage.setItem('lastEmail', email)
+    window.location.reload()
+  }
+  
+  const handleLogout = async () => {
+    setShowDropdown(false)
+    await signOut(auth)
+    localStorage.clear()
+    navigate('/')
   }
   
   return (
@@ -100,18 +115,14 @@ export default function NavBar({ showSearch = false, searchValue = '', onSearchC
               className='px-5 py-3 text-white cursor-pointer hover:bg-zinc-700 tracking-wider text-center border border-zinc-700 rounded-md mx-2 mb-2'
               onClick={() => {
                 setShowDropdown(false)
-                onSwitchAccount()
+                handleSwitchAccount(savedAccounts[0])
               }}
             >
               Cambiar cuenta
             </div>
             <div
               className='px-5 py-3 text-white cursor-pointer hover:bg-zinc-700 tracking-wider text-center'
-              onClick={() => {
-                setShowDropdown(false)
-                navigate('/')
-                localStorage.clear()
-              }}
+              onClick={handleLogout}
             >
               Cerrar sesión
             </div>
