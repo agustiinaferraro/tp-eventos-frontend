@@ -4,15 +4,18 @@
 
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useAuth } from '../context/AuthContext'
+import { useAuth, auth } from '../context/AuthContext'
+import { signOut } from 'firebase/auth'
 
-export default function NavBar({ showSearch = false, searchValue = '', onSearchChange = () => {}, profiles = [], onSwitchAccount = () => {} }) {
+export default function NavBar({ showSearch = false, searchValue = '', onSearchChange = () => {}, profiles = [] }) {
   const navigate = useNavigate()
   const { user } = useAuth()
   const [showDropdown, setShowDropdown] = useState(false)
+  const [showSwitchModal, setShowSwitchModal] = useState(false)
   
   const currentProfile = JSON.parse(localStorage.getItem('currentProfile') || '{}')
   const currentSala = JSON.parse(localStorage.getItem('currentSala') || 'null')
+  const savedAccounts = JSON.parse(localStorage.getItem('savedAccounts') || '[]')
   
   const handleEditCurrentProfile = () => {
     const currentProfileData = JSON.parse(localStorage.getItem('currentProfile') || '{}')
@@ -26,6 +29,19 @@ export default function NavBar({ showSearch = false, searchValue = '', onSearchC
     if (currentSala) {
       navigate('/sala/edit', { state: { index: 0, sala: currentSala } })
     }
+  }
+  
+  const handleSwitchAccount = async (email) => {
+    await signOut(auth)
+    localStorage.setItem('lastEmail', email)
+    window.location.reload()
+  }
+  
+  const handleLogout = async () => {
+    setShowDropdown(false)
+    await signOut(auth)
+    localStorage.clear()
+    navigate('/')
   }
   
   return (
@@ -100,24 +116,72 @@ export default function NavBar({ showSearch = false, searchValue = '', onSearchC
               className='px-5 py-3 text-white cursor-pointer hover:bg-zinc-700 tracking-wider text-center border border-zinc-700 rounded-md mx-2 mb-2'
               onClick={() => {
                 setShowDropdown(false)
-                onSwitchAccount()
+                setShowSwitchModal(true)
               }}
             >
               Cambiar cuenta
             </div>
             <div
               className='px-5 py-3 text-white cursor-pointer hover:bg-zinc-700 tracking-wider text-center'
-              onClick={() => {
-                setShowDropdown(false)
-                navigate('/')
-                localStorage.clear()
-              }}
+              onClick={handleLogout}
             >
               Cerrar sesión
             </div>
           </div>
         )}
       </div>
+      
+      {/* MODAL: CAMBIAR CUENTA */}
+      {showSwitchModal && (
+        <div
+          className="fixed inset-0 bg-black/90 z-[100] flex flex-col items-center justify-center p-5"
+          onClick={() => setShowSwitchModal(false)}
+        >
+          <button
+            className="absolute top-5 right-5 bg-transparent border-none text-zinc-500 text-2xl cursor-pointer hover:text-white"
+            onClick={() => setShowSwitchModal(false)}
+          >
+            ×
+          </button>
+          
+          <p className="text-3xl text-green-400 tracking-widest mb-10">
+            CAMBIAR CUENTA
+          </p>
+          
+          <div className="w-full max-w-md mb-8">
+            {savedAccounts.map((email, i) => (
+              <div
+                key={i}
+                className="flex items-center gap-4 p-4 bg-zinc-800 border border-zinc-700 rounded-lg cursor-pointer transition-all hover:border-green-400 hover:scale-[1.02] mb-3"
+                onClick={() => handleSwitchAccount(email)}
+              >
+                <div className="w-10 h-10 bg-zinc-700 rounded-full flex items-center justify-center text-green-400">
+                  {email.charAt(0).toUpperCase()}
+                </div>
+                <div>
+                  <p className="text-sm text-white">{email}</p>
+                  <p className="text-xs text-zinc-500">Tocá para cambiar</p>
+                </div>
+              </div>
+            ))}
+            
+            {savedAccounts.length === 0 && (
+              <p className="text-white text-center mb-8">No hay cuentas guardadas</p>
+            )}
+          </div>
+          
+          <button
+            className="w-full max-w-md bg-transparent border-2 border-white text-white py-4 px-6 rounded-lg cursor-pointer tracking-wider transition-all hover:bg-red-700 hover:border-red-700"
+            onClick={async () => {
+              await signOut(auth)
+              localStorage.removeItem('savedAccounts')
+              navigate('/')
+            }}
+          >
+            Cerrar todas las sesiones
+          </button>
+        </div>
+      )}
     </nav>
   )
 }
