@@ -25,6 +25,7 @@ export default function SalaEditScreen() {
   const [color, setColor] = useState(initialSala.color || COLORS[0])
   const [image, setImage] = useState(initialSala.image || null)
   const [choseColor, setChoseColor] = useState(!!initialSala.color)
+  const [brightness, setBrightness] = useState(initialSala.brightness ?? 100)
   const [isSaving, setIsSaving] = useState(false)
   const [error, setError] = useState('')
   
@@ -149,6 +150,7 @@ export default function SalaEditScreen() {
       name: name.trim(),
       color: choseColor ? color : (image ? null : (isNew ? color : (salas[editingIndex]?.color || COLORS[0]))),
       image: image,
+      brightness: image ? brightness : null,
       id: initialSala.id || Date.now()
     }
     
@@ -186,7 +188,10 @@ return (
       {/* Preview de la sala */}
       <div 
         className="w-32 h-32 rounded-lg border-4 border-zinc-700 flex items-center justify-center text-4xl mb-4 cursor-pointer overflow-hidden"
-        style={{ background: choseColor ? color : (image ? 'transparent' : color) }}
+        style={{ 
+          background: choseColor ? color : (image ? 'transparent' : color),
+          filter: `brightness(${brightness}%)`
+        }}
         onClick={() => fileInputRef.current?.click()}
       >
         {image ? (
@@ -223,15 +228,34 @@ return (
       </div>
       
       {image && (
-        <button
-          className="text-zinc-500 text-sm mb-4 hover:text-white"
-          onClick={() => {
-            setImage(null)
-            setChoseColor(true)
-          }}
-        >
-          Quitar imagen
-        </button>
+        <>
+          <button
+            className="text-zinc-500 text-sm mb-4 hover:text-white"
+            onClick={() => {
+              setImage(null)
+              setChoseColor(true)
+            }}
+          >
+            Quitar imagen
+          </button>
+          
+          {/* Control de brillo */}
+          <div className="w-full max-w-md mb-8">
+            <p className="text-zinc-400 mb-2 text-center">Brillo</p>
+            <input
+              type="range"
+              min="20"
+              max="150"
+              value={brightness}
+              onChange={(e) => setBrightness(Number(e.target.value))}
+              className="w-full h-2 bg-zinc-700 rounded-lg appearance-none cursor-pointer"
+            />
+            <div className="flex justify-between text-xs text-zinc-500 mt-1">
+              <span>Más oscuro</span>
+              <span>Más claro</span>
+            </div>
+          </div>
+        </>
       )}
       
       {/* Nombre */}

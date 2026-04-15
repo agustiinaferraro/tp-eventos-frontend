@@ -121,7 +121,8 @@ export default function SalaScreen() {
     <div 
       className='flex flex-col items-center min-h-screen w-full p-10'
       style={{
-        background: sala?.image ? `url(${sala.image}) center/cover no-repeat` : sala?.color || '#000'
+        background: sala?.image ? `url(${sala.image}) center/cover no-repeat` : sala?.color || '#000',
+        filter: sala?.brightness ? `brightness(${sala.brightness}%)` : undefined
       }}
     >
       {/* Overlay oscuro */}

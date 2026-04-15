@@ -238,7 +238,8 @@ export default function DashboardScreen() {
             key={sala.id || i}
             className="bg-zinc-900 border border-zinc-700 rounded-lg p-10 cursor-pointer transition-all hover:border-green-400 hover:scale-[1.02] relative overflow-hidden"
             style={{
-              background: sala.image ? `url(${sala.image}) center/cover no-repeat` : sala.color || '#18181b'
+              background: sala.image ? `url(${sala.image}) center/cover no-repeat` : sala.color || '#18181b',
+              filter: sala.brightness ? `brightness(${sala.brightness}%)` : undefined
             }}
             onClick={() => openSala(sala)}
           >
