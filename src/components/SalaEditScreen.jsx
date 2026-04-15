@@ -188,7 +188,9 @@ return (
       <div className="absolute inset-0 bg-black/70 -z-10"></div>
       
       <NavBar />
-      <BackButton onClick={() => navigate('/dashboard')} />
+      <div className="pointer-events-none w-full max-w-5xl">
+        <BackButton onClick={() => navigate('/dashboard')} />
+      </div>
       
       <h1 className="text-2xl md:text-4xl tracking-widest text-green-400 mb-4 text-center relative z-10">
         {isNew ? 'NUEVA SALA' : 'EDITAR SALA'}

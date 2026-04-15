@@ -366,7 +366,9 @@ export default function ProfileEditScreen() {
 return (
     <div className='flex flex-col items-center min-h-screen w-full p-10'>
       <NavBar />
-      <BackButton onClick={() => navigate('/profiles')} />
+      <div className="pointer-events-none w-full max-w-5xl">
+        <BackButton onClick={() => navigate('/profiles')} />
+      </div>
       
       {/* Título dinámico según sea nuevo o edición */}
       <h1 className="text-2xl md:text-4xl tracking-widest text-green-400 mb-4 text-center">
