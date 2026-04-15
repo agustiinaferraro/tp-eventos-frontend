@@ -96,8 +96,7 @@ export default function NavBar({ showSearch = true, searchValue = '', onSearchCh
         <span className='text-zinc-500 text-xl'>▼</span>
         
         {showDropdown && (
-          <div className='absolute top-full right-0 mt-4 bg-zinc-800 border border-zinc-700 rounded-lg py-2 min-w-48 z-50 shadow-xl'>
-            <div className="h-1" />
+          <div className='absolute top-full right-0 mt-4 bg-zinc-800 border border-zinc-700 rounded-lg py-2 min-w-48 z-[100] shadow-xl'>
             <div
               className='px-5 py-3 text-white cursor-pointer hover:bg-zinc-700 tracking-wider text-center border border-zinc-700 rounded-md mx-2 mb-2 flex items-center justify-center gap-2'
               onMouseDown={(e) => {
