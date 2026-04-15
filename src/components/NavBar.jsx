@@ -79,15 +79,6 @@ export default function NavBar({ showSearch = false, searchValue = '', onSearchC
             </div>
             <div
               className='px-5 py-3 text-white cursor-pointer hover:bg-zinc-700 tracking-wider text-center border border-zinc-700 rounded-md mx-2 mb-2'
-              onClick={() => {
-                setShowDropdown(false)
-                navigate('/profiles')
-              }}
-            >
-              Gestionar perfiles
-            </div>
-            <div
-              className='px-5 py-3 text-white cursor-pointer hover:bg-zinc-700 tracking-wider text-center border border-zinc-700 rounded-md mx-2 mb-2'
               onClick={() => setShowDropdown(false)}
             >
               Cambiar cuenta
