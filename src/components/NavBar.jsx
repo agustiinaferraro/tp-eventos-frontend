@@ -18,7 +18,6 @@ export default function NavBar({ showSearch = true, searchValue = '', onSearchCh
   const savedAccounts = JSON.parse(localStorage.getItem('savedAccounts') || '[]')
   
   const handleEditCurrentProfile = (e) => {
-    e.stopPropagation()
     const profileToEdit = JSON.parse(localStorage.getItem('currentProfile') || '{}')
     const saved = localStorage.getItem('profiles_' + user?.uid)
     const profilesData = saved ? JSON.parse(saved) : []
@@ -100,7 +99,10 @@ export default function NavBar({ showSearch = true, searchValue = '', onSearchCh
           <div className='absolute top-full right-0 mt-4 bg-zinc-800 border border-zinc-700 rounded-lg py-2 min-w-48 z-50 shadow-xl'>
             <div
               className='px-5 py-3 text-white cursor-pointer hover:bg-zinc-700 tracking-wider text-center border border-zinc-700 rounded-md mx-2 mb-2 flex items-center justify-center gap-2'
-              onClick={(e) => handleEditCurrentProfile(e)}
+              onClick={(e) => {
+                e.stopPropagation()
+                handleEditCurrentProfile(e)
+              }}
             >
               <svg className='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
                 <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z' />
@@ -123,7 +125,8 @@ export default function NavBar({ showSearch = true, searchValue = '', onSearchCh
             )}
             <div
               className='px-5 py-3 text-white cursor-pointer hover:bg-zinc-700 tracking-wider text-center border border-zinc-700 rounded-md mx-2 mb-2'
-              onClick={() => {
+              onClick={(e) => {
+                e.stopPropagation()
                 setShowDropdown(false)
                 setShowSwitchModal(true)
               }}
@@ -132,7 +135,10 @@ export default function NavBar({ showSearch = true, searchValue = '', onSearchCh
             </div>
             <div
               className='px-5 py-3 text-white cursor-pointer hover:bg-zinc-700 tracking-wider text-center'
-              onClick={handleLogout}
+              onClick={(e) => {
+                e.stopPropagation()
+                handleLogout()
+              }}
             >
               Cerrar sesión
             </div>
