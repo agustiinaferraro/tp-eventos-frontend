@@ -137,8 +137,8 @@ export default function SalaScreen() {
       {/* Contenido relativo para estar arriba del overlay */}
       <div className='relative z-10 w-full max-w-md flex flex-col items-center'>
       
-      {/* Título con el nombre de la sala */}
-      <h1 className="text-2xl md:text-4xl tracking-widest text-green-400 mb-16 text-center">
+{/* Título con el nombre de la sala */}
+      <h1 className="text-4xl md:text-6xl tracking-widest text-green-400 mt-8 mb-16 text-center w-full max-w-5xl">
         {sala.name.toUpperCase()}
       </h1>
       
