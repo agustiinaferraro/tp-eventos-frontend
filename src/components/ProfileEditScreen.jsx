@@ -364,7 +364,7 @@ export default function ProfileEditScreen() {
   // RENDERIZADO
   // =====================
 return (
-    <div className='flex flex-col items-center min-h-screen w-full p-10 pt-24'>
+    <div className='flex flex-col items-center min-h-screen w-full p-10'>
       <NavBar />
       <BackButton onClick={() => navigate('/profiles')} />
       
