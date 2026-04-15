@@ -12,12 +12,20 @@ export default function NavBar({ showSearch = false, searchValue = '', onSearchC
   const [showDropdown, setShowDropdown] = useState(false)
   
   const currentProfile = JSON.parse(localStorage.getItem('currentProfile') || '{}')
+  const currentSala = JSON.parse(localStorage.getItem('currentSala') || 'null')
   
   const handleEditCurrentProfile = () => {
     const currentProfileData = JSON.parse(localStorage.getItem('currentProfile') || '{}')
     const index = profiles.findIndex(p => p.name === currentProfileData.name)
     setShowDropdown(false)
     navigate('/profiles/edit', { state: { index: index >= 0 ? index : 0 } })
+  }
+  
+  const handleEditSala = () => {
+    setShowDropdown(false)
+    if (currentSala) {
+      navigate('/sala/edit', { state: { index: 0, sala: currentSala } })
+    }
   }
   
   return (
@@ -77,6 +85,17 @@ export default function NavBar({ showSearch = false, searchValue = '', onSearchC
               </svg>
               Editar perfil
             </div>
+            {currentSala && (
+              <div
+                className='px-5 py-3 text-white cursor-pointer hover:bg-zinc-700 tracking-wider text-center border border-zinc-700 rounded-md mx-2 mb-2 flex items-center justify-center gap-2'
+                onClick={handleEditSala}
+              >
+                <svg className='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                  <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z' />
+                </svg>
+                Editar sala
+              </div>
+            )}
             <div
               className='px-5 py-3 text-white cursor-pointer hover:bg-zinc-700 tracking-wider text-center border border-zinc-700 rounded-md mx-2 mb-2'
               onClick={() => {
