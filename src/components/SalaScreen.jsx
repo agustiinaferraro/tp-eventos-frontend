@@ -136,7 +136,11 @@ useEffect(() => {
       {!showQR && <NavBar />}
       
       {/* BackButton - solo cuando no está el QR */}
-      {!showQR && <BackButton onClick={() => navigate('/dashboard')} />}
+      {!showQR && (
+        <div className="pointer-events-none">
+          <BackButton onClick={() => navigate('/dashboard')} />
+        </div>
+      )}
       
       {/* Contenido relativo para estar arriba del overlay */}
       <div className='relative z-10 w-full max-w-md flex flex-col items-center'>
