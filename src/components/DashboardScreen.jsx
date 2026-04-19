@@ -119,7 +119,14 @@ export default function DashboardScreen() {
     try {
       const data = await apiGet(`/api/users/${user.uid}/salas`)
       if (data.salas) {
-        localSalas = data.salas
+        // Combinar: usar datos del backend pero mantener brightness de localStorage
+        localSalas = data.salas.map(salaBackend => {
+          const salaLocal = localSalas.find(s => s.name === salaBackend.name)
+          return {
+            ...salaBackend,
+            brightness: salaLocal?.brightness ?? salaBackend.brightness ?? 100
+          }
+        })
       }
     } catch (e) {}
     
