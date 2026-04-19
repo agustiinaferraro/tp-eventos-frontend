@@ -248,7 +248,7 @@ export default function DashboardScreen() {
         {salas.filter(s => s.name.toLowerCase().includes(searchSala.toLowerCase())).map((sala, i) => (
           <div
             key={sala.id || i}
-            className="bg-zinc-900 border border-zinc-700 rounded-lg p-10 cursor-pointer transition-all hover:border-green-400 hover:scale-[1.02] relative overflow-hidden"
+            className="border border-zinc-700 rounded-lg p-10 cursor-pointer transition-all hover:border-green-400 hover:scale-[1.02] relative overflow-hidden"
             onClick={() => openSala(sala)}
           >
             {/* Fondo con brillo */}
