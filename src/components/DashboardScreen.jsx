@@ -249,12 +249,16 @@ export default function DashboardScreen() {
           <div
             key={sala.id || i}
             className="bg-zinc-900 border border-zinc-700 rounded-lg p-10 cursor-pointer transition-all hover:border-green-400 hover:scale-[1.02] relative overflow-hidden"
-            style={{
-              background: sala.image ? `url(${sala.image}) center/cover no-repeat` : sala.color || '#18181b',
-              filter: sala.brightness ? `brightness(${sala.brightness}%)` : undefined
-            }}
             onClick={() => openSala(sala)}
           >
+            {/* Fondo con brillo */}
+            <div 
+              className="absolute inset-0 -z-10"
+              style={{
+                background: sala.image ? `url(${sala.image}) center/cover no-repeat` : sala.color || '#18181b',
+                filter: sala.brightness ? `brightness(${sala.brightness}%)` : undefined
+              }}
+            />
             {/* Overlay oscuro para que se lea el texto */}
             <div className="absolute inset-0 bg-black/50"></div>
             {/* Botón eliminar (X) en la esquina */}
