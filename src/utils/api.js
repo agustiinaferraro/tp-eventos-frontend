@@ -17,3 +17,15 @@ export async function apiPost(path, data) {
   if (!res.ok) throw new Error(`API error: ${res.status}`);
   return res.json();
 }
+
+// Generar imagen con IA
+export async function generateImageWithAI(prompt) {
+  const res = await fetch(`${API_BASE}/api/generate-image`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ prompt })
+  });
+  const data = await res.json();
+  if (data.error) throw new Error(data.error);
+  return data.imageUrl;
+}

@@ -5,6 +5,7 @@
 import React, { useState, useRef } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import { apiPost, generateImageWithAI } from '../utils/api'
 
 import NavBar from './NavBar'
 import BackButton from './BackButton'
@@ -28,6 +29,8 @@ export default function SalaEditScreen() {
   const [brightness, setBrightness] = useState(initialSala.brightness ?? 100)
   const [isSaving, setIsSaving] = useState(false)
   const [error, setError] = useState('')
+  const [aiPrompt, setAiPrompt] = useState('')
+  const [isGenerating, setIsGenerating] = useState(false)
   
   const handleImageSelect = (e) => {
     const file = e.target.files[0]
@@ -39,6 +42,23 @@ export default function SalaEditScreen() {
       setChoseColor(false)
     }
     reader.readAsDataURL(file)
+  }
+  
+  const handleGenerateAI = async () => {
+    if (!aiPrompt.trim() || isGenerating) return
+    
+    setIsGenerating(true)
+    setError('')
+    
+    try {
+      const imageUrl = await generateImageWithAI(aiPrompt)
+      setImage(imageUrl)
+      setChoseColor(false)
+    } catch (err) {
+      setError('Error al generar imagen: ' + err.message)
+    } finally {
+      setIsGenerating(false)
+    }
   }
   
   const handleCamera = async () => {
@@ -230,6 +250,27 @@ return (
         >
           📷 Cámara
         </button>
+      </div>
+      
+      {/* Generación con IA */}
+      <div className="flex flex-col gap-2 mb-6 w-full max-w-md relative z-10">
+        <p className="text-zinc-400 text-sm">🤖 Generar fondo con IA</p>
+        <div className="flex gap-2">
+          <input
+            type="text"
+            className="flex-1 bg-zinc-800 border border-zinc-600 text-white px-3 py-2 rounded-lg text-sm"
+            placeholder="Ej: jazz night, neon lights, purple..."
+            value={aiPrompt}
+            onChange={(e) => setAiPrompt(e.target.value)}
+          />
+          <button
+            className="bg-purple-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-purple-500 disabled:opacity-50"
+            onClick={handleGenerateAI}
+            disabled={isGenerating || !aiPrompt.trim()}
+          >
+            {isGenerating ? '...' : '🤖'}
+          </button>
+        </div>
       </div>
       
       {/* Control de brillo - tanto para imagen como para color */}
