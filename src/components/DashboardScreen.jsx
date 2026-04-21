@@ -401,7 +401,7 @@ export default function DashboardScreen() {
               Crear
             </button>
           </div>
-</div>
+        </div>
         )}
       </div>
       
