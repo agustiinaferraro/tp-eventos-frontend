@@ -148,12 +148,13 @@
 
   const socket = io(SERVER_URL, {
     query: { room: salaParam },
-    transports: ['websocket', 'polling'],
     reconnection: true,
     reconnectionAttempts: 5,
     reconnectionDelay: 2000,
     reconnectionDelayMax: 10000,
-    timeout: 30000
+    timeout: 30000,
+    upgrade: true,
+    rememberUpgrade: false
   });
 
   updateOfflineIndicator();
@@ -168,6 +169,14 @@
     connectionStatus.classList.remove("connected");
     connectionText.textContent = "SIN CONEXIÓN";
     updateOfflineIndicator();
+  });
+
+  socket.on("connect_error", (err) => {
+    console.warn("Conexión degradada (fallback activo)");
+  });
+
+  socket.on("connect_failed", () => {
+    console.warn("Fallo de conexión inicial");
   });
 
   if (titleEl) {
