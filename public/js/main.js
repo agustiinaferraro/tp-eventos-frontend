@@ -144,7 +144,7 @@
 
   const socket = io(SERVER_URL, {
     query: { room: salaParam },
-    transports: ['websocket', 'polling'],
+    transports: ['polling'],  // SOLO polling - test diagnóstico
     reconnection: true,
     reconnectionAttempts: Infinity,
     reconnectionDelay: 1000,
