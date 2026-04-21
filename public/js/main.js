@@ -360,7 +360,10 @@
 
   function initAccelerometerGlobal() {
     console.log("initAccelerometerGlobal() llamada");
-    if (accelerometerEnabled) return;
+    if (accelerometerEnabled) {
+      console.log("ACCELEROMETER YA ESTÁ HABILITADO, no reinicializar");
+      return;
+    }
     accelerometerEnabled = true;
     sensorInitTime = Date.now();
     sensorInitComplete = false;
