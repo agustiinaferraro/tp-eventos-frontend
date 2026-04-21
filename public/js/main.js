@@ -374,25 +374,30 @@
     console.log("requestPermission:", typeof DeviceOrientationEvent?.requestPermission);
     
     if (typeof DeviceOrientationEvent !== "undefined" && typeof DeviceOrientationEvent.requestPermission === "function") {
+      console.log("Pidiendo permiso de accelerometer (iOS)...");
       DeviceOrientationEvent.requestPermission()
         .then(response => {
+          console.log("Respuesta permiso:", response);
           if (response === "granted") addListener();
         })
-        .catch(console.error);
+        .catch(e => console.error("Error pedido permiso:", e));
     } else {
+      console.log("No necesita permiso, añadiendo listener directo");
       addListener();
     }
   }
 
   function initAccelerometer(gesture) {
     if (typeof DeviceOrientationEvent !== "undefined" && typeof DeviceOrientationEvent.requestPermission === "function") {
+      console.log("initAccelerometer - pidiendo permiso iOS...");
       DeviceOrientationEvent.requestPermission()
         .then(response => {
+          console.log("initAccelerometer permiso:", response);
           if (response === "granted") {
             window.addEventListener("deviceorientation", handleOrientation, true);
           }
         })
-        .catch(console.error);
+        .catch(e => console.error("Error pedido permiso:", e));
     } else {
       window.addEventListener("deviceorientation", handleOrientation, true);
     }
