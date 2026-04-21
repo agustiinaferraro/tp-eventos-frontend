@@ -34,6 +34,7 @@
   let sensorInitComplete = false;
   let isFirstReading = true;
   let pendingEnergy = 0;
+  let lastSendTime = 0;
 
   const OFFLINE_KEY = 'pendingEnergy_' + salaParam;
 
@@ -88,6 +89,9 @@
   }
 
   function trySendEnergy(energy) {
+    const now = Date.now();
+    if (now - lastSendTime < 100) return;
+    lastSendTime = now;
     savePendingEnergy(energy);
     if (socket.connected) {
       socket.emit("energy", { energy: energy });
@@ -144,12 +148,12 @@
 
   const socket = io(SERVER_URL, {
     query: { room: salaParam },
-    transports: ['polling', 'websocket'],
+    transports: ['websocket', 'polling'],
     reconnection: true,
-    reconnectionAttempts: Infinity,
-    reconnectionDelay: 1000,
-    reconnectionDelayMax: 5000,
-    timeout: 20000
+    reconnectionAttempts: 5,
+    reconnectionDelay: 2000,
+    reconnectionDelayMax: 10000,
+    timeout: 30000
   });
 
   updateOfflineIndicator();
