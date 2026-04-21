@@ -56,13 +56,25 @@ export default function ExperienceEditScreen() {
     setSaving(true)
     try {
       await apiSaveExperience(sala.name, experience)
-      // Recargar el iframe con los nuevos datos
+      // Recargar el iframe con los nuevos datos guardados en backend
       setIframeKey(k => k + 1)
-      setTimeout(() => setSaving(false), 500)
+      setTimeout(() => setSaving(false), 1000)
     } catch (err) {
       console.error('Error guardando experiencia:', err)
       setSaving(false)
     }
+  }
+
+  function applyToPreview() {
+    if (!sala) return
+    // Primero guardar en backend, luego recargar iframe
+    setSaving(true)
+    apiSaveExperience(sala.name, experience)
+      .then(() => {
+        setIframeKey(k => k + 1)
+        setSaving(false)
+      })
+      .catch(() => setSaving(false))
   }
 
   function getLevelKey(points) {
@@ -340,15 +352,13 @@ export default function ExperienceEditScreen() {
           </div>
         </div>
 
-        {/* BOTÓN GUARDAR */}
+        {/* BOTÓN APLICAR */}
         <button
-          onClick={() => {
-            setIframeKey(k => k + 1)
-          }}
+          onClick={applyToPreview}
           disabled={saving}
           className="w-full bg-yellow-600 text-black py-3 rounded-xl mt-4 tracking-wider hover:bg-yellow-500 disabled:opacity-50"
         >
-          APLICAR CAMBIOS EN PREVIEW
+          {saving ? 'Aplicando...' : 'APLICAR Y VER EN PREVIEW'}
         </button>
         
         <button
