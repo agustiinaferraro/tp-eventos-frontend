@@ -402,8 +402,7 @@ export default function DashboardScreen() {
             </button>
           </div>
         </div>
-        )}
-      </div>
+      )}
       
       <Footer />
     </div>
