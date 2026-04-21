@@ -134,95 +134,99 @@ export default function ExperienceEditScreen() {
         </div>
 
         {/* NIVEL CONFIG */}
-        {LEVELS.map(level => (
-          <div key={level.key} className={activeTab === level.key ? '' : 'hidden'}>
-            <h2 className="text-xl text-white mb-4">{level.desc}</h2>
-            
-            {/* Color */}
-            <div className="mb-4">
-              <label className="block text-zinc-400 mb-2">Color de barra</label>
-              <div className="flex gap-4 items-center">
-                <input
-                  type="color"
-                  value={experience[level.key].color}
-                  onChange={(e) => updateLevel(level.key, 'color', e.target.value)}
-                  className="w-16 h-12 rounded cursor-pointer"
-                />
-                <input
-                  type="text"
-                  value={experience[level.key].color}
-                  onChange={(e) => updateLevel(level.key, 'color', e.target.value)}
-                  className="flex-1 bg-zinc-800 text-white p-2 rounded"
-                />
+        {activeTab !== 'effects' && (
+          <div>
+            {LEVELS.map(level => (
+              <div key={level.key} className={activeTab === level.key ? '' : 'hidden'}>
+                <h2 className="text-xl text-white mb-4">{level.desc}</h2>
+                
+                {/* Color */}
+                <div className="mb-4">
+                  <label className="block text-zinc-400 mb-2">Color de barra</label>
+                  <div className="flex gap-4 items-center">
+                    <input
+                      type="color"
+                      value={experience[level.key].color}
+                      onChange={(e) => updateLevel(level.key, 'color', e.target.value)}
+                      className="w-16 h-12 rounded cursor-pointer"
+                    />
+                    <input
+                      type="text"
+                      value={experience[level.key].color}
+                      onChange={(e) => updateLevel(level.key, 'color', e.target.value)}
+                      className="flex-1 bg-zinc-800 text-white p-2 rounded"
+                    />
+                  </div>
+                </div>
+
+                {/* Mensaje */}
+                <div className="mb-4">
+                  <label className="block text-zinc-400 mb-2">Mensaje motivacional</label>
+                  <input
+                    type="text"
+                    value={experience[level.key].message}
+                    onChange={(e) => updateLevel(level.key, 'message', e.target.value)}
+                    maxLength={30}
+                    className="w-full bg-zinc-800 text-white p-2 rounded"
+                  />
+                </div>
+
+                {/* Fondo color */}
+                <div className="mb-4">
+                  <label className="block text-zinc-400 mb-2">Color de fondo</label>
+                  <div className="flex gap-4 items-center">
+                    <input
+                      type="color"
+                      value={experience[level.key].background || '#000000'}
+                      onChange={(e) => updateLevel(level.key, 'background', e.target.value)}
+                      className="w-16 h-12 rounded cursor-pointer"
+                    />
+                    <button
+                      onClick={() => updateLevel(level.key, 'background', null)}
+                      className="px-4 py-2 bg-zinc-800 text-zinc-400 rounded"
+                    >
+                      Sin color
+                    </button>
+                  </div>
+                </div>
+
+                {/* Imagen de fondo */}
+                <div className="mb-4">
+                  <label className="block text-zinc-400 mb-2">Imagen de fondo (URL)</label>
+                  <input
+                    type="text"
+                    value={experience[level.key].backgroundImage || ''}
+                    onChange={(e) => updateLevel(level.key, 'backgroundImage', e.target.value)}
+                    placeholder="https://..."
+                    className="w-full bg-zinc-800 text-white p-2 rounded"
+                  />
+                  {experience[level.key].backgroundImage && (
+                    <img 
+                      src={experience[level.key].backgroundImage} 
+                      alt="Preview" 
+                      className="mt-2 w-full h-32 object-cover rounded"
+                    />
+                  )}
+                </div>
+
+                {/* Partículas */}
+                <div className="mb-4 flex items-center gap-4">
+                  <label className="text-zinc-400">Partículas activas</label>
+                  <button
+                    onClick={() => updateLevel(level.key, 'particles', !experience[level.key].particles)}
+                    className={`w-12 h-6 rounded-full transition-colors ${
+                      experience[level.key].particles ? 'bg-green-600' : 'bg-zinc-700'
+                    }`}
+                  >
+                    <div className={`w-5 h-5 bg-white rounded-full transition-transform ${
+                      experience[level.key].particles ? 'translate-x-6' : 'translate-x-0.5'
+                    }`} />
+                  </button>
+                </div>
               </div>
-            </div>
-
-            {/* Mensaje */}
-            <div className="mb-4">
-              <label className="block text-zinc-400 mb-2">Mensaje motivacional</label>
-              <input
-                type="text"
-                value={experience[level.key].message}
-                onChange={(e) => updateLevel(level.key, 'message', e.target.value)}
-                maxLength={30}
-                className="w-full bg-zinc-800 text-white p-2 rounded"
-              />
-            </div>
-
-            {/* Fondo color */}
-            <div className="mb-4">
-              <label className="block text-zinc-400 mb-2">Color de fondo</label>
-              <div className="flex gap-4 items-center">
-                <input
-                  type="color"
-                  value={experience[level.key].background || '#000000'}
-                  onChange={(e) => updateLevel(level.key, 'background', e.target.value)}
-                  className="w-16 h-12 rounded cursor-pointer"
-                />
-                <button
-                  onClick={() => updateLevel(level.key, 'background', null)}
-                  className="px-4 py-2 bg-zinc-800 text-zinc-400 rounded"
-                >
-                  Sin color
-                </button>
-              </div>
-            </div>
-
-            {/* Imagen de fondo */}
-            <div className="mb-4">
-              <label className="block text-zinc-400 mb-2">Imagen de fondo (URL)</label>
-              <input
-                type="text"
-                value={experience[level.key].backgroundImage || ''}
-                onChange={(e) => updateLevel(level.key, 'backgroundImage', e.target.value)}
-                placeholder="https://..."
-                className="w-full bg-zinc-800 text-white p-2 rounded"
-              />
-              {experience[level.key].backgroundImage && (
-                <img 
-                  src={experience[level.key].backgroundImage} 
-                  alt="Preview" 
-                  className="mt-2 w-full h-32 object-cover rounded"
-                />
-              )}
-            </div>
-
-            {/* Partículas */}
-            <div className="mb-4 flex items-center gap-4">
-              <label className="text-zinc-400">Partículas activas</label>
-              <button
-                onClick={() => updateLevel(level.key, 'particles', !experience[level.key].particles)}
-                className={`w-12 h-6 rounded-full transition-colors ${
-                  experience[level.key].particles ? 'bg-green-600' : 'bg-zinc-700'
-                }`}
-              >
-                <div className={`w-5 h-5 bg-white rounded-full transition-transform ${
-                  experience[level.key].particles ? 'translate-x-6' : 'translate-x-0.5'
-                }`} />
-              </button>
-            </div>
+            ))}
           </div>
-        ))}
+        )}
 
         {/* EFECTOS CONFIG */}
         <div className={activeTab === 'effects' ? '' : 'hidden'}>
@@ -268,28 +272,50 @@ export default function ExperienceEditScreen() {
               }`} />
             </button>
           </div>
+
+          <h3 className="text-zinc-400 mt-6 mb-2">Preview de efectos</h3>
+          <div className="p-4 bg-zinc-950 rounded-lg">
+            <div className="text-sm text-zinc-500 mb-2">Partículas: {experience.effects.particleCount}</div>
+            <div className="text-sm text-zinc-500 mb-2">Gestos: {experience.effects.showGestures ? 'Sí' : 'No'}</div>
+            <div className="text-sm text-zinc-500">Near threshold: {experience.effects.showNearThreshold ? 'Sí' : 'No'}</div>
+            <div className="flex gap-1 mt-4">
+              {Array.from({ length: Math.min(experience.effects.particleCount / 10, 10) }).map((_, i) => (
+                <span key={i} className="text-green-400">✦</span>
+              ))}
+            </div>
+          </div>
         </div>
 
         {/* PREVIEW */}
-        <div className="mt-6 p-4 rounded-lg" style={{
-          backgroundColor: experience[activeTab]?.background || '#000',
-          backgroundImage: experience[activeTab]?.backgroundImage ? `url(${experience[activeTab].backgroundImage})` : undefined,
-          backgroundSize: 'cover'
-        }}>
-          <h3 className="text-zinc-400 mb-2">Preview</h3>
-          <div className="text-center">
-            <p className="text-3xl mb-4" style={{ color: experience[activeTab]?.color }}>
-              {experience[activeTab]?.color}
-            </p>
-            <p className="text-xl text-white">
-              {experience[activeTab]?.message}
-            </p>
-            {experience[activeTab]?.particles && (
-              <div className="text-zinc-500 mt-2">
-                ● ● ● partículas activas
+        <h3 className="text-zinc-400 mt-8 mb-2">Vista previa de todos los niveles</h3>
+        
+        <div className="space-y-4">
+          {LEVELS.map(level => {
+            const lvl = experience[level.key];
+            return (
+              <div key={level.key} className="p-4 rounded-lg" style={{
+                backgroundColor: lvl.background || '#111',
+                backgroundImage: lvl.backgroundImage ? `url(${lvl.backgroundImage})` : undefined,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center'
+              }}>
+                <div className="text-sm text-zinc-500 mb-2">{level.label}</div>
+                <div className="text-center">
+                  <p className="text-4xl mb-2" style={{ color: lvl.color }}>
+                    {lvl.color}
+                  </p>
+                  <p className="text-lg text-white mb-2">
+                    {lvl.message}
+                  </p>
+                  {lvl.particles && (
+                    <div className="text-zinc-500">
+                      ✦ partículas
+                    </div>
+                  )}
+                </div>
               </div>
-            )}
-          </div>
+            );
+          })}
         </div>
 
         {/* BOTÓN GUARDAR */}

@@ -234,6 +234,9 @@
 
   updateOfflineIndicator();
 
+  // Cargar experiencia inmediatamente
+  loadExperience();
+
   socket.on("connect", () => {
     connectionStatus.classList.add("connected");
     connectionText.textContent = "CONECTADO";
