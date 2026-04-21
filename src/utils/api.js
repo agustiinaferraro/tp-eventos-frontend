@@ -25,14 +25,11 @@ export async function generateImageWithAI(prompt) {
       throw new Error('Puter no está cargado');
     }
     
-    // Generate usando Puter.js con GPT Image
-    const result = await window.puter.ai.chat.completions.create({
-      model: 'gpt-image-1',
-      messages: [{ role: 'user', content: `Generate an image: ${prompt}` }]
-    });
+    // Generate usando Puter.js txt2img
+    const imageElement = await window.puter.ai.txt2img(prompt, true);
     
-    if (result?.image_url) {
-      return result.image_url;
+    if (imageElement && imageElement.src) {
+      return imageElement.src;
     }
     
     throw new Error('No se pudo generar la imagen');
