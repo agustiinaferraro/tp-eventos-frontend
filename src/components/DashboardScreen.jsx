@@ -21,6 +21,7 @@ import { signOut } from 'firebase/auth'
 // NavBar component
 import NavBar from './NavBar'
 import BackButton from './BackButton'
+import Footer from './Footer'
 
 // Componente principal del dashboard
 export default function DashboardScreen() {
@@ -400,8 +401,11 @@ export default function DashboardScreen() {
               Crear
             </button>
           </div>
-        </div>
-      )}
+</div>
+        )}
+      </div>
+      
+      <Footer />
     </div>
   )
 }
