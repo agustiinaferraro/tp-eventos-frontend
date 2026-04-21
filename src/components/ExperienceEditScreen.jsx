@@ -9,9 +9,9 @@ import BackButton from './BackButton'
 import { apiGetExperience, apiSaveExperience } from '../utils/api'
 
 const LEVELS = [
-  { key: 'level0', min: 0, max: 499, label: '0-499' },
-  { key: 'level1', min: 500, max: 999, label: '500-999' },
-  { key: 'level2', min: 1000, max: 1000, label: '1000' }
+  { key: 'level0', min: 0, max: 499, label: '0-499', className: 'orange' },
+  { key: 'level1', min: 500, max: 999, label: '500-999', className: 'yellow' },
+  { key: 'level2', min: 1000, max: 1000, label: '1000', className: 'green' }
 ]
 
 export default function ExperienceEditScreen() {
@@ -90,8 +90,20 @@ export default function ExperienceEditScreen() {
     }
   }
 
+  function getBarColor(points) {
+    if (points >= 1000) return experience.level2.color
+    if (points >= 500) return experience.level1.color
+    return experience.level0.color
+  }
+
+  function getProgressWidth(points) {
+    return Math.min(points / 1000 * 100, 100) + '%'
+  }
+
   const currentLevel = getLevelForPoints(currentPoints)
   const currentLvl = experience[currentLevel]
+  const bgColor = currentLvl.background || '#000'
+  const bgImage = currentLvl.backgroundImage
 
   if (loading) {
     return (
@@ -102,58 +114,93 @@ export default function ExperienceEditScreen() {
   }
 
   return (
-    <div className="min-h-screen bg-zinc-950">
+    <div className="min-h-screen bg-black">
       <NavBar currentProfile={null} onMenuAction={() => {}} />
       
-      <div className="max-w-4xl mx-auto p-4 pt-20">
+      <div className="max-w-2xl mx-auto p-4 pt-20">
         <BackButton onClick={handleBack} />
         
-        <h1 className="text-2xl text-green-400 tracking-wider mt-4 mb-2">
+        <h1 className="text-2xl text-green-400 tracking-wider mt-4 mb-6">
           PERSONALIZAR EXPERIENCIA
         </h1>
-        <p className="text-zinc-400 mb-6">Sala: {sala?.name}</p>
 
         {/* ================================================ */}
-        {/* PREVIEW GRANDE DE LA EXPERIENCIA */}
+        {/* PREVIEW - IDENTICO A LA EXPERIENCIA REAL */}
         {/* ================================================ */}
         <div 
-          className="rounded-xl overflow-hidden mb-6 relative"
+          className="flex flex-col items-center justify-center min-h-[60vh]"
           style={{
-            height: '280px',
-            backgroundColor: currentLvl.background || '#0a0a0a',
-            backgroundImage: currentLvl.backgroundImage ? `url(${currentLvl.backgroundImage})` : undefined,
+            backgroundColor: bgColor,
+            backgroundImage: bgImage ? `url(${bgImage})` : undefined,
             backgroundSize: 'cover',
             backgroundPosition: 'center'
           }}
         >
-          {/* Overlay */}
-          <div className="absolute inset-0 bg-black/50" />
-          
-          {/* Contenido centrado */}
-          <div className="absolute inset-0 flex flex-col items-center justify-center p-6">
-            <p className="text-6xl font-bold mb-4" style={{ color: currentLvl.color }}>
-              {currentPoints}
-            </p>
-            <p className="text-xl text-white text-center mb-4">
-              {currentLvl.message}
-            </p>
-            {currentLvl.particles && (
-              <div className="text-green-400/60 text-sm">
-                ✦ partículas activas
-              </div>
-            )}
+          {/* Título */}
+          <p className="text-3xl md:text-5xl font-bold mb-4 text-white">
+            {sala?.name?.toUpperCase() || 'Evento'}
+          </p>
+
+          {/* Puntos */}
+          <div 
+            id="points" 
+            className="text-6xl md:text-8xl font-bold mb-2"
+            style={{ color: currentLvl.color }}
+          >
+            {currentPoints}
           </div>
+          <p className="text-lg text-white mb-4">puntos</p>
+          
+          <p className="text-lg text-gray-400 text-center px-5 mb-4">
+            {currentLvl.message}
+          </p>
+
+          {/* Indicador de movimiento */}
+          <div className="text-sm text-gray-400">
+            📱 Mueva el teléfono
+          </div>
+
+          {/* Barra de progreso */}
+          <div className="w-full max-w-md mt-8 mb-8 px-4">
+            {/* Etiquetas */}
+            <div className="relative h-6 mb-1">
+              <span className="absolute text-xs text-gray-500" style={{ left: '0%' }}>0</span>
+              <span className="absolute text-xs text-gray-500" style={{ left: '12%' }}>125</span>
+              <span className="absolute text-xs text-gray-500" style={{ left: '25%' }}>250</span>
+              <span className="absolute text-xs text-gray-500" style={{ left: '37%' }}>375</span>
+              <span className="absolute text-xs text-gray-500" style={{ left: '62%' }}>625</span>
+              <span className="absolute text-xs text-gray-500" style={{ left: '75%' }}>750</span>
+              <span className="absolute text-xs text-gray-500" style={{ left: '87%' }}>875</span>
+              <span className="absolute text-xs text-gray-500" style={{ right: '0%' }}>1000</span>
+            </div>
+            
+            {/* Barra */}
+            <div className="h-2 bg-neutral-900 rounded">
+              <div 
+                className="h-full rounded transition-all"
+                style={{ 
+                  width: getProgressWidth(currentPoints),
+                  backgroundColor: getBarColor(currentPoints)
+                }}
+              />
+            </div>
+          </div>
+
+          {/* Partículas (decorativo) */}
+          {currentLvl.particles && (
+            <div className="text-green-400/30 text-xs mt-4">
+              ✦ ✦ ✦ partículas
+            </div>
+          )}
         </div>
 
         {/* ================================================ */}
-        {/* SCRUBBER / TIMELINE */}
+        {/* SCRUBBER */}
         {/* ================================================ */}
-        <div className="bg-zinc-900 rounded-xl p-4 mb-4">
+        <div className="bg-zinc-900 rounded-xl p-4 my-4">
           <div className="flex justify-between text-xs text-zinc-500 mb-2">
             <span>0</span>
-            <span>250</span>
             <span>500</span>
-            <span>750</span>
             <span>1000</span>
           </div>
           
@@ -163,13 +210,13 @@ export default function ExperienceEditScreen() {
             max="1000"
             value={currentPoints}
             onChange={(e) => setCurrentPoints(parseInt(e.target.value))}
-            className="w-full h-3 bg-zinc-700 rounded-lg appearance-none cursor-pointer accent-green-400"
+            className="w-full h-3 bg-zinc-700 rounded-lg appearance-none cursor-pointer"
             style={{ accentColor: currentLvl.color }}
           />
           
           <div className="flex justify-between items-center mt-2">
             <span className="text-sm text-zinc-400">
-              {currentPoints} pts — {LEVELS.find(l => l.key === currentLevel)?.label} pts
+              {currentPoints} pts — {LEVELS.find(l => l.key === currentLevel)?.label}
             </span>
             <span 
               className="px-3 py-1 rounded text-sm font-bold"
@@ -181,7 +228,7 @@ export default function ExperienceEditScreen() {
         </div>
 
         {/* ================================================ */}
-        {/* PANEL DE EDICIÓN (cambia según posición) */}
+        {/* PANEL DE EDICIÓN */}
         {/* ================================================ */}
         <div className="bg-zinc-900 rounded-xl p-5">
           <h2 className="text-lg text-white mb-4 flex items-center gap-2">
@@ -189,7 +236,7 @@ export default function ExperienceEditScreen() {
             Editando: {LEVELS.find(l => l.key === currentLevel)?.label} pts
           </h2>
           
-          {/* Color */}
+          {/* Color de barra */}
           <div className="mb-4">
             <label className="block text-zinc-400 text-sm mb-2">Color de barra</label>
             <div className="flex gap-3 items-center">
@@ -227,7 +274,7 @@ export default function ExperienceEditScreen() {
             <div className="flex gap-3 items-center">
               <input
                 type="color"
-                value={currentLvl.background || '#111111'}
+                value={currentLvl.background || '#000000'}
                 onChange={(e) => updateLevel(currentLevel, 'background', e.target.value)}
                 className="w-14 h-14 rounded-lg cursor-pointer border-2 border-zinc-700"
               />
