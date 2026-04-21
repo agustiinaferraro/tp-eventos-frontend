@@ -359,15 +359,20 @@
   }
 
   function initAccelerometerGlobal() {
+    console.log("initAccelerometerGlobal() llamada");
     if (accelerometerEnabled) return;
     accelerometerEnabled = true;
     sensorInitTime = Date.now();
     sensorInitComplete = false;
 
     const addListener = () => {
+      console.log("Añadiendo event listener deviceorientation");
       window.addEventListener("deviceorientation", handleOrientation, true);
     };
 
+    console.log("DeviceOrientationEvent:", typeof DeviceOrientationEvent);
+    console.log("requestPermission:", typeof DeviceOrientationEvent?.requestPermission);
+    
     if (typeof DeviceOrientationEvent !== "undefined" && typeof DeviceOrientationEvent.requestPermission === "function") {
       DeviceOrientationEvent.requestPermission()
         .then(response => {
@@ -394,6 +399,7 @@
   }
 
   function handleOrientation(event) {
+    console.log("Orientation:", event.beta, event.gamma);
     if (event.alpha === null || event.alpha === undefined) return;
 
     if (!sensorInitComplete) {
@@ -456,12 +462,14 @@
 
   if (enableMotionBtn) {
     enableMotionBtn.addEventListener("click", function() {
+      console.log("Botón tocqueado - intentando inicializar accelerometer");
       initAccelerometerGlobal();
       enableMotionBtn.style.display = "none";
       motionOverlay.style.display = "none";
     });
     enableMotionBtn.addEventListener("touchend", function(e) {
       e.preventDefault();
+      console.log("Botón tocqueado touch - intentando inicializar accelerometer");
       initAccelerometerGlobal();
       enableMotionBtn.style.display = "none";
       motionOverlay.style.display = "none";
