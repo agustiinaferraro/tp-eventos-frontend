@@ -25,8 +25,10 @@ export async function generateImageWithAI(prompt) {
       throw new Error('Puter no está cargado');
     }
     
-    // Generate usando Puter.js txt2img
-    const imageElement = await window.puter.ai.txt2img(prompt, true);
+    // Generate usando Puter.js txt2img con nano-banana
+    const imageElement = await window.puter.ai.txt2img(prompt, {
+      model: "gemini-2.5-flash-image-preview"
+    });
     
     if (imageElement && imageElement.src) {
       return imageElement.src;
