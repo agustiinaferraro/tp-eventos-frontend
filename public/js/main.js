@@ -38,6 +38,81 @@
 
   const OFFLINE_KEY = 'pendingEnergy_' + salaParam;
 
+  // Experiencia personalizada
+  let experience = {
+    level0: { color: '#ff6b00', background: null, backgroundImage: null, particles: true, message: '¡Sumá tu energía!' },
+    level1: { color: '#ffdd00', background: null, backgroundImage: null, particles: true, message: '¡Casi llegamos!' },
+    level2: { color: '#00ff88', background: null, backgroundImage: null, particles: true, message: '¡Nivel máximo!' },
+    effects: { particleCount: 40, showGestures: true, showNearThreshold: true }
+  };
+
+  async function loadExperience() {
+    try {
+      const res = await fetch(SERVER_URL + '/api/salas/' + salaParam + '/experience');
+      if (res.ok) {
+        const data = await res.json();
+        experience = data.experience;
+        applyExperience();
+      }
+    } catch (e) {
+      console.log('Usando experiencia por defecto');
+    }
+  }
+
+  function getLevelKey(points) {
+    if (points >= 1000) return 'level2';
+    if (points >= 500) return 'level1';
+    return 'level0';
+  }
+
+  function applyExperience() {
+    const level = getLevelKey(0);
+    const lvl = experience[level];
+    
+    // Aplicar color de fondo
+    if (lvl.background) {
+      document.body.style.backgroundColor = lvl.background;
+    } else {
+      document.body.style.backgroundColor = '#000';
+    }
+    
+    // Aplicar imagen de fondo
+    if (lvl.backgroundImage) {
+      document.body.style.backgroundImage = 'url(' + lvl.backgroundImage + ')';
+      document.body.style.backgroundSize = 'cover';
+    } else {
+      document.body.style.backgroundImage = 'none';
+    }
+    
+    // Aplicar partículas
+    const particles = document.getElementById('effectsParticles');
+    if (particles) {
+      particles.style.display = lvl.particles ? 'block' : 'none';
+    }
+  }
+
+  function applyLevelExperience(points) {
+    const level = getLevelKey(points);
+    const lvl = experience[level];
+    
+    // Color del título
+    if (titleEl) {
+      titleEl.style.color = lvl.color;
+    }
+    
+    // Fondo
+    if (lvl.background) {
+      document.body.style.backgroundColor = lvl.background;
+    }
+    
+    if (lvl.backgroundImage) {
+      document.body.style.backgroundImage = 'url(' + lvl.backgroundImage + ')';
+    } else if (!lvl.background) {
+      document.body.style.backgroundColor = '#000';
+      document.body.style.backgroundImage = 'none';
+    }
+  }
+
   function getPendingEnergy() {
     return parseInt(localStorage.getItem(OFFLINE_KEY) || '0');
   }
@@ -163,6 +238,7 @@
     connectionStatus.classList.add("connected");
     connectionText.textContent = "CONECTADO";
     sendPendingEnergy();
+    loadExperience();
   });
 
   socket.on("disconnect", (reason) => {
@@ -279,11 +355,7 @@
 
     if (titleEl && data.room) {
       titleEl.textContent = data.room.toUpperCase();
-      
-      let titleColor = '#ff6b00';
-      if (data.points >= 500) titleColor = '#ffdd00';
-      if (data.points >= 1000) titleColor = '#00ff88';
-      titleEl.style.color = titleColor;
+      applyLevelExperience(data.points);
     }
 
     if (data.gestureActive && !gestureActive) {
