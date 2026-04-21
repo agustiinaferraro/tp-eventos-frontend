@@ -2,7 +2,7 @@
 // ExperienceEditScreen.jsx - Personalizar experiencia de sala
 // =====================
 
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import NavBar from './NavBar'
