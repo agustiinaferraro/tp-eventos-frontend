@@ -23,6 +23,7 @@ import SalaScreen from './components/SalaScreen'          // QR y compartir sala
 import SalaEditScreen from './components/SalaEditScreen'  // Editar sala
 import LinkModal from './components/LinkModal'              // Modal de copiar link
 import StatsScreen from './components/StatsScreen'        // Estadísticas de salas
+import ExperienceEditScreen from './components/ExperienceEditScreen'  // Editar experiencia
 
 // Componente principal de la aplicación
 function App() {
@@ -56,6 +57,9 @@ function App() {
           
           {/* Ruta de link para compartir (pantalla independiente) */}
           <Route path="/link" element={<LinkModal />} />
+          
+          {/* Ruta para editar experiencia de sala */}
+          <Route path="/experience/edit" element={<ExperienceEditScreen />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>

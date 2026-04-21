@@ -191,6 +191,14 @@ useEffect(() => {
         📊 ESTADÍSTICAS
       </button>
 
+      {/* Botón personalizar experiencia */}
+      <button
+        className="mt-3 bg-zinc-900 border border-zinc-700 text-zinc-300 text-sm py-3 px-6 rounded-lg cursor-pointer tracking-wider transition-all hover:border-green-400 hover:text-green-400"
+        onClick={() => navigate('/experience/edit', { state: { sala } })}
+      >
+        ✏️ PERSONALIZAR EXPERIENCIA
+      </button>
+
       {/* ===================== */}
       {/* MODAL: CÓDIGO QR */}
       {/* ===================== */}

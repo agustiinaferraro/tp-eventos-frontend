@@ -18,6 +18,15 @@ export async function apiPost(path, data) {
   return res.json();
 }
 
+// API: Experiencia de sala
+export async function apiGetExperience(salaName) {
+  return apiGet(`/api/salas/${salaName}/experience`);
+}
+
+export async function apiSaveExperience(salaName, experience) {
+  return apiPost(`/api/salas/${salaName}/experience`, { experience });
+}
+
 // Generar imagen con IA usando Puter.js (gratis, sin API key, nano-banana powered)
 export async function generateImageWithAI(prompt) {
   try {
