@@ -144,7 +144,7 @@
 
   const socket = io(SERVER_URL, {
     query: { room: salaParam },
-    transports: ['polling'],  // SOLO polling - test diagnóstico
+    transports: ['polling', 'websocket'],
     reconnection: true,
     reconnectionAttempts: Infinity,
     reconnectionDelay: 1000,
@@ -160,7 +160,7 @@
     sendPendingEnergy();
   });
 
-  socket.on("disconnect", () => {
+  socket.on("disconnect", (reason) => {
     connectionStatus.classList.remove("connected");
     connectionText.textContent = "SIN CONEXIÓN";
     updateOfflineIndicator();
@@ -299,7 +299,6 @@
     gestureFeedback.classList.add("active");
     feedbackFill.style.width = "0%";
     feedbackText.textContent = "Haciendo el gesto...";
-    initAccelerometer(gesture);
   }
 
   function hideGesture() {
@@ -314,7 +313,6 @@
     myRepetitions = 0;
     nearThresholdOverlay.classList.add("active");
     thresholdCount.textContent = "Repeticiones: 0/5";
-    initAccelerometer('any');
   }
 
   function hideNearThreshold() {
@@ -387,22 +385,6 @@
     } else {
       console.log("No necesita permiso, añadiendo listener directo");
       addListener();
-    }
-  }
-
-  function initAccelerometer(gesture) {
-    if (typeof DeviceOrientationEvent !== "undefined" && typeof DeviceOrientationEvent.requestPermission === "function") {
-      console.log("initAccelerometer - pidiendo permiso iOS...");
-      DeviceOrientationEvent.requestPermission()
-        .then(response => {
-          console.log("initAccelerometer permiso:", response);
-          if (response === "granted") {
-            window.addEventListener("deviceorientation", handleOrientation, true);
-          }
-        })
-        .catch(e => console.error("Error pedido permiso:", e));
-    } else {
-      window.addEventListener("deviceorientation", handleOrientation, true);
     }
   }
 
