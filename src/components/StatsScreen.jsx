@@ -6,7 +6,6 @@ import React, { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { apiGet } from '../utils/api'
 
-import NavBar from './NavBar'
 import BackButton from './BackButton'
 
 export default function StatsScreen() {
@@ -57,7 +56,6 @@ return (
       {/* Overlay oscuro */}
       <div className="absolute inset-0 bg-black/70 z-0"></div>
       
-      <NavBar />
       <div className="pointer-events-none w-full max-w-5xl">
         <BackButton onClick={() => {
           const savedSala = localStorage.getItem('currentSala')

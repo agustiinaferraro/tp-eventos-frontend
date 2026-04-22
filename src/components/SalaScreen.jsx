@@ -12,7 +12,6 @@ import { useNavigate } from 'react-router-dom'
 import { getBaseUrl } from '../constants'
 
 // NavBar y BackButton
-import NavBar from './NavBar'
 import BackButton from './BackButton'
 import QRModal from './QRModal'
 
@@ -128,9 +127,6 @@ useEffect(() => {
       
       {/* Overlay oscuro */}
       <div className='absolute inset-0 bg-black/70 z-0'></div>
-      
-      {/* NavBar - solo cuando no está el QR */}
-      {!showQR && <NavBar />}
       
       {/* BackButton - solo cuando no está el QR */}
       {!showQR && (

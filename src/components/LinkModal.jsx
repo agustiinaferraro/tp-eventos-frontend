@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getBaseUrl } from '../constants'
-import NavBar from './NavBar'
 import BackButton from './BackButton'
 
 export default function LinkModal() {
@@ -36,7 +35,6 @@ export default function LinkModal() {
       />
       <div className="absolute inset-0 bg-black/70 -z-10"></div>
       
-      <NavBar />
       <div className="pointer-events-none w-full max-w-5xl">
         <BackButton onClick={() => navigate('/sala')} />
       </div>

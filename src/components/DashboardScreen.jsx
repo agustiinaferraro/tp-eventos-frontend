@@ -19,9 +19,7 @@ import { apiGet, apiPost } from '../utils/api'
 import { signOut } from 'firebase/auth'
 
 // NavBar component
-import NavBar from './NavBar'
 import BackButton from './BackButton'
-import Footer from './Footer'
 
 // Componente principal del dashboard
 export default function DashboardScreen() {
@@ -219,14 +217,7 @@ export default function DashboardScreen() {
   return (
     <div className='flex flex-col items-center min-h-screen w-full p-10'>
       
-{/* NavBar con búsqueda */}
-      <NavBar 
-        showSearch={true}
-        searchValue={searchSala}
-        onSearchChange={setSearchSala}
-      />
-      
-      {/* BackButton a Profiles */}
+{/* BackButton a Profiles */}
       <div className="pointer-events-none w-full max-w-5xl">
         <BackButton onClick={() => navigate('/profiles')} />
       </div>
@@ -403,8 +394,6 @@ export default function DashboardScreen() {
           </div>
         </div>
       )}
-      
-      <Footer />
     </div>
   )
 }

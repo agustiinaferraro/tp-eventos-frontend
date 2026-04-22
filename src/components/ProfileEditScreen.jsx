@@ -19,7 +19,6 @@ import { apiGet, apiPost } from '../utils/api'
 // COLORS: array de colores predefinidos desde constants
 import { COLORS } from '../constants'
 
-import NavBar from './NavBar'
 import BackButton from './BackButton'
 
 // Componente principal
@@ -388,7 +387,6 @@ return (
       {/* Overlay oscuro */}
       <div className="absolute inset-0 bg-black/70 -z-10"></div>
       
-      <NavBar />
       <div className="pointer-events-none w-full max-w-5xl">
         <BackButton onClick={() => {
           const savedSala = localStorage.getItem('currentSala')

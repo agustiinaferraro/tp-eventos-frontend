@@ -1,70 +1,70 @@
 // =====================
-// App.jsx - Componente Principal
+// App.jsx - Componente Principal con Layout anidado
 // =====================
 
-// Importamos React para usar JSX
 import React from 'react'
-
-// Importamos las herramientas de enrutamiento de React Router
-// BrowserRouter: Envuelve toda la app para habilitar la navegación
-// Routes: Contenedor para definir las rutas
-// Route: Define cada ruta individual
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
-
-// Importamos el contexto de autenticación (provee usuario actual a toda la app)
+import { BrowserRouter, Routes, Route, Outlet } from 'react-router-dom'
 import { AuthProvider } from './context/AuthContext'
 
-// Importamos todos los componentes de pantalla
-import AuthScreen from './components/AuthScreen'        // Pantalla de login/registro
-import ProfilesScreen from './components/ProfilesScreen'  // Selector de perfiles
-import ProfileEditScreen from './components/ProfileEditScreen'  // Crear/editar perfil
-import DashboardScreen from './components/DashboardScreen'    // Gestión de salas
-import SalaScreen from './components/SalaScreen'          // QR y compartir sala
-import SalaEditScreen from './components/SalaEditScreen'  // Editar sala
-import LinkModal from './components/LinkModal'              // Modal de copiar link
-import StatsScreen from './components/StatsScreen'        // Estadísticas de salas
-import ExperienceEditScreen from './components/ExperienceEditScreen'  // Editar experiencia
+import AuthScreen from './components/AuthScreen'
+import ProfilesScreen from './components/ProfilesScreen'
+import ProfileEditScreen from './components/ProfileEditScreen'
+import DashboardScreen from './components/DashboardScreen'
+import SalaScreen from './components/SalaScreen'
+import SalaEditScreen from './components/SalaEditScreen'
+import LinkModal from './components/LinkModal'
+import StatsScreen from './components/StatsScreen'
+import ExperienceEditScreen from './components/ExperienceEditScreen'
 
-// Componente principal de la aplicación
+import NavBar from './components/NavBar'
+import Footer from './components/Footer'
+
+// Layout común (similar a Next.js layout.js)
+// Props permite controlar visibility del NavBar
+function AppLayout({ showNavBar = true, showFooter = true }) {
+  return (
+    <>
+      {showNavBar && <NavBar />}
+      <Outlet />
+      {showFooter && <Footer />}
+    </>
+  )
+}
+
+// Layout vacío para Auth (sin Nav/Footer)
+function AuthLayout() {
+  return <Outlet />
+}
+
 function App() {
   return (
-    // AuthProvider envuelve toda la app para que cualquier componente pueda acceder al usuario
     <AuthProvider>
-      {/* BrowserRouter habilita la navegación sin recargar la página */}
       <BrowserRouter>
-        {/* Routes contiene todas las definiciones de rutas */}
         <Routes>
-          {/* Ruta principal: muestra AuthScreen (login/registro) */}
-          <Route path="/" element={<AuthScreen />} />
-          
-          {/* Ruta de perfiles: después de login */}
-          <Route path="/profiles" element={<ProfilesScreen />} />
-          
-          {/* Ruta para crear nuevo perfil o editar existente */}
-          <Route path="/profiles/edit" element={<ProfileEditScreen />} />
-          
-          {/* Ruta del dashboard: muestra las salas disponibles */}
-          <Route path="/dashboard" element={<DashboardScreen />} />
-          
-          {/* Ruta de sala: muestra QR y opciones de compartir */}
-          <Route path="/sala" element={<SalaScreen />} />
-          
-          {/* Ruta para editar sala (nombre, color, imagen) */}
-          <Route path="/sala/edit" element={<SalaEditScreen />} />
-          
-          {/* Ruta de estadísticas */}
-          <Route path="/stats" element={<StatsScreen />} />
-          
-          {/* Ruta de link para compartir (pantalla independiente) */}
-          <Route path="/link" element={<LinkModal />} />
-          
-          {/* Ruta para editar experiencia de sala */}
-          <Route path="/experience/edit" element={<ExperienceEditScreen />} />
+          {/* Auth: sin layout */}
+          <Route element={<AuthLayout />}>
+            <Route path="/" element={<AuthScreen />} />
+          </Route>
+
+          {/* Dashboard y otros: con layout completo */}
+          <Route element={<AppLayout />}>
+            <Route path="/profiles" element={<ProfilesScreen />} />
+            <Route path="/profiles/edit" element={<ProfileEditScreen />} />
+            <Route path="/dashboard" element={<DashboardScreen />} />
+            <Route path="/stats" element={<StatsScreen />} />
+            <Route path="/experience/edit" element={<ExperienceEditScreen />} />
+            <Route path="/sala/edit" element={<SalaEditScreen />} />
+            <Route path="/link" element={<LinkModal />} />
+          </Route>
+
+          {/* Sala: sin NavBar para que no moleste al QR */}
+          <Route element={<AppLayout showNavBar={false} showFooter={false} />}>
+            <Route path="/sala" element={<SalaScreen />} />
+          </Route>
         </Routes>
       </BrowserRouter>
     </AuthProvider>
   )
 }
 
-// Exportamos App como componente default
 export default App

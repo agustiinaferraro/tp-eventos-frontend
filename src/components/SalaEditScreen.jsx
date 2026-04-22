@@ -7,7 +7,6 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { apiPost, generateImageWithAI } from '../utils/api'
 
-import NavBar from './NavBar'
 import BackButton from './BackButton'
 
 const COLORS = ['#22c55e', '#ef4444', '#3b82f6', '#f59e0b', '#8b5cf6', '#ec4899', '#14b8a6', '#f97316']
@@ -215,7 +214,6 @@ return (
       {/* Overlay oscuro */}
       <div className="absolute inset-0 bg-black/70 -z-10"></div>
       
-      <NavBar />
       <div className="pointer-events-none w-full max-w-5xl">
         <BackButton onClick={() => navigate('/sala')} />
       </div>
