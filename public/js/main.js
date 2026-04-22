@@ -54,7 +54,7 @@
       updateMilestoneColors(pts);
       applyExperience();
       applyLevelExperience(pts);
-      createContinuousParticles();
+      createContinuousParticles(pts);
     }
   });
 
@@ -141,7 +141,7 @@
     
     // Recrear partículas con nuevo color
     if (document.body.classList.contains('effects-active') || document.body.classList.contains('effects-level-2')) {
-      createContinuousParticles();
+      createContinuousParticles(points);
     }
     
     // Fondo
@@ -158,25 +158,25 @@
   }
   
   function updateMilestoneColors(points = 0) {
-    let c0 = experience.level0?.color || '#ff6b00';
-    let c500 = experience.level1?.color || '#ffdd00';
-    let c1000 = experience.level2?.color || '#00ff88';
+    const level = getLevelKey(points);
+    const lvl = experience[level];
+    const color = lvl?.color || '#ff6b00';
     
     const m0 = document.getElementById('milestoneNum0');
     const m500 = document.getElementById('milestoneNum500');
     const m1000 = document.getElementById('milestoneNum1000');
     
     if (m0) {
-      m0.style.color = c0;
-      m0.style.textShadow = '0 0 15px ' + c0;
+      m0.style.color = color;
+      m0.style.textShadow = '0 0 15px ' + color;
     }
     if (m500) {
-      m500.style.color = c500;
-      m500.style.textShadow = '0 0 15px ' + c500;
+      m500.style.color = color;
+      m500.style.textShadow = '0 0 15px ' + color;
     }
     if (m1000) {
-      m1000.style.color = c1000;
-      m1000.style.textShadow = '0 0 15px ' + c1000;
+      m1000.style.color = color;
+      m1000.style.textShadow = '0 0 15px ' + color;
     }
     
     const minorIds = ['m125', 'm250', 'm375', 'm625', 'm750', 'm875'];
@@ -351,7 +351,7 @@
 
   effectsContainer.classList.add('active', 'level-1');
   document.body.classList.add('effects-active');
-  createContinuousParticles();
+  createContinuousParticles(0);
 
   let lastProgress = 0;
   socket.on("stateUpdate", (data) => {
@@ -388,7 +388,7 @@
         effectsContainer.classList.add('level-3');
         document.body.classList.remove('effects-active', 'effects-level-2');
         document.body.classList.add('effects-level-3');
-        createContinuousParticles();
+        createContinuousParticles(data.points);
         showUnlockEffects('¡NIVEL FINAL!', 3);
       }
     } else if (data.gestureActive) {
@@ -424,7 +424,7 @@
         effectsContainer.classList.add('level-2');
         document.body.classList.remove('effects-active');
         document.body.classList.add('effects-level-2');
-        createContinuousParticles();
+        createContinuousParticles(points);
         showUnlockEffects('¡EFECTOS DESBLOQUEADOS!', 2);
       } else if (points < 500 && level2Unlocked) {
         level2Unlocked = false;
@@ -495,10 +495,11 @@
     nearThresholdOverlay.classList.remove("active");
   }
 
-  function createContinuousParticles() {
+  function createContinuousParticles(points = 0) {
     if (!effectsParticles) return;
     effectsParticles.innerHTML = '';
-    const color = experience.level0?.color || '#ff6b00';
+    const level = getLevelKey(points);
+    const color = experience[level]?.color || experience.level0?.color || '#ff6b00';
     const particleCount = experience.effects?.particleCount || 40;
     for (let i = 0; i < particleCount; i++) {
       const particle = document.createElement('span');
