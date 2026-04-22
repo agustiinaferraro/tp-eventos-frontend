@@ -3,11 +3,18 @@
 // =====================
 
 import React from 'react'
-import { Outlet } from 'react-router-dom'
+import { Outlet, useLocation } from 'react-router-dom'
 import NavBar from './NavBar'
 import Footer from './Footer'
 
 export default function Layout() {
+  const location = useLocation()
+  
+  // Auth Screen no tiene Nav/Footer
+  if (location.pathname === '/') {
+    return <Outlet />
+  }
+  
   return (
     <>
       <NavBar />

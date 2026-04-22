@@ -23,10 +23,8 @@ function App() {
     <AuthProvider>
       <BrowserRouter>
         <Routes>
-          {/* Auth - sin Nav/Footer */}
           <Route path="/" element={<AuthScreen />} />
           
-          {/* Resto - con Layout común */}
           <Route element={<Layout />}>
             <Route path="/profiles" element={<ProfilesScreen />} />
             <Route path="/profiles/edit" element={<ProfileEditScreen />} />
