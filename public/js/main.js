@@ -50,9 +50,10 @@
   window.addEventListener('message', (event) => {
     if (event.data && event.data.type === 'EXPERIENCE_PREVIEW') {
       experience = event.data.config.experience;
-      applyExperience();
       updateMilestoneColors();
+      applyExperience();
       applyLevelExperience(event.data.config.points || 0);
+      updateMilestoneColors();
     }
   });
 
