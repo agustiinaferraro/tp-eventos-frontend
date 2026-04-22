@@ -63,6 +63,7 @@ useEffect(() => {
   // =====================
   const showQRModal = () => {
     setShowQR(true)
+    window.history.replaceState({}, '', '?qr=open')
     
     // Esperamos 100ms a que se renderice el modal
     // luego generamos el código QR
@@ -201,7 +202,10 @@ useEffect(() => {
       <QRModal 
         sala={sala} 
         show={showQR} 
-        onClose={() => setShowQR(false)} 
+        onClose={() => {
+          setShowQR(false)
+          window.history.replaceState({}, '', window.location.pathname)
+        }} 
       />
 
       </div>
