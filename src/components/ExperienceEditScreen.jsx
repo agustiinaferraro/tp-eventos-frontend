@@ -120,16 +120,16 @@ export default function ExperienceEditScreen() {
   }
 
   function handleColorChange(color) {
-    updateLevel(currentLevel, 'color', color)
+    const newExp = {
+      ...experience,
+      level0: { ...experience.level0, color },
+      level1: { ...experience.level1, color },
+      level2: { ...experience.level2, color }
+    }
+    setExperience(newExp)
     if (iframeRef.current) {
-      const config = {
-        points: previewPoints,
-        room: sala?.name || 'test',
-        experience: { ...experience, [currentLevel]: { ...experience[currentLevel], color } },
-        currentLevel: currentLevel
-      }
       try {
-        iframeRef.current.contentWindow?.postMessage({ type: 'EXPERIENCE_PREVIEW', config }, '*')
+        iframeRef.current.contentWindow?.postMessage({ type: 'EXPERIENCE_PREVIEW', config: { points: previewPoints, room: sala?.name || 'test', experience: newExp, currentLevel } }, '*')
       } catch (e) {}
     }
   }
@@ -240,8 +240,6 @@ export default function ExperienceEditScreen() {
             {saving ? '...' : 'GUARDAR'}
           </button>
         </div>
-
-        {}
       </div>
     </div>
   )
