@@ -49,13 +49,12 @@
   // Listener para preview en tiempo real desde el editor
   window.addEventListener('message', (event) => {
     if (event.data && event.data.type === 'EXPERIENCE_PREVIEW') {
-      var newExp = event.data.config.experience;
-      var debugMode = false;
-      if (debugMode) alert('RECEIVED! lvl1=' + newExp.level1?.color + ' lvl2=' + newExp.level2?.color);
-      experience = newExp;
+      experience = event.data.config.experience;
+      var pts = event.data.config.points || 0;
       updateMilestoneColors();
       applyExperience();
-      applyLevelExperience(event.data.config.points || 0);
+      applyLevelExperience(pts);
+      createContinuousParticles();
     }
   });
 
