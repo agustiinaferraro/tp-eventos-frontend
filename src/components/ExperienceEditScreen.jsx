@@ -25,6 +25,7 @@ export default function ExperienceEditScreen() {
   const [showBgMenu, setShowBgMenu] = useState(false)
   const [bgInput, setBgInput] = useState('')
   const [bgInputVisible, setBgInputVisible] = useState(false)
+  const skipPreviewRef = useRef(false)
   const [experience, setExperience] = useState({
     level0: { color: '#ff6b00', background: null, backgroundImage: null, particles: true, message: '¡Sumá tu energía!' },
     level1: { color: '#ffdd00', background: null, backgroundImage: null, particles: true, message: '¡Casi llegamos!' },
@@ -43,6 +44,10 @@ export default function ExperienceEditScreen() {
   }, [])
 
   useEffect(() => {
+    if (skipPreviewRef.current) {
+      skipPreviewRef.current = false
+      return
+    }
     if (iframeRef.current) {
       const currentLevelKey = getLevelForPoints(previewPoints)
       const config = {
@@ -121,6 +126,7 @@ export default function ExperienceEditScreen() {
 
   function handleColorChange(color) {
     const levelKey = getLevelForPoints(previewPoints)
+    skipPreviewRef.current = true
     const newExp = {
       ...experience,
       [levelKey]: { ...experience[levelKey], color }
