@@ -5,11 +5,13 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth, auth } from '../context/AuthContext'
+import { useApp } from '../context/AppContext'
 import { signOut } from 'firebase/auth'
 
-export default function NavBar({ showSearch = true, searchValue = '', onSearchChange = () => {} }) {
+export default function NavBar() {
   const navigate = useNavigate()
   const { user, profiles, currentProfile: authCurrentProfile } = useAuth()
+  const { searchQuery, setSearchQuery } = useApp()
   const [showDropdown, setShowDropdown] = useState(false)
   const [showSwitchModal, setShowSwitchModal] = useState(false)
   
@@ -57,23 +59,21 @@ export default function NavBar({ showSearch = true, searchValue = '', onSearchCh
         <span className='text-white font-bold text-xl'>E</span>
       </div>
       
-      {/* Buscador de salas (CENTRADO) - solo si showSearch es true */}
-      {showSearch && (
-        <div className='flex-1 max-w-xs mx-4'>
-          <div className='relative'>
-            <svg className='absolute left-2 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500 mr-2' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-              <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z' />
-            </svg>
-            <input
-              type='text'
-              className='w-full bg-zinc-900 border border-zinc-700 text-white pl-8 p-2 rounded-lg outline-none focus:border-green-400 placeholder-zinc-500 text-sm'
-              placeholder='Buscar sala...'
-              value={searchValue}
-              onChange={(e) => onSearchChange(e.target.value)}
-            />
-          </div>
+      {/* Buscador de salas (CENTRADO) */}
+      <div className='flex-1 max-w-xs mx-4'>
+        <div className='relative'>
+          <svg className='absolute left-2 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500 mr-2' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+            <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z' />
+          </svg>
+          <input
+            type='text'
+            className='w-full bg-zinc-900 border border-zinc-700 text-white pl-8 p-2 rounded-lg outline-none focus:border-green-400 placeholder-zinc-500 text-sm'
+            placeholder='Buscar sala...'
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
         </div>
-      )}
+      </div>
       
       {/* Menú del usuario (A LA DERECHA) */}
       <div

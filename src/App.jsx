@@ -5,6 +5,7 @@
 import React from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { AuthProvider } from './context/AuthContext'
+import { AppProvider } from './context/AppContext'
 
 import Layout from './components/Layout'
 
@@ -21,22 +22,23 @@ import ExperienceEditScreen from './components/ExperienceEditScreen'
 function App() {
   return (
     <AuthProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<AuthScreen />} />
-          
-          <Route element={<Layout />}>
-            <Route path="/profiles" element={<ProfilesScreen />} />
-            <Route path="/profiles/edit" element={<ProfileEditScreen />} />
-            <Route path="/dashboard" element={<DashboardScreen />} />
-            <Route path="/sala" element={<SalaScreen />} />
-            <Route path="/sala/edit" element={<SalaEditScreen />} />
-            <Route path="/stats" element={<StatsScreen />} />
-            <Route path="/link" element={<LinkModal />} />
-            <Route path="/experience/edit" element={<ExperienceEditScreen />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
+      <AppProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<AuthScreen />} />
+            <Route element={<Layout />}>
+              <Route path="/profiles" element={<ProfilesScreen />} />
+              <Route path="/profiles/edit" element={<ProfileEditScreen />} />
+              <Route path="/dashboard" element={<DashboardScreen />} />
+              <Route path="/sala" element={<SalaScreen />} />
+              <Route path="/sala/edit" element={<SalaEditScreen />} />
+              <Route path="/stats" element={<StatsScreen />} />
+              <Route path="/link" element={<LinkModal />} />
+              <Route path="/experience/edit" element={<ExperienceEditScreen />} />
+            </Route>
+          </Routes>
+        </BrowserRouter>
+      </AppProvider>
     </AuthProvider>
   )
 }

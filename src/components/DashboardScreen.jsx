@@ -11,6 +11,7 @@ import { useNavigate } from 'react-router-dom'
 // useAuth: usuario actual
 // auth: instancia de Firebase Auth
 import { useAuth, auth } from '../context/AuthContext'
+import { useApp } from '../context/AppContext'
 
 // API del backend
 import { apiGet, apiPost } from '../utils/api'
@@ -25,6 +26,7 @@ import BackButton from './BackButton'
 export default function DashboardScreen() {
   // Usuario actual
   const { user } = useAuth()
+  const { searchQuery } = useApp()
   
   // Navegación
   const navigate = useNavigate()
@@ -46,9 +48,6 @@ export default function DashboardScreen() {
   
   // savedAccounts: cuentas guardadas en localStorage para quick switch
   const [savedAccounts, setSavedAccounts] = useState([])
-  
-  // searchSala: para buscar salas
-  const [searchSala, setSearchSala] = useState('')
   
   // showCreateSalaModal: si el modal de crear sala está visible
   const [showCreateSalaModal, setShowCreateSalaModal] = useState(false)
@@ -237,7 +236,7 @@ export default function DashboardScreen() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full max-w-5xl">
         
         {/* Recorremos las salas y las mostramos (filtradas por búsqueda) */}
-        {salas.filter(s => s.name.toLowerCase().includes(searchSala.toLowerCase())).map((sala, i) => (
+        {salas.filter(s => s.name.toLowerCase().includes(searchQuery.toLowerCase())).map((sala, i) => (
           <div
             key={sala.id || i}
             className="border border-zinc-700 rounded-lg p-10 cursor-pointer transition-all hover:border-green-400 hover:scale-[1.02] relative overflow-hidden"
