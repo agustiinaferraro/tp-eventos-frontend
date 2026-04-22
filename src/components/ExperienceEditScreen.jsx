@@ -277,6 +277,7 @@ export default function ExperienceEditScreen() {
           {saving ? 'Guardando...' : 'GUARDAR Y SALIR'}
         </button>
       </div>
+      </div>
       )}
     </div>
   )
