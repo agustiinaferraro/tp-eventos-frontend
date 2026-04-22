@@ -51,6 +51,7 @@
     if (event.data && event.data.type === 'EXPERIENCE_PREVIEW') {
       experience = event.data.config.experience;
       applyExperience();
+      updateMilestoneColors();
       applyLevelExperience(event.data.config.points || 0);
     }
   });
@@ -62,9 +63,11 @@
         const data = await res.json();
         experience = data.experience;
         applyExperience();
+        applyLevelExperience(0);
       }
     } catch (e) {
       console.log('Usando experiencia por defecto');
+      applyLevelExperience(0);
     }
   }
 
