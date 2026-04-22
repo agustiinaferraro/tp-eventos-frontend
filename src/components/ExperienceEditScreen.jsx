@@ -125,10 +125,10 @@ export default function ExperienceEditScreen() {
   }
 
   function handleColorChange(color) {
+    const levelKey = getLevelForPoints(previewPoints)
     const newExp = {
-      level0: { ...experience.level0, color },
-      level1: { ...experience.level1, color },
-      level2: { ...experience.level2, color }
+      ...experience,
+      [levelKey]: { ...experience[levelKey], color }
     }
     setExperience(newExp)
   }
