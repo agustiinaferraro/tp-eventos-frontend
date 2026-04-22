@@ -122,8 +122,8 @@
       bar.style.boxShadow = '0 0 20px ' + color;
     }
     
-    // "Faltan X puntos" - usar lógica original (blanco con números colored)
-    // Se regenera cuando se actualiza el estado desde el servidor
+    // Actualizar colores de milestones (0, 500, 1000)
+    updateMilestoneColors();
     
     // Recrear partículas con nuevo color
     if (document.body.classList.contains('effects-active') || document.body.classList.contains('effects-level-2')) {
@@ -140,6 +140,29 @@
     } else if (!lvl.background) {
       document.body.style.backgroundColor = '#000';
       document.body.style.backgroundImage = 'none';
+    }
+  }
+  
+  function updateMilestoneColors() {
+    const lvl0 = experience.level0;
+    const lvl1 = experience.level1;
+    const lvl2 = experience.level2;
+    
+    const m0 = document.getElementById('milestoneNum0');
+    const m500 = document.getElementById('milestoneNum500');
+    const m1000 = document.getElementById('milestoneNum1000');
+    
+    if (m0) {
+      m0.style.color = lvl0?.color || '#ff6b00';
+      m0.style.textShadow = '0 0 15px ' + (lvl0?.color || '#ff6b00');
+    }
+    if (m500) {
+      m500.style.color = lvl1?.color || '#ffdd00';
+      m500.style.textShadow = '0 0 15px ' + (lvl1?.color || '#ffdd00');
+    }
+    if (m1000) {
+      m1000.style.color = lvl2?.color || '#00ff88';
+      m1000.style.textShadow = '0 0 15px ' + (lvl2?.color || '#00ff88');
     }
   }
 
@@ -241,6 +264,9 @@
   const motionIndicator = document.getElementById("motionIndicator");
   const tiltIndicator = document.getElementById("tiltIndicator");
   const pumpsToGoEl = document.getElementById("pumpsToGo");
+  const milestoneNum0 = document.getElementById("milestoneNum0");
+  const milestoneNum500 = document.getElementById("milestoneNum500");
+  const milestoneNum1000 = document.getElementById("milestoneNum1000");
 
   const THRESHOLDS = [0, 125, 250, 375, 500, 625, 750, 875, 1000];
 
@@ -266,6 +292,7 @@
 
   // Cargar experiencia inmediatamente
   loadExperience();
+  setTimeout(updateMilestoneColors, 500);
 
   socket.on("connect", () => {
     connectionStatus.classList.add("connected");
