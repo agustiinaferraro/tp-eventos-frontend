@@ -20,18 +20,18 @@ import NavBar from './components/NavBar'
 import Footer from './components/Footer'
 
 // Layout común (similar a Next.js layout.js)
-// Props permite controlar visibility del NavBar
 function AppLayout({ showNavBar = true, showFooter = true }) {
   return (
-    <>
+    <div className="min-h-screen flex flex-col">
       {showNavBar && <NavBar />}
-      <Outlet />
+      <div className="flex-1">
+        <Outlet />
+      </div>
       {showFooter && <Footer />}
-    </>
+    </div>
   )
 }
 
-// Layout vacío para Auth (sin Nav/Footer)
 function AuthLayout() {
   return <Outlet />
 }
