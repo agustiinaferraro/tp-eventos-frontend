@@ -22,6 +22,7 @@ export default function ExperienceEditScreen() {
   const [saving, setSaving] = useState(false)
   const [sala, setSala] = useState(null)
   const [previewPoints, setPreviewPoints] = useState(0)
+  const [showControls, setShowControls] = useState(false)
   const [experience, setExperience] = useState({
     level0: { color: '#ff6b00', background: null, backgroundImage: null, particles: true, message: '¡Sumá tu energía!' },
     level1: { color: '#ffdd00', background: null, backgroundImage: null, particles: true, message: '¡Casi llegamos!' },
@@ -122,29 +123,27 @@ export default function ExperienceEditScreen() {
   }
 
   return (
-    <div className="min-h-screen bg-black flex flex-col">
-      <div className="p-4 pb-2">
-        <BackButton onClick={handleBack} />
-        
-        <h1 className="text-xl text-green-400 tracking-wider mt-3 mb-2">
-          PERSONALIZAR EXPERIENCIA
-        </h1>
-
-      </div>
-
-      <div className="flex-shrink-0 px-4">
+    <div className="min-h-screen bg-black">
+      <div className="fixed inset-0">
         <iframe
           ref={iframeRef}
           src={experienceUrl}
-          className="w-full border-2 border-green-400 rounded-lg"
-          style={{ height: '35vh' }}
+          className="w-full h-full border-0"
           title="Preview experiencia"
           allow="accelerometer"
         />
       </div>
 
-      <div className="flex-1 overflow-y-auto px-4 pb-4">
-        <div className="bg-zinc-900 rounded-xl p-4 mt-3">
+      <button
+        onClick={() => setShowControls(!showControls)}
+        className="fixed top-16 right-4 z-50 bg-green-600 text-white px-4 py-2 rounded-lg shadow-lg"
+      >
+        {showControls ? '✕' : '⚙️'}
+      </button>
+
+      {showControls && (
+      <div className="fixed inset-0 z-40 bg-black bg-opacity-90 overflow-y-auto p-4">
+        <div className="max-w-md mx-auto bg-zinc-900 rounded-xl p-4">
           <div className="flex justify-between text-xs text-zinc-500 mb-2">
             <span>0</span>
             <span>500</span>
@@ -251,7 +250,6 @@ export default function ExperienceEditScreen() {
               }`} />
             </button>
           </div>
-        </div>
 
         <div className="bg-zinc-900 rounded-xl p-4 mt-3">
           <h2 className="text-base text-white mb-3">Efectos globales</h2>
@@ -279,6 +277,7 @@ export default function ExperienceEditScreen() {
           {saving ? 'Guardando...' : 'GUARDAR Y SALIR'}
         </button>
       </div>
+      )}
     </div>
   )
 }
