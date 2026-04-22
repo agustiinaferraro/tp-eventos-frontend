@@ -157,22 +157,32 @@
     const lvl1 = experience.level1;
     const lvl2 = experience.level2;
     
-    const m0 = document.getElementById('milestoneNum0');
-    const m500 = document.getElementById('milestoneNum500');
-    const m1000 = document.getElementById('milestoneNum1000');
+    const thresholds = [
+      { id: 'm125', points: 125, color: lvl0?.color },
+      { id: 'm250', points: 250, color: lvl0?.color },
+      { id: 'm375', points: 375, color: lvl0?.color },
+      { id: 'm625', points: 625, color: lvl1?.color },
+      { id: 'm750', points: 750, color: lvl1?.color },
+      { id: 'm875', points: 875, color: lvl1?.color },
+      { id: 'milestoneNum0', points: 0, color: lvl0?.color },
+      { id: 'milestoneNum500', points: 500, color: lvl1?.color },
+      { id: 'milestoneNum1000', points: 1000, color: lvl2?.color }
+    ];
     
-    if (m0) {
-      m0.style.color = lvl0?.color || '#ff6b00';
-      m0.style.textShadow = '0 0 15px ' + (lvl0?.color || '#ff6b00');
-    }
-    if (m500) {
-      m500.style.color = lvl1?.color || '#ffdd00';
-      m500.style.textShadow = '0 0 15px ' + (lvl1?.color || '#ffdd00');
-    }
-    if (m1000) {
-      m1000.style.color = lvl2?.color || '#00ff88';
-      m1000.style.textShadow = '0 0 15px ' + (lvl2?.color || '#00ff88');
-    }
+    thresholds.forEach(t => {
+      const el = document.getElementById(t.id);
+      if (el) {
+        const c = t.color || getDefaultColor(t.points);
+        el.style.color = c;
+        el.style.textShadow = '0 0 10px ' + c;
+      }
+    });
+  }
+  
+  function getDefaultColor(points) {
+    if (points >= 1000) return '#00ff88';
+    if (points >= 500) return '#ffdd00';
+    return '#ff6b00';
   }
 
   function getPendingEnergy() {
