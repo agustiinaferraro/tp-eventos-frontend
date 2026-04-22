@@ -125,6 +125,15 @@
     // Actualizar colores de milestones (0, 500, 1000)
     updateMilestoneColors();
     
+    // Actualizar texto "Faltan X movimientos"
+    const nextThreshold = getNextThreshold(points);
+    const remaining = nextThreshold - Math.floor(points);
+    const nextLvl = experience[getLevelKey(nextThreshold)];
+    const targetColor = nextLvl?.color || color;
+    if (pumpsToGoEl && remaining > 0) {
+      pumpsToGoEl.innerHTML = `Faltan <span class="big-number" style="color:${color}">${remaining}</span> movimientos para llegar a los <span class="big-number" style="color:${targetColor}">${nextThreshold}</span> puntos`;
+    }
+    
     // Recrear partículas con nuevo color
     if (document.body.classList.contains('effects-active') || document.body.classList.contains('effects-level-2')) {
       createContinuousParticles();
