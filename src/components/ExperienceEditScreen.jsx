@@ -23,8 +23,8 @@ export default function ExperienceEditScreen() {
   const [sala, setSala] = useState(null)
   const [previewPoints, setPreviewPoints] = useState(0)
   const [showBgMenu, setShowBgMenu] = useState(false)
-  const [showIaInput, setShowIaInput] = useState(false)
-  const [bgUrlInput, setBgUrlInput] = useState('')
+  const [bgInput, setBgInput] = useState('')
+  const [bgInputVisible, setBgInputVisible] = useState(false)
   const [experience, setExperience] = useState({
     level0: { color: '#ff6b00', background: null, backgroundImage: null, particles: true, message: '¡Sumá tu energía!' },
     level1: { color: '#ffdd00', background: null, backgroundImage: null, particles: true, message: '¡Casi llegamos!' },
@@ -119,13 +119,51 @@ export default function ExperienceEditScreen() {
     )
   }
 
+  function handleColorChange(color) {
+    updateLevel(currentLevel, 'color', color)
+    if (iframeRef.current) {
+      const config = {
+        points: previewPoints,
+        room: sala?.name || 'test',
+        experience: { ...experience, [currentLevel]: { ...experience[currentLevel], color } },
+        currentLevel: currentLevel
+      }
+      try {
+        iframeRef.current.contentWindow?.postMessage({ type: 'EXPERIENCE_PREVIEW', config }, '*')
+      } catch (e) {}
+    }
+  }
+
   return (
     <div className="h-screen bg-black flex flex-col overflow-hidden">
-      <div className="p-2 bg-zinc-950 flex justify-between items-center">
-        <BackButton onClick={handleBack} />
-        <span className="text-white font-bold text-sm">{sala?.name || 'Preview'}</span>
-        <div className="w-8" />
-      </div>
+      {bgInputVisible ? (
+        <div className="p-2 bg-zinc-950 flex justify-between items-center">
+          <BackButton onClick={() => setBgInputVisible(false)} />
+          <input
+            type="text"
+            value={bgInput}
+            onChange={(e) => setBgInput(e.target.value)}
+            placeholder="URL de imagen..."
+            className="flex-1 mx-2 bg-zinc-800 text-white text-sm p-1 rounded max-w-40"
+            onKeyDown={(e) => e.key === 'Enter' && updateLevel(currentLevel, 'backgroundImage', bgInput)}
+          />
+          <button
+            onClick={() => { updateLevel(currentLevel, 'backgroundImage', bgInput); setBgInputVisible(false) }}
+            className="text-green-500 text-sm"
+          >
+            ✓
+          </button>
+        </div>
+      ) : (
+        <div className="fixed top-2 right-2 z-50 flex gap-2">
+          <button
+            onClick={handleBack}
+            className="bg-zinc-800 text-white p-2 rounded-full text-xs"
+          >
+            ✕
+          </button>
+        </div>
+      )}
 
       <div className="flex-1 relative">
         <iframe
@@ -163,7 +201,7 @@ export default function ExperienceEditScreen() {
             <input
               type="color"
               value={currentLvl.color}
-              onChange={(e) => updateLevel(currentLevel, 'color', e.target.value)}
+              onChange={(e) => handleColorChange(e.target.value)}
               className="w-14 h-14 rounded-lg cursor-pointer border-2 border-zinc-700"
             />
           </div>
@@ -185,19 +223,7 @@ export default function ExperienceEditScreen() {
                   IA (proximamente)
                 </button>
                 <button
-                  onClick={() => setShowBgMenu(false)}
-                  className="block w-full text-left text-sm text-zinc-300 hover:bg-zinc-700 p-2 rounded"
-                >
-                  Galería
-                </button>
-                <button
-                  onClick={() => { updateLevel(currentLevel, 'background', '#000'); updateLevel(currentLevel, 'backgroundImage', null); setShowBgMenu(false) }}
-                  className="block w-full text-left text-sm text-zinc-300 hover:bg-zinc-700 p-2 rounded"
-                >
-                  Color
-                </button>
-                <button
-                  onClick={() => { setBgUrlInput(''); setShowIaInput(true); setShowBgMenu(false) }}
+                  onClick={() => { setBgInputVisible(true); setShowBgMenu(false) }}
                   className="block w-full text-left text-sm text-zinc-300 hover:bg-zinc-700 p-2 rounded"
                 >
                   Internet
@@ -215,31 +241,7 @@ export default function ExperienceEditScreen() {
           </button>
         </div>
 
-        {showIaInput && (
-          <div className="mt-3">
-            <div className="flex gap-2">
-              <input
-                type="text"
-                value={bgUrlInput}
-                onChange={(e) => setBgUrlInput(e.target.value)}
-                placeholder="URL imagen..."
-                className="flex-1 max-w-32 bg-zinc-700 text-white p-2 rounded text-xs"
-              />
-              <button
-                onClick={() => { updateLevel(currentLevel, 'backgroundImage', bgUrlInput); setShowIaInput(false) }}
-                className="bg-green-600 text-white px-3 py-2 rounded text-xs"
-              >
-                ✓
-              </button>
-              <button
-                onClick={() => setShowIaInput(false)}
-                className="bg-zinc-700 text-white px-3 py-2 rounded text-xs"
-              >
-                ✕
-              </button>
-            </div>
-          </div>
-        )}
+        {}
       </div>
     </div>
   )
