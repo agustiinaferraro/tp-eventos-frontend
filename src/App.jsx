@@ -24,7 +24,7 @@ function AppLayout({ showNavBar = true, showFooter = true }) {
   return (
     <div className="min-h-screen flex flex-col">
       {showNavBar && <NavBar />}
-      <div className="flex-1">
+      <div className="flex-1 pt-4">
         <Outlet />
       </div>
       {showFooter && <Footer />}
