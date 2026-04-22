@@ -9,12 +9,16 @@ import Footer from './Footer'
 
 export default function Layout() {
   const location = useLocation()
-  
-  // Auth Screen no tiene Nav/Footer
-  if (location.pathname === '/') {
+
+  // Ocultar Nav/Footer en pantallas específicas
+  const hideLayout =
+    location.pathname === '/' ||
+    location.pathname.includes('experiencia')
+
+  if (hideLayout) {
     return <Outlet />
   }
-  
+
   return (
     <>
       <NavBar />
