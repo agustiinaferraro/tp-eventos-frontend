@@ -56,6 +56,7 @@ export default function ExperienceEditScreen() {
         experience: experience,
         currentLevel: currentLevelKey
       }
+      console.log('useEffect sending - level1:', experience.level1?.color)
       try {
         iframeRef.current.contentWindow?.postMessage(
           { type: 'EXPERIENCE_PREVIEW', config },
@@ -126,10 +127,12 @@ export default function ExperienceEditScreen() {
 
   function handleColorChange(color) {
     const levelKey = getLevelForPoints(previewPoints)
+    console.log('handleColorChange - level:', levelKey, 'new color:', color)
     const newExp = {
       ...experience,
       [levelKey]: { ...experience[levelKey], color }
     }
+    console.log('newExp.level1:', newExp.level1?.color)
     setExperience(newExp)
   }
 
