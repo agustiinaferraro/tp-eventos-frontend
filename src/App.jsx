@@ -21,9 +21,12 @@ import Footer from './components/Footer'
 
 // Layout común (similar a Next.js layout.js)
 function AppLayout({ showNavBar = true, showFooter = true }) {
+  // Ocultar NavBar si hay param ?qr=open en la URL
+  const hideNav = typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('qr') === 'open'
+  
   return (
     <div className="min-h-screen flex flex-col">
-      {showNavBar && <NavBar />}
+      {showNavBar && !hideNav && <NavBar />}
       <div className="flex-1 pt-4">
         <Outlet />
       </div>
