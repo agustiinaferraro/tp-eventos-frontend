@@ -48,9 +48,11 @@
 
   // Listener para preview en tiempo real desde el editor
   window.addEventListener('message', (event) => {
+    console.log('Received EXPERIENCE_PREVIEW', event.data?.config?.experience);
     if (event.data && event.data.type === 'EXPERIENCE_PREVIEW') {
       experience = event.data.config.experience;
       updateMilestoneColors();
+      console.log('Updated milestone colors - level1:', experience.level1?.color, 'level2:', experience.level2?.color);
       applyExperience();
       applyLevelExperience(event.data.config.points || 0);
       updateMilestoneColors();
@@ -160,6 +162,8 @@
     const lvl0 = experience.level0;
     const lvl1 = experience.level1;
     const lvl2 = experience.level2;
+    
+    console.log('updateMilestoneColors - lvl0:', lvl0?.color, 'lvl1:', lvl1?.color, 'lvl2:', lvl2?.color);
     
     const c0 = lvl0?.color || '#ff6b00';
     const c500 = lvl1?.color || '#ffdd00';
