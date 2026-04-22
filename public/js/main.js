@@ -49,8 +49,9 @@
   // Listener para preview en tiempo real desde el editor
   window.addEventListener('message', (event) => {
     if (event.data && event.data.type === 'EXPERIENCE_PREVIEW') {
-      experience = event.data.config.experience;
-      console.log('RECEIVED POSTMESSAGE - level1 color:', experience.level1?.color, 'level2:', experience.level2?.color);
+      var newExp = event.data.config.experience;
+      alert('RECEIVED! lvl1=' + newExp.level1?.color);
+      experience = newExp;
       updateMilestoneColors();
       applyExperience();
       applyLevelExperience(event.data.config.points || 0);
@@ -157,7 +158,7 @@
   }
   
   function updateMilestoneColors() {
-    console.log('updateMilestoneColors called! exp:', experience);
+    alert('updateMilestoneColors run! lvl1=' + experience?.level1?.color);
     
     let c0 = '#ff6b00';
     let c500 = '#ffdd00';
@@ -169,7 +170,7 @@
       c1000 = experience.level2?.color || c1000;
     }
     
-    console.log('Setting colors - 0:', c0, '500:', c500, '1000:', c1000);
+    alert('Setting - 0:' + c0 + ',500:' + c500 + ',1000:' + c1000);
     
     const m0 = document.getElementById('milestoneNum0');
     const m500 = document.getElementById('milestoneNum500');
