@@ -47,7 +47,7 @@ export default function NavBar({ showSearch = true, searchValue = '', onSearchCh
   }
   
   return (
-    <nav className='w-full max-w-5xl flex justify-between items-center relative z-20'>
+    <nav className='w-full flex justify-center items-center relative z-20 px-4 py-3' style={{ maxWidth: '1280px' }}>
       
       {/* Logo a la izquierda (clickeable -> Dashboard) */}
       <div 

@@ -23,17 +23,21 @@ import Footer from './components/Footer'
 // Props permite controlar visibility del NavBar
 function AppLayout({ showNavBar = true, showFooter = true }) {
   return (
-    <>
+    <div className="min-h-screen flex flex-col">
       {showNavBar && <NavBar />}
-      <Outlet />
+      <main className="flex-1 py-4">
+        <div className="w-full max-w-5xl mx-auto px-4">
+          <Outlet />
+        </div>
+      </main>
       {showFooter && <Footer />}
-    </>
+    </div>
   )
 }
 
 // Layout vacío para Auth (sin Nav/Footer)
 function AuthLayout() {
-  return <Outlet />
+  return <div className="min-h-screen"><Outlet /></div>
 }
 
 function App() {
