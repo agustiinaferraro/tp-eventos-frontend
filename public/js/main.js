@@ -51,7 +51,7 @@
     if (event.data && event.data.type === 'EXPERIENCE_PREVIEW') {
       experience = event.data.config.experience;
       var pts = event.data.config.points || 0;
-      updateMilestoneColors();
+      updateMilestoneColors(pts);
       applyExperience();
       applyLevelExperience(pts);
       createContinuousParticles();
@@ -128,7 +128,7 @@
     }
     
     // Actualizar colores de milestones (0, 500, 1000)
-    updateMilestoneColors();
+    updateMilestoneColors(points);
     
     // Actualizar texto "Faltan X movimientos"
     const nextThreshold = getNextThreshold(points);
@@ -157,24 +157,26 @@
     }
   }
   
-  function updateMilestoneColors() {
-    const color = experience.level0?.color || '#ff6b00';
+  function updateMilestoneColors(points = 0) {
+    let c0 = experience.level0?.color || '#ff6b00';
+    let c500 = experience.level1?.color || '#ffdd00';
+    let c1000 = experience.level2?.color || '#00ff88';
     
     const m0 = document.getElementById('milestoneNum0');
     const m500 = document.getElementById('milestoneNum500');
     const m1000 = document.getElementById('milestoneNum1000');
     
     if (m0) {
-      m0.style.color = color;
-      m0.style.textShadow = '0 0 15px ' + color;
+      m0.style.color = c0;
+      m0.style.textShadow = '0 0 15px ' + c0;
     }
     if (m500) {
-      m500.style.color = color;
-      m500.style.textShadow = '0 0 15px ' + color;
+      m500.style.color = c500;
+      m500.style.textShadow = '0 0 15px ' + c500;
     }
     if (m1000) {
-      m1000.style.color = color;
-      m1000.style.textShadow = '0 0 15px ' + color;
+      m1000.style.color = c1000;
+      m1000.style.textShadow = '0 0 15px ' + c1000;
     }
     
     const minorIds = ['m125', 'm250', 'm375', 'm625', 'm750', 'm875'];
@@ -319,7 +321,7 @@
 
   // Cargar experiencia inmediatamente
   loadExperience();
-  setTimeout(updateMilestoneColors, 500);
+  setTimeout(function() { updateMilestoneColors(0); }, 500);
 
   socket.on("connect", () => {
     connectionStatus.classList.add("connected");
@@ -353,10 +355,14 @@
 
   let lastProgress = 0;
   socket.on("stateUpdate", (data) => {
-    const colorClass = data.color;
-    pointsEl.innerText = Math.floor(data.points);
-    pointsEl.className = colorClass;
-    const progress = Math.min(data.points / 1000, 1);
+    const points = data.points;
+    const lvl = experience[getLevelKey(points)];
+    const color = lvl?.color || '#ff6b00';
+    
+    pointsEl.innerText = Math.floor(points);
+    pointsEl.style.color = color;
+    
+    const progress = Math.min(points / 1000, 1);
     const newWidth = (progress * 100) + "%";
     
     if (progress >= lastProgress) {
@@ -368,9 +374,8 @@
     }
     lastProgress = progress;
     
-    bar.className = `${colorClass} h-full rounded`;
-
-    const points = data.points;
+    bar.style.backgroundColor = color;
+    bar.style.boxShadow = '0 0 20px ' + color;
 
     if (data.points >= 1000) {
       pumpsToGoEl.innerHTML = '¡COMPLETADO!';
