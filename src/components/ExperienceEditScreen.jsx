@@ -158,14 +158,14 @@ export default function ExperienceEditScreen() {
             </div>
           </div>
 
-          <div className="flex gap-2 flex-wrap">
+          <div className="flex gap-3 flex-wrap items-end">
             <div>
               <label className="text-xs text-zinc-500 block mb-1">Color</label>
               <input
                 type="color"
                 value={currentLvl.color}
                 onChange={(e) => updateLevel(currentLevel, 'color', e.target.value)}
-                className="w-10 h-10 rounded-lg cursor-pointer border-2 border-zinc-700"
+                className="w-12 h-12 rounded-lg cursor-pointer border-2 border-zinc-700"
               />
             </div>
 
@@ -173,54 +173,48 @@ export default function ExperienceEditScreen() {
               <label className="text-xs text-zinc-500 block mb-1">Fondo</label>
               <button
                 onClick={() => setShowBgMenu(!showBgMenu)}
-                className="w-10 h-10 rounded-lg border-2 border-zinc-700 bg-zinc-800 flex items-center justify-center text-lg"
+                className="w-12 h-12 rounded-lg border-2 border-zinc-700 bg-zinc-800 flex items-center justify-center text-2xl"
               >
                 🖼️
               </button>
               {showBgMenu && (
-                <div className="absolute bottom-full left-0 mb-2 bg-zinc-800 rounded-lg p-2 shadow-lg z-10 w-40">
+                <div className="absolute bottom-full left-0 mb-2 bg-zinc-800 rounded-lg p-2 shadow-lg z-10 w-36">
                   <button
-                    onClick={() => { updateLevel(currentLevel, 'backgroundImage', null); setShowBgMenu(false) }}
+                    onClick={() => setShowBgMenu(false)}
                     className="block w-full text-left text-xs text-zinc-300 hover:bg-zinc-700 p-2 rounded"
                   >
-                    Quitar
+                    IA
+                  </button>
+                  <button
+                    onClick={() => setShowBgMenu(false)}
+                    className="block w-full text-left text-xs text-zinc-300 hover:bg-zinc-700 p-2 rounded"
+                  >
+                    Galería
                   </button>
                   <button
                     onClick={() => { updateLevel(currentLevel, 'background', '#000'); setShowBgMenu(false) }}
                     className="block w-full text-left text-xs text-zinc-300 hover:bg-zinc-700 p-2 rounded"
                   >
-                    Negro
+                    Color
                   </button>
                   <button
-                    onClick={() => { updateLevel(currentLevel, 'background', '#1a1a2e'); setShowBgMenu(false) }}
+                    onClick={() => setShowBgMenu(false)}
                     className="block w-full text-left text-xs text-zinc-300 hover:bg-zinc-700 p-2 rounded"
                   >
-                    Azul oscuro
+                    Internet
                   </button>
                 </div>
               )}
             </div>
 
-            <div>
-              <label className="text-xs text-zinc-500 block mb-1">Partículas</label>
-              <input
-                type="range"
-                min="0"
-                max="100"
-                value={currentLvl.particles ? experience.effects.particleCount : 0}
-                onChange={(e) => updateEffects('particleCount', parseInt(e.target.value))}
-                className="w-20 h-10"
-              />
-            </div>
+            <button
+              onClick={handleSave}
+              disabled={saving}
+              className="ml-auto bg-green-600 text-white px-6 py-3 rounded-lg text-sm font-bold tracking-wider hover:bg-green-500 disabled:opacity-50"
+            >
+              {saving ? '...' : 'GUARDAR'}
+            </button>
           </div>
-
-          <button
-            onClick={handleSave}
-            disabled={saving}
-            className="w-full bg-green-600 text-white py-2 rounded-lg text-sm tracking-wider hover:bg-green-500 disabled:opacity-50"
-          >
-            {saving ? 'Guardando...' : 'GUARDAR'}
-          </button>
         </div>
       </div>
 
