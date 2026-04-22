@@ -120,16 +120,10 @@ export default function ExperienceEditScreen() {
   }
 
   function handleColorChange(color) {
-    const newExp = {
-      ...experience,
-      level0: { ...experience.level0, color },
-      level1: { ...experience.level1, color },
-      level2: { ...experience.level2, color }
-    }
-    setExperience(newExp)
+    updateLevel(currentLevel, 'color', color)
     if (iframeRef.current) {
       try {
-        iframeRef.current.contentWindow?.postMessage({ type: 'EXPERIENCE_PREVIEW', config: { points: previewPoints, room: sala?.name || 'test', experience: newExp, currentLevel } }, '*')
+        iframeRef.current.contentWindow?.postMessage({ type: 'EXPERIENCE_PREVIEW', config: { points: previewPoints, room: sala?.name || 'test', experience, currentLevel } }, '*')
       } catch (e) {}
     }
   }
