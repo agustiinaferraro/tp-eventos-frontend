@@ -46,7 +46,7 @@ export default function QRModal({ sala, show, onClose }) {
 
       {/* Contenido */}
       <div
-        className="relative z-10 flex flex-col items-center text-center p-6 rounded-2xl bg-black/40 backdrop-blur-lg border border-white/10 shadow-xl max-w-xs w-full"
+        className="relative z-10 flex flex-col items-center text-center p-6 r max-w-xs w-full"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Título */}
