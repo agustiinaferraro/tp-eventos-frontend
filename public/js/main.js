@@ -46,6 +46,14 @@
     effects: { particleCount: 40, showGestures: true, showNearThreshold: true }
   };
 
+  // Listener para preview en tiempo real desde el editor
+  window.addEventListener('message', (event) => {
+    if (event.data && event.data.type === 'EXPERIENCE_PREVIEW') {
+      experience = event.data.config.experience;
+      applyExperience();
+    }
+  });
+
   async function loadExperience() {
     try {
       const res = await fetch(SERVER_URL + '/api/salas/' + salaParam + '/experience');
