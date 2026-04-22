@@ -63,7 +63,7 @@ useEffect(() => {
   // =====================
   const showQRModal = () => {
     setShowQR(true)
-    window.history.replaceState({}, '', '?qr=open')
+    sessionStorage.setItem('hideNav', 'true')
     
     // Esperamos 100ms a que se renderice el modal
     // luego generamos el código QR
@@ -204,7 +204,7 @@ useEffect(() => {
         show={showQR} 
         onClose={() => {
           setShowQR(false)
-          window.history.replaceState({}, '', window.location.pathname)
+          sessionStorage.removeItem('hideNav')
         }} 
       />
 
