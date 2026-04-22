@@ -161,23 +161,27 @@
     const lvl1 = experience.level1;
     const lvl2 = experience.level2;
     
-    // Solo 0, 500, 1000 tienen color de nivel - resto blanco
-    const mainMilestones = [
-      { id: 'milestoneNum0', color: lvl0?.color },
-      { id: 'milestoneNum500', color: lvl1?.color },
-      { id: 'milestoneNum1000', color: lvl2?.color }
-    ];
+    const c0 = lvl0?.color || '#ff6b00';
+    const c500 = lvl1?.color || '#ffdd00';
+    const c1000 = lvl2?.color || '#00ff88';
     
-    mainMilestones.forEach(t => {
-      const el = document.getElementById(t.id);
-      if (el) {
-        const c = t.color || '#ff6b00';
-        el.style.color = c;
-        el.style.textShadow = '0 0 15px ' + c;
-      }
-    });
+    const m0 = document.getElementById('milestoneNum0');
+    const m500 = document.getElementById('milestoneNum500');
+    const m1000 = document.getElementById('milestoneNum1000');
     
-    // Los demás hitos en blanco
+    if (m0) {
+      m0.style.color = c0;
+      m0.style.textShadow = '0 0 15px ' + c0;
+    }
+    if (m500) {
+      m500.style.color = c500;
+      m500.style.textShadow = '0 0 15px ' + c500;
+    }
+    if (m1000) {
+      m1000.style.color = c1000;
+      m1000.style.textShadow = '0 0 15px ' + c1000;
+    }
+    
     const minorIds = ['m125', 'm250', 'm375', 'm625', 'm750', 'm875'];
     minorIds.forEach(id => {
       const el = document.getElementById(id);
