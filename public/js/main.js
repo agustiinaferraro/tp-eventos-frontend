@@ -51,6 +51,7 @@
     if (event.data && event.data.type === 'EXPERIENCE_PREVIEW') {
       experience = event.data.config.experience;
       applyExperience();
+      applyLevelExperience(event.data.config.points || 0);
     }
   });
 
@@ -102,10 +103,23 @@
   function applyLevelExperience(points) {
     const level = getLevelKey(points);
     const lvl = experience[level];
+    const color = lvl?.color || '#ff6b00';
     
     // Color del título - siempre blanco
     if (titleEl) {
       titleEl.style.color = '#fff';
+    }
+    
+    // Color de puntos
+    if (pointsEl) {
+      pointsEl.style.color = color;
+      pointsEl.className = color;
+    }
+    
+    // Color de barra
+    if (bar) {
+      bar.style.backgroundColor = color;
+      bar.style.boxShadow = '0 0 20px ' + color;
     }
     
     // Fondo
@@ -417,15 +431,17 @@
   }
 
   function createContinuousParticles() {
+    if (!effectsParticles) return;
     effectsParticles.innerHTML = '';
     const lvl = experience[getLevelKey(0)];
     const particleCount = experience.effects?.particleCount || 40;
+    const color = lvl?.color || '#ff6b00';
     for (let i = 0; i < particleCount; i++) {
       const particle = document.createElement('span');
       particle.style.left = Math.random() * 100 + '%';
       particle.style.animationDelay = Math.random() * 6 + 's';
-      particle.style.backgroundColor = lvl.color;
-      particle.style.boxShadow = '0 0 10px ' + lvl.color;
+      particle.style.backgroundColor = color;
+      particle.style.boxShadow = '0 0 10px ' + color;
       effectsParticles.appendChild(particle);
     }
   }
