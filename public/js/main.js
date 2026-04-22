@@ -122,6 +122,16 @@
       bar.style.boxShadow = '0 0 20px ' + color;
     }
     
+    // "Faltan X puntos" - asociado al color
+    if (pumpsToGoEl) {
+      pumpsToGoEl.style.color = color;
+    }
+    
+    // Recrear partículas con nuevo color
+    if (document.body.classList.contains('effects-active') || document.body.classList.contains('effects-level-2')) {
+      createContinuousParticles();
+    }
+    
     // Fondo
     if (lvl.background) {
       document.body.style.backgroundColor = lvl.background;
