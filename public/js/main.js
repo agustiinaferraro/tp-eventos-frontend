@@ -103,9 +103,9 @@
     const level = getLevelKey(points);
     const lvl = experience[level];
     
-    // Color del título
+    // Color del título - siempre blanco
     if (titleEl) {
-      titleEl.style.color = lvl.color;
+      titleEl.style.color = '#fff';
     }
     
     // Fondo
@@ -418,11 +418,14 @@
 
   function createContinuousParticles() {
     effectsParticles.innerHTML = '';
-    const particleCount = 40;
+    const lvl = experience[getLevelKey(0)];
+    const particleCount = experience.effects?.particleCount || 40;
     for (let i = 0; i < particleCount; i++) {
       const particle = document.createElement('span');
       particle.style.left = Math.random() * 100 + '%';
       particle.style.animationDelay = Math.random() * 6 + 's';
+      particle.style.backgroundColor = lvl.color;
+      particle.style.boxShadow = '0 0 10px ' + lvl.color;
       effectsParticles.appendChild(particle);
     }
   }
