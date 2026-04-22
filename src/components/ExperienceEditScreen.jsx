@@ -44,12 +44,12 @@ export default function ExperienceEditScreen() {
 
   useEffect(() => {
     if (iframeRef.current) {
-      const currentLevel = getLevelForPoints(previewPoints)
+      const currentLevelKey = getLevelForPoints(previewPoints)
       const config = {
         points: previewPoints,
         room: sala?.name || 'test',
         experience: experience,
-        currentLevel: currentLevel
+        currentLevel: currentLevelKey
       }
       try {
         iframeRef.current.contentWindow?.postMessage(
@@ -120,10 +120,15 @@ export default function ExperienceEditScreen() {
   }
 
   function handleColorChange(color) {
-    updateLevel(currentLevel, 'color', color)
+    const levelKey = getLevelForPoints(previewPoints)
+    const newExp = {
+      ...experience,
+      [levelKey]: { ...experience[levelKey], color }
+    }
+    setExperience(newExp)
     if (iframeRef.current) {
       try {
-        iframeRef.current.contentWindow?.postMessage({ type: 'EXPERIENCE_PREVIEW', config: { points: previewPoints, room: sala?.name || 'test', experience, currentLevel } }, '*')
+        iframeRef.current.contentWindow?.postMessage({ type: 'EXPERIENCE_PREVIEW', config: { points: previewPoints, room: sala?.name || 'test', experience: newExp, currentLevel: levelKey } }, '*')
       } catch (e) {}
     }
   }
