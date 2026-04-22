@@ -157,26 +157,26 @@
     }
   }
   
-  function updateMilestoneColors(points = 0) {
-    const level = getLevelKey(points);
-    const lvl = experience[level];
-    const color = lvl?.color || '#ff6b00';
+  function updateMilestoneColors() {
+    const c0 = experience.level0?.color || '#ff6b00';
+    const c500 = experience.level1?.color || '#ffdd00';
+    const c1000 = experience.level2?.color || '#00ff88';
     
     const m0 = document.getElementById('milestoneNum0');
     const m500 = document.getElementById('milestoneNum500');
     const m1000 = document.getElementById('milestoneNum1000');
     
     if (m0) {
-      m0.style.color = color;
-      m0.style.textShadow = '0 0 15px ' + color;
+      m0.style.color = c0;
+      m0.style.textShadow = '0 0 15px ' + c0;
     }
     if (m500) {
-      m500.style.color = color;
-      m500.style.textShadow = '0 0 15px ' + color;
+      m500.style.color = c500;
+      m500.style.textShadow = '0 0 15px ' + c500;
     }
     if (m1000) {
-      m1000.style.color = color;
-      m1000.style.textShadow = '0 0 15px ' + color;
+      m1000.style.color = c1000;
+      m1000.style.textShadow = '0 0 15px ' + c1000;
     }
     
     const minorIds = ['m125', 'm250', 'm375', 'm625', 'm750', 'm875'];
