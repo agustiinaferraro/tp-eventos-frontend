@@ -50,7 +50,8 @@
   window.addEventListener('message', (event) => {
     if (event.data && event.data.type === 'EXPERIENCE_PREVIEW') {
       var newExp = event.data.config.experience;
-      alert('RECEIVED! lvl1=' + newExp.level1?.color);
+      var debugMode = false;
+      if (debugMode) alert('RECEIVED! lvl1=' + newExp.level1?.color + ' lvl2=' + newExp.level2?.color);
       experience = newExp;
       updateMilestoneColors();
       applyExperience();
@@ -158,7 +159,9 @@
   }
   
   function updateMilestoneColors() {
-    alert('updateMilestoneColors run! lvl1=' + experience?.level1?.color);
+    var debugMode = false;
+    
+    if (debugMode) alert('updateMilestoneColors run! lvl1=' + experience?.level1?.color);
     
     let c0 = '#ff6b00';
     let c500 = '#ffdd00';
@@ -170,7 +173,7 @@
       c1000 = experience.level2?.color || c1000;
     }
     
-    alert('Setting - 0:' + c0 + ',500:' + c500 + ',1000:' + c1000);
+    if (debugMode) alert('Setting - 0:' + c0 + ',500:' + c500 + ',1000:' + c1000);
     
     const m0 = document.getElementById('milestoneNum0');
     const m500 = document.getElementById('milestoneNum500');
