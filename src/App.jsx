@@ -57,8 +57,8 @@ function App() {
             <Route path="/link" element={<LinkModal />} />
           </Route>
 
-          {/* Sala: sin NavBar para que no moleste al QR */}
-          <Route element={<AppLayout showNavBar={false} showFooter={false} />}>
+          {/* Sala: con NavBar */}
+          <Route element={<AppLayout showFooter={false} />}>
             <Route path="/sala" element={<SalaScreen />} />
           </Route>
         </Routes>
