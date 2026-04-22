@@ -3,14 +3,15 @@
 // =====================
 
 import React from 'react'
+import { Outlet } from 'react-router-dom'
 import NavBar from './NavBar'
 import Footer from './Footer'
 
-export default function Layout({ children }) {
+export default function Layout() {
   return (
     <>
       <NavBar />
-      {children}
+      <Outlet />
       <Footer />
     </>
   )
