@@ -121,35 +121,10 @@ export default function ExperienceEditScreen() {
 
   return (
     <div className="h-screen bg-black flex flex-col overflow-hidden">
-      <div className="p-3" style={{ backgroundColor: currentLvl.background || '#0a0a0a' }}>
-        <div className="flex justify-between items-center">
-          <BackButton onClick={handleBack} />
-          <span className="text-white font-bold">{sala?.name || 'Preview'}</span>
-          <div className="w-10" />
-        </div>
-        
-        <div className="mt-2 mb-2">
-          <div className="flex justify-between text-xs" style={{ color: currentLvl.color }}>
-            <span>0</span>
-            <span>500</span>
-            <span>1000</span>
-          </div>
-          <div className="h-2 bg-neutral-900 rounded-full w-full overflow-hidden">
-            <div 
-              className="h-full rounded-full transition-all"
-              style={{ 
-                width: (progress * 100) + '%',
-                backgroundColor: currentLvl.color,
-                boxShadow: `0 0 15px ${currentLvl.color}`
-              }}
-            />
-          </div>
-          <div className="flex justify-center mt-1">
-            <span className="text-xs font-bold" style={{ color: currentLvl.color }}>
-              {previewPoints} pts — {LEVELS.find(l => l.key === currentLevel)?.label}
-            </span>
-          </div>
-        </div>
+      <div className="p-2 bg-zinc-950 flex justify-between items-center">
+        <BackButton onClick={handleBack} />
+        <span className="text-white font-bold text-sm">{sala?.name || 'Preview'}</span>
+        <div className="w-8" />
       </div>
 
       <div className="flex-1 relative">
@@ -163,6 +138,25 @@ export default function ExperienceEditScreen() {
       </div>
 
       <div className="flex-shrink-0 bg-zinc-900 border-t border-zinc-800 p-3">
+        <div className="mb-3">
+          <input
+            type="range"
+            min="0"
+            max="1000"
+            value={previewPoints}
+            onChange={(e) => setPreviewPoints(parseInt(e.target.value))}
+            className="w-full h-2"
+            style={{ accentColor: currentLvl.color }}
+          />
+          <div className="flex justify-between items-center mt-1">
+            <span className="text-xs text-zinc-500">0</span>
+            <span className="text-xs font-bold" style={{ color: currentLvl.color }}>
+              {previewPoints} pts — {LEVELS.find(l => l.key === currentLevel)?.label}
+            </span>
+            <span className="text-xs text-zinc-500">1000</span>
+          </div>
+        </div>
+
         <div className="flex gap-3 flex-wrap items-end justify-center">
           <div>
             <label className="text-xs text-zinc-500 block mb-1">Color</label>
@@ -188,7 +182,7 @@ export default function ExperienceEditScreen() {
                   onClick={() => { setShowIaInput(true); setShowBgMenu(false) }}
                   className="block w-full text-left text-sm text-zinc-300 hover:bg-zinc-700 p-2 rounded"
                 >
-                  IA
+                  IA (proximamente)
                 </button>
                 <button
                   onClick={() => setShowBgMenu(false)}
@@ -222,24 +216,24 @@ export default function ExperienceEditScreen() {
         </div>
 
         {showIaInput && (
-          <div className="mt-3 p-2 bg-zinc-800 rounded-lg">
-            <input
-              type="text"
-              value={bgUrlInput}
-              onChange={(e) => setBgUrlInput(e.target.value)}
-              placeholder="URL de la imagen..."
-              className="w-full bg-zinc-700 text-white p-2 rounded text-sm"
-            />
-            <div className="flex gap-2 mt-2">
+          <div className="mt-3">
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={bgUrlInput}
+                onChange={(e) => setBgUrlInput(e.target.value)}
+                placeholder="URL imagen..."
+                className="flex-1 max-w-32 bg-zinc-700 text-white p-2 rounded text-xs"
+              />
               <button
                 onClick={() => { updateLevel(currentLevel, 'backgroundImage', bgUrlInput); setShowIaInput(false) }}
-                className="flex-1 bg-green-600 text-white py-2 rounded text-sm"
+                className="bg-green-600 text-white px-3 py-2 rounded text-xs"
               >
-                Aplicar
+                ✓
               </button>
               <button
                 onClick={() => setShowIaInput(false)}
-                className="px-4 bg-zinc-700 text-white py-2 rounded text-sm"
+                className="bg-zinc-700 text-white px-3 py-2 rounded text-xs"
               >
                 ✕
               </button>
