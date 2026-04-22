@@ -2,7 +2,7 @@
 // AppContext.jsx - Estado global de la app
 // =====================
 
-import { createContext, useContext, useState } from 'react'
+import React, { createContext, useContext, useState } from 'react'
 
 const AppContext = createContext()
 
