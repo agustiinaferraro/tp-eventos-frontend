@@ -4,7 +4,6 @@
 
 import React, { useState, useEffect, useRef } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
-import NavBar from './NavBar'
 import BackButton from './BackButton'
 import { apiGetExperience, apiSaveExperience } from '../utils/api'
 import { getBaseUrl } from '../constants'
@@ -123,27 +122,29 @@ export default function ExperienceEditScreen() {
   }
 
   return (
-    <div className="min-h-screen bg-black">
-      <NavBar />
-      
-      <div className="p-4 pt-16">
+    <div className="min-h-screen bg-black flex flex-col">
+      <div className="p-4 pb-2">
         <BackButton onClick={handleBack} />
         
-        <h1 className="text-xl text-green-400 tracking-wider mt-3 mb-4">
+        <h1 className="text-xl text-green-400 tracking-wider mt-3 mb-2">
           PERSONALIZAR EXPERIENCIA
         </h1>
 
-        <div className="w-full" style={{ height: '50vh' }}>
-          <iframe
-            ref={iframeRef}
-            src={experienceUrl}
-            className="w-full h-full border-2 border-green-400 rounded-lg"
-            title="Preview experiencia"
-            allow="accelerometer"
-          />
-        </div>
+      </div>
 
-        <div className="bg-zinc-900 rounded-xl p-4 my-3">
+      <div className="flex-shrink-0 px-4">
+        <iframe
+          ref={iframeRef}
+          src={experienceUrl}
+          className="w-full border-2 border-green-400 rounded-lg"
+          style={{ height: '35vh' }}
+          title="Preview experiencia"
+          allow="accelerometer"
+        />
+      </div>
+
+      <div className="flex-1 overflow-y-auto px-4 pb-4">
+        <div className="bg-zinc-900 rounded-xl p-4 mt-3">
           <div className="flex justify-between text-xs text-zinc-500 mb-2">
             <span>0</span>
             <span>500</span>
@@ -277,6 +278,7 @@ export default function ExperienceEditScreen() {
         >
           {saving ? 'Guardando...' : 'GUARDAR Y SALIR'}
         </button>
+      </div>
       </div>
     </div>
   )
