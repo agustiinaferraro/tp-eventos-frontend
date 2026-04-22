@@ -122,10 +122,8 @@
       bar.style.boxShadow = '0 0 20px ' + color;
     }
     
-    // "Faltan X puntos" - asociado al color
-    if (pumpsToGoEl) {
-      pumpsToGoEl.style.color = color;
-    }
+    // "Faltan X puntos" - usar lógica original (blanco con números colored)
+    // Se regenera cuando se actualiza el estado desde el servidor
     
     // Recrear partículas con nuevo color
     if (document.body.classList.contains('effects-active') || document.body.classList.contains('effects-level-2')) {
@@ -379,13 +377,11 @@
 
       const nextThreshold = getNextThreshold(points);
       const remaining = nextThreshold - Math.floor(points);
-      let remainingColor = '#ff6b00';
-      if (nextThreshold > 375) remainingColor = '#ffdd00';
-      if (nextThreshold >= 1000) remainingColor = '#00ff88';
-      let targetColor = '#ff6b00';
-      if (nextThreshold >= 500) targetColor = '#ffdd00';
-      if (nextThreshold >= 1000) targetColor = '#00ff88';
-      pumpsToGoEl.innerHTML = `Faltan <span class="big-number" style="color:${remainingColor}">${remaining}</span> movimientos para llegar a los <span class="big-number" style="color:${targetColor}">${nextThreshold}</span> puntos`;
+      const lvl = experience[getLevelKey(points)];
+      const currentColor = lvl?.color || '#ff6b00';
+      const nextLvl = experience[getLevelKey(nextThreshold)];
+      const targetColor = nextLvl?.color || currentColor;
+      pumpsToGoEl.innerHTML = `Faltan <span class="big-number" style="color:${currentColor}">${remaining}</span> movimientos para llegar a los <span class="big-number" style="color:${targetColor}">${nextThreshold}</span> puntos`;
     }
 
     if (titleEl && data.room) {
