@@ -51,7 +51,7 @@
     if (event.data && event.data.type === 'EXPERIENCE_PREVIEW') {
       experience = event.data.config.experience;
       var pts = event.data.config.points || 0;
-      alert('GOT MESSAGE! level1=' + experience.level1?.color);
+      console.log('MESSAGE RECEIVED - level1:', experience.level1?.color);
       updateMilestoneColors();
       applyExperience();
       applyLevelExperience(pts);
