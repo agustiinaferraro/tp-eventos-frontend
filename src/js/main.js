@@ -162,7 +162,6 @@
     const c0 = experience.level0?.color || '#ff6b00';
     const c500 = experience.level1?.color || '#ffdd00';
     const c1000 = experience.level2?.color || '#00ff88';
-    console.log('updateMilestoneColors - c0:', c0, 'c500:', c500, 'c1000:', c1000);
     
     const m0 = document.getElementById('milestoneNum0');
     const m500 = document.getElementById('milestoneNum500');
