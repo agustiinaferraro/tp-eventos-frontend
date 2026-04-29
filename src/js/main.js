@@ -162,12 +162,11 @@
     const c0 = experience.level0?.color || '#ff6b00';
     const c500 = experience.level1?.color || '#ffdd00';
     const c1000 = experience.level2?.color || '#00ff88';
-    alert('updateMilestoneColors! c500=' + c500);
+    console.log('updateMilestoneColors - c0:', c0, 'c500:', c500, 'c1000:', c1000);
     
     const m0 = document.getElementById('milestoneNum0');
     const m500 = document.getElementById('milestoneNum500');
     const m1000 = document.getElementById('milestoneNum1000');
-    console.log('Elements - m0:', !!m0, 'm500:', !!m500, 'm1000:', !!m1000);
     
     if (m0) {
       m0.style.color = c0;
