@@ -158,7 +158,7 @@ A partir de esta necesidad surge el proyecto Energía Colectiva, orientado a bri
 ## 4. Recursos y Links
 
 **Frontend (Vercel):** https://energia-colectiva.vercel.app  
-**Backend (Railway):** https://tp-eventos-backend-production.up.railway.app  
+**Backend (Render):** https://tp-eventos-backend.onrender.com
 **Repositorio Frontend:** https://github.com/agustiinaferraro/tp-eventos-frontend  
 **Repositorio Backend:** https://github.com/agustiinaferraro/tp-eventos-backend  
 **Presentación:** [Link a la presentación]

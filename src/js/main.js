@@ -6,7 +6,7 @@
     return;
   }
   
-  const SERVER_URL = "https://eager-otters-cough.loca.lt";
+  const SERVER_URL = "https://tp-eventos-backend.onrender.com";
 
   let currentGesture = null;
   let gestureActive = false;

@@ -10,7 +10,7 @@ dotenv.config();
 export default defineConfig({
   server: {
     host: true,
-    allowedHosts: ['.loca.lt', '.lhr.life'],
+    allowedHosts: ['.onrender.com'],
     https: {
       key: fs.readFileSync('./key.pem'),
       cert: fs.readFileSync('./cert.pem')

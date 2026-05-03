@@ -1,6 +1,6 @@
 // Backend API utility
 
-const API_BASE = 'https://eager-otters-cough.loca.lt';
+const API_BASE = 'https://tp-eventos-backend.onrender.com';
 
 export async function apiGet(path) {
   const res = await fetch(`${API_BASE}${path}`);
