@@ -18,9 +18,14 @@ export async function apiPost(path, data) {
   return res.json();
 }
 
-// API: Experiencia de sala
-export async function apiGetExperience(salaName) {
-  return apiGet(`/api/salas/${salaName}/experience`);
+// API: Experiencia de sala (por perfil)
+export async function apiGetExperience(salaName, profileName) {
+  const query = profileName ? `?profile=${encodeURIComponent(profileName)}` : ''
+  return apiGet(`/api/salas/${salaName}/experience${query}`)
+}
+
+export async function apiSaveExperience(salaName, experience, profileName) {
+  return apiPost(`/api/salas/${salaName}/experience`, { experience, profile: profileName })
 }
 
 export async function apiSaveExperience(salaName, experience) {

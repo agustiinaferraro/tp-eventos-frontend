@@ -115,7 +115,7 @@ export default function DashboardScreen() {
     let localSalas = saved ? JSON.parse(saved) : []
     
     try {
-      const data = await apiGet(`/api/users/${user.uid}/salas`)
+      const data = await apiGet(`/api/users/${user.uid}/salas?profile=${encodeURIComponent(profile.name || '')}`)
       if (data.salas) {
         // Combinar: usar datos del backend pero mantener brightness de localStorage
         localSalas = data.salas.map(salaBackend => {
@@ -140,7 +140,7 @@ export default function DashboardScreen() {
     localStorage.setItem('salas_' + user.uid + '_' + profile.name, JSON.stringify(newSalas))
     
     try {
-      await apiPost(`/api/users/${user.uid}/salas`, { salas: newSalas })
+      await apiPost(`/api/users/${user.uid}/salas`, { salas: newSalas, profile: profile.name })
     } catch (e) {}
   }
 

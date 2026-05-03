@@ -68,7 +68,8 @@ export default function ExperienceEditScreen() {
 
   async function loadExperience(salaName) {
     try {
-      const data = await apiGetExperience(salaName)
+      const profile = JSON.parse(localStorage.getItem('currentProfile') || '{}')
+      const data = await apiGetExperience(salaName, profile.name)
       setExperience(data.experience)
     } catch (err) {
       console.error('Error cargando experiencia:', err)
@@ -81,7 +82,8 @@ export default function ExperienceEditScreen() {
     if (!sala) return
     setSaving(true)
     try {
-      await apiSaveExperience(sala.name, experience)
+      const profile = JSON.parse(localStorage.getItem('currentProfile') || '{}')
+      await apiSaveExperience(sala.name, experience, profile.name)
       navigate('/sala')
     } catch (err) {
       console.error('Error guardando experiencia:', err)
