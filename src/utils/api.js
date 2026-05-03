@@ -1,6 +1,6 @@
 // Backend API utility
 
-const API_BASE = 'https://tp-eventos-backend.onrender.com';
+const API_BASE = import.meta.env.VITE_SERVER_URL || 'https://tp-eventos-backend.onrender.com';
 
 export async function apiGet(path) {
   const res = await fetch(`${API_BASE}${path}`);

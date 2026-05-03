@@ -6,7 +6,7 @@
     return;
   }
   
-  const SERVER_URL = "https://tp-eventos-backend.onrender.com";
+  const SERVER_URL = import.meta.env.VITE_SERVER_URL || "https://tp-eventos-backend.onrender.com";
 
   let currentGesture = null;
   let gestureActive = false;
