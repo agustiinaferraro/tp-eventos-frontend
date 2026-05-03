@@ -1,6 +1,6 @@
 // Backend API utility
 
-const API_BASE = 'http://localhost:3000';
+const API_BASE = 'https://eager-otters-cough.loca.lt';
 
 export async function apiGet(path) {
   const res = await fetch(`${API_BASE}${path}`);

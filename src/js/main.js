@@ -6,7 +6,7 @@
     return;
   }
   
-  const SERVER_URL = "http://localhost:3000";
+  const SERVER_URL = "https://eager-otters-cough.loca.lt";
 
   let currentGesture = null;
   let gestureActive = false;
