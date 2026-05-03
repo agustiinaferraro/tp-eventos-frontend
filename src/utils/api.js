@@ -28,10 +28,6 @@ export async function apiSaveExperience(salaName, experience, profileName) {
   return apiPost(`/api/salas/${salaName}/experience`, { experience, profile: profileName })
 }
 
-export async function apiSaveExperience(salaName, experience) {
-  return apiPost(`/api/salas/${salaName}/experience`, { experience });
-}
-
 // Generar imagen con IA usando Puter.js (gratis, sin API key, nano-banana powered)
 export async function generateImageWithAI(prompt) {
   try {
