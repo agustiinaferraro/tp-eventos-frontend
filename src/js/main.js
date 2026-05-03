@@ -6,7 +6,7 @@
     return;
   }
   
-  const SERVER_URL = "https://tp-eventos-backend-production.up.railway.app";
+  const SERVER_URL = "http://localhost:3000";
 
   let currentGesture = null;
   let gestureActive = false;
