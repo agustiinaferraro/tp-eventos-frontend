@@ -8,6 +8,14 @@ import { apiGet } from '../utils/api'
 
 import BackButton from './BackButton'
 
+import {
+  BarChart, Bar,
+  LineChart, Line,
+  PieChart, Pie, Cell,
+  XAxis, YAxis, CartesianGrid, Tooltip, Legend,
+  ResponsiveContainer
+} from 'recharts'
+
 export default function StatsScreen() {
   const navigate = useNavigate()
   const location = useLocation()
@@ -39,6 +47,27 @@ export default function StatsScreen() {
     }
     setLoading(false)
   }
+
+  // Preparar datos para gráficos
+  const energyData = stats?.stats
+    ?.filter(s => s.type === 'energy')
+    ?.slice(-20)
+    ?.map(s => ({
+      time: new Date(s.timestamp).toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' }),
+      energy: s.energy || 0,
+      total: s.totalPoints || 0
+    })) || []
+
+  const typeData = stats?.stats
+    ?.reduce((acc, s) => {
+      acc[s.type] = (acc[s.type] || 0) + 1
+      return acc
+    }, {})
+  
+  const pieData = typeData ? Object.keys(typeData).map(key => ({
+    name: key === 'connect' ? 'Entradas' : key === 'disconnect' ? 'Salidas' : 'Energía',
+    value: typeData[key]
+  })) : []
 
   const formatDate = (date) => {
     return new Date(date).toLocaleString('es-AR')
@@ -84,28 +113,85 @@ return (
         <p className="text-xl text-red-400 text-center mb-8 relative z-10">{error}</p>
       )}
 
-      {stats && (
-        <div className="w-full max-w-2xl relative z-10">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-            <div className="bg-zinc-900 border border-zinc-700 rounded-lg p-4 text-center">
-              <p className="text-3xl text-green-400 font-bold">{stats.summary?.connections || 0}</p>
-              <p className="text-xs text-zinc-500 mt-1">Entradas</p>
+       {stats && (
+          <div className="w-full max-w-2xl relative z-10">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+              <div className="bg-zinc-900 border border-zinc-700 rounded-lg p-4 text-center">
+                <p className="text-3xl text-green-400 font-bold">{stats.summary?.connections || 0}</p>
+                <p className="text-xs text-zinc-500 mt-1">Entradas</p>
+              </div>
+              <div className="bg-zinc-900 border border-zinc-700 rounded-lg p-4 text-center">
+                <p className="text-3xl text-red-400 font-bold">{stats.summary?.disconnections || 0}</p>
+                <p className="text-xs text-zinc-500 mt-1">Salidas</p>
+              </div>
+              <div className="bg-zinc-900 border border-zinc-700 rounded-lg p-4 text-center">
+                <p className="text-3xl text-blue-400 font-bold">{stats.summary?.activeConnections || 0}</p>
+                <p className="text-xs text-zinc-500 mt-1">Jugadores ahora</p>
+              </div>
+              <div className="bg-zinc-900 border border-zinc-700 rounded-lg p-4 text-center">
+                <p className="text-3xl text-yellow-400 font-bold">{stats.summary?.totalEnergy || 0}</p>
+                <p className="text-xs text-zinc-500 mt-1">Energía total</p>
+              </div>
             </div>
-            <div className="bg-zinc-900 border border-zinc-700 rounded-lg p-4 text-center">
-              <p className="text-3xl text-red-400 font-bold">{stats.summary?.disconnections || 0}</p>
-              <p className="text-xs text-zinc-500 mt-1">Salidas</p>
-            </div>
-            <div className="bg-zinc-900 border border-zinc-700 rounded-lg p-4 text-center">
-              <p className="text-3xl text-blue-400 font-bold">{stats.summary?.activeConnections || 0}</p>
-              <p className="text-xs text-zinc-500 mt-1">Jugadores ahora</p>
-            </div>
-            <div className="bg-zinc-900 border border-zinc-700 rounded-lg p-4 text-center">
-              <p className="text-3xl text-yellow-400 font-bold">{stats.summary?.totalEnergy || 0}</p>
-              <p className="text-xs text-zinc-500 mt-1">Energía total</p>
-            </div>
-          </div>
 
-          <h2 className="text-lg text-zinc-300 mb-4">Actividad reciente</h2>
+            {/* Gráfico lineal: Evolución de energía y puntos */}
+            <div className="bg-zinc-900 border border-zinc-700 rounded-lg p-4 mb-8">
+              <p className="text-lg text-zinc-300 mb-4">Evolución de energía y puntos</p>
+              <ResponsiveContainer width="100%" height={300}>
+                <LineChart data={energyData}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#333" />
+                  <XAxis dataKey="time" stroke="#666" />
+                  <YAxis stroke="#666" />
+                  <Tooltip contentStyle={{ backgroundColor: '#222', border: '1px solid #444' }} />
+                  <Legend />
+                  <Line type="monotone" dataKey="energy" stroke="#ff6b00" name="Energía" />
+                  <Line type="monotone" dataKey="total" stroke="#00ff88" name="Puntos totales" />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+
+            {/* Gráficos de barras y circular */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+              {/* Gráfico de barras: Distribución de actividad */}
+              <div className="bg-zinc-900 border border-zinc-700 rounded-lg p-4">
+                <p className="text-lg text-zinc-300 mb-4">Distribución de actividad</p>
+                <ResponsiveContainer width="100%" height={250}>
+                  <BarChart data={pieData}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#333" />
+                    <XAxis dataKey="name" stroke="#666" />
+                    <YAxis stroke="#666" />
+                    <Tooltip contentStyle={{ backgroundColor: '#222', border: '1px solid #444' }} />
+                    <Bar dataKey="value" fill="#8884d8" name="Cantidad" />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+
+              {/* Gráfico circular: Proporción de actividad */}
+              <div className="bg-zinc-900 border border-zinc-700 rounded-lg p-4">
+                <p className="text-lg text-zinc-300 mb-4">Proporción de actividad</p>
+                <ResponsiveContainer width="100%" height={250}>
+                  <PieChart>
+                    <Pie
+                      data={pieData}
+                      cx="50%"
+                      cy="50%"
+                      outerRadius={80}
+                      fill="#8884d8"
+                      dataKey="value"
+                      label
+                    >
+                      {pieData.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={['#00ff88', '#ff6b00', '#ffdd00'][index % 3]} />
+                      ))}
+                    </Pie>
+                    <Tooltip contentStyle={{ backgroundColor: '#222', border: '1px solid #444' }} />
+                    <Legend />
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+
+            <h2 className="text-lg text-zinc-300 mb-4">Actividad reciente</h2>
           <div className="bg-zinc-900 border border-zinc-700 rounded-lg max-h-96 overflow-y-auto">
             {stats.stats && stats.stats.length > 0 ? (
               stats.stats.map((stat, i) => (
