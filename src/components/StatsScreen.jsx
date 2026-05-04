@@ -30,7 +30,9 @@ export default function StatsScreen() {
     setLoading(true)
     setError('')
     try {
-      const data = await apiGet(`/api/stats/${selectedSala}`)
+      // Normalizar nombre: minúsculas y espacios por guiones
+      const normalizedSala = selectedSala.toLowerCase().replace(/\s+/g, '-')
+      const data = await apiGet(`/api/stats/${normalizedSala}`)
       setStats(data)
     } catch (e) {
       setError('No se pudieron cargar las estadísticas. Intentá más tarde.')
