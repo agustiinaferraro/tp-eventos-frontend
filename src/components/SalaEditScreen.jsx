@@ -195,10 +195,14 @@ export default function SalaEditScreen() {
       await apiPost(`/api/users/${user.uid}/salas`, { salas: newSalas })
     } catch (err) {}
     
-    setIsSaving(false)
-    localStorage.setItem('currentSala', JSON.stringify(salaData))
-    navigate('/sala')
-  }
+      setIsSaving(false)
+      // Guardar en currentSala SIN la imagen base64 (para evitar quota exceeded)
+      const salaSinImagen = { ...salaData, image: null }
+      localStorage.setItem('currentSala', JSON.stringify(salaSinImagen))
+      navigate('/sala')
+    }
+      navigate('/sala')
+    }
   
 return (
     <div className='flex flex-col items-center min-h-screen w-full p-10 relative'>

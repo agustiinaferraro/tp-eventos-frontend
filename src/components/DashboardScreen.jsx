@@ -137,7 +137,13 @@ export default function DashboardScreen() {
   const saveSalas = async (newSalas) => {
     const profile = JSON.parse(localStorage.getItem('currentProfile') || '{}')
     setSalas(newSalas)
-    localStorage.setItem('salas_' + user.uid + '_' + profile.name, JSON.stringify(newSalas))
+    
+    // Guardar en localStorage SIN las imágenes base64 (para evitar quota exceeded)
+    const salasForLocal = newSalas.map(s => ({
+      ...s,
+      image: s.image?.startsWith('data:image') ? null : s.image
+    }))
+    localStorage.setItem('salas_' + user.uid + '_' + profile.name, JSON.stringify(salasForLocal))
     
     try {
       await apiPost(`/api/users/${user.uid}/salas`, { salas: newSalas, profile: profile.name })

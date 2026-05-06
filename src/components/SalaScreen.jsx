@@ -32,16 +32,40 @@ const [sala, setSala] = useState(null)
   // copySuccess: si el link se copió exitosamente (para mostrar feedback)
   const [copySuccess, setCopySuccess] = useState(false)
 
-// =====================
-// EFECTO: CARGAR SALA DE LOCALSTORAGE
-// =====================
-useEffect(() => {
-  // Cuando entra a esta pantalla, carga la sala que guardamos en DashboardScreen
-  const saved = localStorage.getItem('currentSala')
-  if (saved) {
-    setSala(JSON.parse(saved))
-  }
-}, [])
+  // =====================
+  // EFECTO: CARGAR SALA DE LOCALSTORAGE Y BACKEND
+  // =====================
+  useEffect(() => {
+    // Cuando entra a esta pantalla, carga la sala que guardamos en DashboardScreen
+    const saved = localStorage.getItem('currentSala')
+    if (saved) {
+      const salaData = JSON.parse(saved)
+      setSala(salaData)
+      
+      // Si no tiene imagen (fue filtrada por quota), obtener del backend
+      if (!salaData?.image) {
+        const profile = JSON.parse(localStorage.getItem('currentProfile') || {})
+        const user = JSON.parse(localStorage.getItem('user') || {})
+        if (user.uid && profile.name && salaData.name) {
+          fetch(`${import.meta.env.VITE_SERVER_URL || 'https://tp-eventos-backend.onrender.com'}/api/users/${user.uid}/salas?profile=${encodeURIComponent(profile.name)}`)
+            .then(res => res.json())
+            .then(data => {
+              if (data.salas) {
+                const updatedSala = data.salas.find(s => s.name === salaData.name)
+                if (updatedSala) {
+                  console.log('Got sala from backend - has image:', !!updatedSala.image)
+                  setSala(updatedSala)
+                  // Guardar en localStorage sin imagen (para evitar quota)
+                  const salaForLocal = { ...updatedSala, image: null }
+                  localStorage.setItem('currentSala', JSON.stringify(salaForLocal))
+                }
+              }
+            })
+            .catch(err => console.error('Error loading sala from backend:', err))
+        }
+      }
+    }
+  }, [])
 
   // =====================
   // FUNCIÓN: IR A LA EXPERIENCIA
