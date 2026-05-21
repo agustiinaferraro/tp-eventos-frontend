@@ -28,14 +28,31 @@ export async function apiSaveExperience(salaName, experience, profileName) {
   return apiPost(`/api/salas/${salaName}/experience`, { experience, profile: profileName })
 }
 
-// Generar imagen con IA usando Puter.js (gratis, sin API key, nano-banana powered)
+ // Generar imagen con IA usando Puter.js (gratis, sin API key, nano-banana powered)
 export async function generateImageWithAI(prompt) {
   try {
+    if (!window.puter) {
+      await new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        script.src = 'https://js.puter.com/v2/';
+        script.onload = resolve;
+        script.onerror = () => reject(new Error('No se pudo cargar Puter.js'));
+        document.head.appendChild(script);
+      });
+      
+      await new Promise(resolve => {
+        const checkPuter = () => {
+          if (window.puter) resolve();
+          else setTimeout(checkPuter, 100);
+        };
+        checkPuter();
+      });
+    }
+    
     if (!window.puter) {
       throw new Error('Puter no está cargado');
     }
     
-    // Generate usando Puter.js txt2img con nano-banana
     const imageElement = await window.puter.ai.txt2img(prompt, {
       model: "gemini-2.5-flash-image-preview"
     });

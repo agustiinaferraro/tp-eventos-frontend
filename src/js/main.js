@@ -158,7 +158,7 @@
     }
   }
   
-  function updateMilestoneColors() {
+   function updateMilestoneColors() {
     const c0 = experience.level0?.color || '#ff6b00';
     const c500 = experience.level1?.color || '#ffdd00';
     const c1000 = experience.level2?.color || '#00ff88';
@@ -168,16 +168,16 @@
     const m1000 = document.getElementById('milestoneNum1000');
     
     if (m0) {
-      m0.style.color = c0;
-      m0.style.textShadow = '0 0 15px ' + c0;
+      m0.style.setProperty('color', c0, 'important');
+      m0.style.setProperty('text-shadow', '0 0 15px ' + c0, 'important');
     }
     if (m500) {
-      m500.style.color = c500;
-      m500.style.textShadow = '0 0 15px ' + c500;
+      m500.style.setProperty('color', c500, 'important');
+      m500.style.setProperty('text-shadow', '0 0 15px ' + c500, 'important');
     }
     if (m1000) {
-      m1000.style.color = c1000;
-      m1000.style.textShadow = '0 0 15px ' + c1000;
+      m1000.style.setProperty('color', c1000, 'important');
+      m1000.style.setProperty('text-shadow', '0 0 15px ' + c1000, 'important');
     }
     
     const minorIds = ['m125', 'm250', 'm375', 'm625', 'm750', 'm875'];
