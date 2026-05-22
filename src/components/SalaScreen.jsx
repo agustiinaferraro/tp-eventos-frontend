@@ -82,30 +82,32 @@ const [sala, setSala] = useState(null)
   // =====================
   // FUNCIÓN: MOSTRAR MODAL DE QR
   // =====================
+   function getCurrentProfileName() {
+    const profile = JSON.parse(localStorage.getItem('currentProfile') || '{}')
+    return profile.name || ''
+  }
+
   const showQRModal = () => {
     setShowQR(true)
     window.history.replaceState({}, '', '?qr=open')
     
-    // Esperamos 100ms a que se renderice el modal
-    // luego generamos el código QR
     setTimeout(() => {
-      // Verificamos que la librería QRCode esté disponible
-      // (se carga desde CDN en experiencia.html)
       if (sala && typeof QRCode !== 'undefined') {
         const qrBox = document.getElementById('qrCodeBox')
         if (qrBox) {
-          qrBox.innerHTML = ''  // Limpiamos QR anterior si existe
+          qrBox.innerHTML = ''
           
-          // Construimos la URL para el QR
-          const url = getBaseUrl() + '/experiencia.html?sala=' + sala.name.toLowerCase().replace(/\s+/g, '-')
+          const profileName = getCurrentProfileName()
+          const salaSlug = sala.name.toLowerCase().replace(/\s+/g, '-')
+          const profileParam = profileName ? `&profile=${encodeURIComponent(profileName)}` : ''
+          const url = getBaseUrl() + '/experiencia.html?sala=' + salaSlug + profileParam
           
-          // Generamos el código QR
           new QRCode(qrBox, {
-            text: url,                    // URL a codificar
-            width: 196,                   // Ancho en px
-            height: 196,                  // Alto en px
-            colorDark: "#0a0a0a",         // Color de los módulos (negro)
-            colorLight: "#ffffff"          // Color del fondo (blanco)
+            text: url,
+            width: 196,
+            height: 196,
+            colorDark: "#0a0a0a",
+            colorLight: "#ffffff"
           })
         }
       }
@@ -115,15 +117,14 @@ const [sala, setSala] = useState(null)
   // =====================
   // FUNCIÓN: COPIAR LINK
   // =====================
-  const copyLink = () => {
-    // Construimos la URL
-    const url = getBaseUrl() + '/experiencia.html?sala=' + sala.name.toLowerCase().replace(/\s+/g, '-')
+   const copyLink = () => {
+    const profileName = getCurrentProfileName()
+    const salaSlug = sala.name.toLowerCase().replace(/\s+/g, '-')
+    const profileParam = profileName ? `&profile=${encodeURIComponent(profileName)}` : ''
+    const url = getBaseUrl() + '/experiencia.html?sala=' + salaSlug + profileParam
     
-    // navigator.clipboard.writeText copia el texto al portapapeles
     navigator.clipboard.writeText(url).then(() => {
-      setCopySuccess(true)  // Mostramos "¡Copiado!"
-      
-      // Después de 1.5s, cerramos el modal
+      setCopySuccess(true)
       setTimeout(() => setShowCopy(false), 1500)
     })
   }
@@ -220,9 +221,10 @@ const [sala, setSala] = useState(null)
       {/* ===================== */}
       {/* MODAL: CÓDIGO QR */}
       {/* ===================== */}
-      <QRModal 
+       <QRModal 
         sala={sala} 
         show={showQR} 
+        profileName={getCurrentProfileName()}
         onClose={() => {
           setShowQR(false)
           window.history.replaceState({}, '', window.location.pathname)

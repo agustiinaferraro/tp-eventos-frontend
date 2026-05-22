@@ -5,17 +5,21 @@
 import React, { useEffect } from 'react'
 import { getBaseUrl } from '../constants'
 
-export default function QRModal({ sala, show, onClose }) {
+ function buildExperienceUrl(sala, profileName) {
+  const baseUrl = getBaseUrl()
+  const salaSlug = sala.name.toLowerCase().replace(/\s+/g, '-')
+  const profileParam = profileName ? `&profile=${encodeURIComponent(profileName)}` : ''
+  return `${baseUrl}/experiencia.html?sala=${salaSlug}${profileParam}`
+}
+
+export default function QRModal({ sala, show, onClose, profileName }) {
   useEffect(() => {
     if (show && sala) {
       setTimeout(() => {
         const qrBox = document.getElementById('qrCodeBox')
         if (qrBox && typeof QRCode !== 'undefined') {
           qrBox.innerHTML = ''
-          const url =
-            getBaseUrl() +
-            '/experiencia.html?sala=' +
-            sala.name.toLowerCase().replace(/\s+/g, '-')
+          const url = buildExperienceUrl(sala, profileName)
 
           new QRCode(qrBox, {
             text: url,
@@ -27,14 +31,11 @@ export default function QRModal({ sala, show, onClose }) {
         }
       }, 100)
     }
-  }, [show, sala])
+  }, [show, sala, profileName])
 
   if (!show) return null
 
-  const url =
-    getBaseUrl() +
-    '/experiencia.html?sala=' +
-    sala.name.toLowerCase().replace(/\s+/g, '-')
+  const url = buildExperienceUrl(sala, profileName)
 
   return (
     <div
@@ -80,16 +81,13 @@ export default function QRModal({ sala, show, onClose }) {
   )
 }
 
-export function showQRCode(sala) {
+ export function showQRCode(sala, profileName) {
   setTimeout(() => {
     if (sala && typeof QRCode !== 'undefined') {
       const qrBox = document.getElementById('qrCodeBox')
       if (qrBox) {
         qrBox.innerHTML = ''
-        const url =
-          getBaseUrl() +
-          '/experiencia.html?sala=' +
-          sala.name.toLowerCase().replace(/\s+/g, '-')
+        const url = buildExperienceUrl(sala, profileName)
 
         new QRCode(qrBox, {
           text: url,
