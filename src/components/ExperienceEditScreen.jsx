@@ -141,23 +141,12 @@ export default function ExperienceEditScreen() {
 
   const progress = previewPoints / 1000
 
-  if (loading) {
+   if (loading) {
     return (
       <div className="h-screen bg-black flex items-center justify-center">
         <p className="text-white">Cargando...</p>
       </div>
     )
-  }
-
-  function handleColorChange(color) {
-    const levelKey = getLevelForPoints(previewPoints)
-    console.log('handleColorChange - level:', levelKey, 'new color:', color)
-    const newExp = {
-      ...experience,
-      [levelKey]: { ...experience[levelKey], color }
-    }
-    console.log('newExp.level1:', newExp.level1?.color)
-    setExperience(newExp)
   }
 
   return (
@@ -221,16 +210,24 @@ export default function ExperienceEditScreen() {
           </div>
         </div>
 
-        <div className="flex gap-3 flex-wrap items-end justify-center">
-          <div>
-            <label className="text-xs text-zinc-500 block mb-1">Color</label>
-            <input
-              type="color"
-              value={currentLvl.color}
-              onChange={(e) => handleColorChange(e.target.value)}
-              className="w-14 h-14 rounded-lg cursor-pointer border-2 border-zinc-700"
-            />
-          </div>
+          <div className="flex gap-3 flex-wrap items-end justify-center">
+          {LEVELS.map((level) => (
+            <div key={level.key}>
+              <label className="text-xs text-zinc-500 block mb-1">{level.label} ({level.min}-{level.max})</label>
+              <input
+                type="color"
+                value={experience[level.key]?.color || '#ff6b00'}
+                onChange={(e) => {
+                  const newExp = {
+                    ...experience,
+                    [level.key]: { ...experience[level.key], color: e.target.value }
+                  }
+                  setExperience(newExp)
+                }}
+                className="w-14 h-14 rounded-lg cursor-pointer border-2 border-zinc-700"
+              />
+            </div>
+          ))}
 
           <div className="relative">
             <label className="text-xs text-zinc-500 block mb-1">Fondo</label>
