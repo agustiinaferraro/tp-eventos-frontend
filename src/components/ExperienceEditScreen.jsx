@@ -25,6 +25,7 @@ export default function ExperienceEditScreen() {
   const [aiPrompt, setAiPrompt] = useState('')
   const [isGenerating, setIsGenerating] = useState(false)
   const [aiError, setAiError] = useState('')
+  const [bgMode, setBgMode] = useState(null)
   const skipPreviewRef = useRef(false)
   const [experience, setExperience] = useState({
     level0: { color: '#ff6b00', background: null, backgroundImage: null, particles: true, message: '¡Sumá tu energía!' },
@@ -231,75 +232,138 @@ export default function ExperienceEditScreen() {
             </div>
           ))}
 
-            <div className="flex flex-col gap-1">
-            <label className="text-xs text-zinc-500">Fondo (URL)</label>
-            <div className="flex gap-2 items-end">
-              <input
-                type="text"
-                value={bgInput}
-                onChange={(e) => setBgInput(e.target.value)}
-                placeholder="https://ejemplo.com/imagen.jpg"
-                className="bg-zinc-800 text-white text-sm p-2 rounded border border-zinc-700 w-48 focus:border-green-500 focus:outline-none"
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' && bgInput.trim()) {
-                    updateLevel(currentLevel, 'backgroundImage', bgInput.trim())
-                  }
-                }}
-              />
+           <div className="flex flex-col gap-2">
+            <div className="flex gap-2 justify-center">
+              <button
+                onClick={() => setBgMode(bgMode === 'color' ? null : 'color')}
+                className={`px-3 py-1 rounded text-xs ${
+                  bgMode === 'color'
+                    ? 'bg-green-600 text-white'
+                    : 'bg-zinc-800 text-zinc-400 hover:bg-zinc-700'
+                }`}
+              >
+                🎨 Color sólido
+              </button>
+              <button
+                onClick={() => setBgMode(bgMode === 'url' ? null : 'url')}
+                className={`px-3 py-1 rounded text-xs ${
+                  bgMode === 'url'
+                    ? 'bg-green-600 text-white'
+                    : 'bg-zinc-800 text-zinc-400 hover:bg-zinc-700'
+                }`}
+              >
+                🔗 URL
+              </button>
+              <button
+                onClick={() => setBgMode(bgMode === 'ai' ? null : 'ai')}
+                className={`px-3 py-1 rounded text-xs ${
+                  bgMode === 'ai'
+                    ? 'bg-green-600 text-white'
+                    : 'bg-zinc-800 text-zinc-400 hover:bg-zinc-700'
+                }`}
+              >
+                🤖 IA
+              </button>
               <button
                 onClick={() => {
-                  if (bgInput.trim()) {
-                    updateLevel(currentLevel, 'backgroundImage', bgInput.trim())
-                  }
+                  updateLevel(currentLevel, 'background', null)
+                  updateLevel(currentLevel, 'backgroundImage', null)
+                  setBgMode(null)
                 }}
-                className="bg-green-600 text-white px-3 py-2 rounded text-sm hover:bg-green-500 disabled:opacity-50"
-                disabled={!bgInput.trim()}
+                className="px-3 py-1 rounded text-xs bg-zinc-800 text-red-400 hover:bg-zinc-700"
               >
-                Aplicar
-               </button>
-            </div>
-          </div>
-
-          <div className="flex flex-col gap-1 mt-2">
-            <label className="text-xs text-zinc-500">Generar con IA</label>
-            {aiError && (
-              <p className="text-xs text-red-400">{aiError}</p>
-            )}
-            <div className="flex gap-2 items-end">
-              <input
-                type="text"
-                value={aiPrompt}
-                onChange={(e) => {
-                  setAiPrompt(e.target.value)
-                  setAiError('')
-                }}
-                placeholder="Ej: jazz night, neon lights, purple..."
-                className="bg-zinc-800 text-white text-sm p-2 rounded border border-zinc-700 w-48 focus:border-green-500 focus:outline-none"
-                disabled={isGenerating}
-              />
-              <button
-                onClick={async () => {
-                  if (!aiPrompt.trim() || isGenerating) return
-                  
-                  setIsGenerating(true)
-                  setAiError('')
-                  
-                  try {
-                    const imageUrl = await generateImageWithAI(aiPrompt.trim())
-                    updateLevel(currentLevel, 'backgroundImage', imageUrl)
-                    setAiPrompt('')
-                  } catch (err) {
-                    setAiError('Error: ' + err.message)
-                  } finally {
-                    setIsGenerating(false)
-                  }
-                }}
-                disabled={isGenerating || !aiPrompt.trim()}
-                className="bg-purple-600 text-white px-3 py-2 rounded text-sm hover:bg-purple-500 disabled:opacity-50"
-              >
-                {isGenerating ? '...' : '🤖 Generar'}
+                ✕ Quitar
               </button>
             </div>
+
+            {bgMode === 'color' && (
+              <div className="flex gap-2 items-center justify-center">
+                <input
+                  type="color"
+                  value={experience[currentLevel]?.background || '#000000'}
+                  onChange={(e) => {
+                    updateLevel(currentLevel, 'background', e.target.value)
+                    updateLevel(currentLevel, 'backgroundImage', null)
+                  }}
+                  className="w-14 h-14 rounded-lg cursor-pointer border-2 border-zinc-700"
+                />
+                <span className="text-xs text-zinc-500">Color de fondo para {LEVELS.find(l => l.key === currentLevel)?.label}</span>
+              </div>
+            )}
+
+            {bgMode === 'url' && (
+              <div className="flex gap-2 items-end justify-center">
+                <input
+                  type="text"
+                  value={bgInput}
+                  onChange={(e) => setBgInput(e.target.value)}
+                  placeholder="https://ejemplo.com/imagen.jpg"
+                  className="bg-zinc-800 text-white text-sm p-2 rounded border border-zinc-700 w-48 focus:border-green-500 focus:outline-none"
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' && bgInput.trim()) {
+                      updateLevel(currentLevel, 'backgroundImage', bgInput.trim())
+                      updateLevel(currentLevel, 'background', null)
+                    }
+                  }}
+                />
+                <button
+                  onClick={() => {
+                    if (bgInput.trim()) {
+                      updateLevel(currentLevel, 'backgroundImage', bgInput.trim())
+                      updateLevel(currentLevel, 'background', null)
+                    }
+                  }}
+                  className="bg-green-600 text-white px-3 py-2 rounded text-sm hover:bg-green-500 disabled:opacity-50"
+                  disabled={!bgInput.trim()}
+                >
+                  Aplicar
+                </button>
+              </div>
+            )}
+
+            {bgMode === 'ai' && (
+              <div className="flex flex-col gap-2">
+                {aiError && (
+                  <p className="text-xs text-red-400 text-center">{aiError}</p>
+                )}
+                <div className="flex gap-2 items-end justify-center">
+                  <input
+                    type="text"
+                    value={aiPrompt}
+                    onChange={(e) => {
+                      setAiPrompt(e.target.value)
+                      setAiError('')
+                    }}
+                    placeholder="Ej: jazz night, neon lights, purple..."
+                    className="bg-zinc-800 text-white text-sm p-2 rounded border border-zinc-700 w-48 focus:border-green-500 focus:outline-none"
+                    disabled={isGenerating}
+                  />
+                  <button
+                    onClick={async () => {
+                      if (!aiPrompt.trim() || isGenerating) return
+                      
+                      setIsGenerating(true)
+                      setAiError('')
+                      
+                      try {
+                        const imageUrl = await generateImageWithAI(aiPrompt.trim())
+                        updateLevel(currentLevel, 'backgroundImage', imageUrl)
+                        updateLevel(currentLevel, 'background', null)
+                        setAiPrompt('')
+                      } catch (err) {
+                        setAiError('Error: ' + err.message)
+                      } finally {
+                        setIsGenerating(false)
+                      }
+                    }}
+                    disabled={isGenerating || !aiPrompt.trim()}
+                    className="bg-purple-600 text-white px-3 py-2 rounded text-sm hover:bg-purple-500 disabled:opacity-50"
+                  >
+                    {isGenerating ? '...' : '🤖 Generar'}
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
 
           <button
