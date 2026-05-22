@@ -66,10 +66,15 @@ export default function ExperienceEditScreen() {
     }
   }, [previewPoints, experience, sala])
 
+   function normalizeSalaName(name) {
+    return name.toLowerCase().replace(/\s+/g, '-')
+  }
+
   async function loadExperience(salaName) {
     try {
       const profile = JSON.parse(localStorage.getItem('currentProfile') || '{}')
-      const data = await apiGetExperience(salaName, profile.name)
+      const normalizedName = normalizeSalaName(salaName)
+      const data = await apiGetExperience(normalizedName, profile.name)
       setExperience(data.experience)
     } catch (err) {
       console.error('Error cargando experiencia:', err)
@@ -83,7 +88,8 @@ export default function ExperienceEditScreen() {
     setSaving(true)
     try {
       const profile = JSON.parse(localStorage.getItem('currentProfile') || '{}')
-      await apiSaveExperience(sala.name, experience, profile.name)
+      const normalizedName = normalizeSalaName(sala.name)
+      await apiSaveExperience(normalizedName, experience, profile.name)
       navigate('/sala')
     } catch (err) {
       console.error('Error guardando experiencia:', err)
