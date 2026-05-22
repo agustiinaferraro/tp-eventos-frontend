@@ -43,11 +43,7 @@ export default function ExperienceEditScreen() {
     }
   }, [])
 
-  useEffect(() => {
-    if (skipPreviewRef.current) {
-      skipPreviewRef.current = false
-      return
-    }
+   function sendPreview() {
     if (iframeRef.current) {
       const currentLevelKey = getLevelForPoints(previewPoints)
       const config = {
@@ -56,15 +52,41 @@ export default function ExperienceEditScreen() {
         experience: experience,
         currentLevel: currentLevelKey
       }
-      console.log('useEffect sending - level1:', experience.level1?.color)
+      console.log('sendPreview - level0:', experience.level0?.color)
+      console.log('sendPreview - level1:', experience.level1?.color)
+      console.log('sendPreview - level2:', experience.level2?.color)
       try {
         iframeRef.current.contentWindow?.postMessage(
           { type: 'EXPERIENCE_PREVIEW', config },
           '*'
         )
-      } catch (e) {}
+      } catch (e) {
+        console.error('Error sending preview:', e)
+      }
     }
+  }
+
+  useEffect(() => {
+    if (skipPreviewRef.current) {
+      skipPreviewRef.current = false
+      return
+    }
+    sendPreview()
   }, [previewPoints, experience, sala])
+
+  useEffect(() => {
+    if (!loading && iframeRef.current) {
+      const timer1 = setTimeout(sendPreview, 500)
+      const timer2 = setTimeout(sendPreview, 1500)
+      const timer3 = setTimeout(sendPreview, 3000)
+      
+      return () => {
+        clearTimeout(timer1)
+        clearTimeout(timer2)
+        clearTimeout(timer3)
+      }
+    }
+  }, [loading, experience])
 
    function normalizeSalaName(name) {
     return name.toLowerCase().replace(/\s+/g, '-')
