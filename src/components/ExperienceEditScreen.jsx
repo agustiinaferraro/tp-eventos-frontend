@@ -2,9 +2,8 @@
 // ExperienceEditScreen.jsx - Personalizar experiencia de sala
 // =====================
 
-import React, { useState, useEffect, useRef } from 'react'
+ import React, { useState, useEffect, useRef } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
-import BackButton from './BackButton'
 import { apiGetExperience, apiSaveExperience } from '../utils/api'
 import { getBaseUrl } from '../constants'
 
@@ -18,13 +17,11 @@ export default function ExperienceEditScreen() {
   const navigate = useNavigate()
   const location = useLocation()
   const iframeRef = useRef(null)
-  const [loading, setLoading] = useState(true)
+   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [sala, setSala] = useState(null)
   const [previewPoints, setPreviewPoints] = useState(0)
-  const [showBgMenu, setShowBgMenu] = useState(false)
   const [bgInput, setBgInput] = useState('')
-  const [bgInputVisible, setBgInputVisible] = useState(false)
   const skipPreviewRef = useRef(false)
   const [experience, setExperience] = useState({
     level0: { color: '#ff6b00', background: null, backgroundImage: null, particles: true, message: '¡Sumá tu energía!' },
@@ -171,36 +168,16 @@ export default function ExperienceEditScreen() {
     )
   }
 
-  return (
+    return (
     <div className="h-screen bg-black flex flex-col overflow-hidden">
-      {bgInputVisible ? (
-        <div className="p-2 bg-zinc-950 flex justify-between items-center">
-          <BackButton onClick={() => setBgInputVisible(false)} />
-          <input
-            type="text"
-            value={bgInput}
-            onChange={(e) => setBgInput(e.target.value)}
-            placeholder="URL de imagen..."
-            className="flex-1 mx-2 bg-zinc-800 text-white text-sm p-1 rounded max-w-40"
-            onKeyDown={(e) => e.key === 'Enter' && updateLevel(currentLevel, 'backgroundImage', bgInput)}
-          />
-          <button
-            onClick={() => { updateLevel(currentLevel, 'backgroundImage', bgInput); setBgInputVisible(false) }}
-            className="text-green-500 text-sm"
-          >
-            ✓
-          </button>
-        </div>
-      ) : (
-        <div className="fixed top-2 right-2 z-50 flex gap-2">
-          <button
-            onClick={handleBack}
-            className="bg-zinc-800 text-white p-2 rounded-full text-xs"
-          >
-            ✕
-          </button>
-        </div>
-      )}
+      <div className="fixed top-2 right-2 z-50 flex gap-2">
+        <button
+          onClick={handleBack}
+          className="bg-zinc-800 text-white p-2 rounded-full text-xs"
+        >
+          ✕
+        </button>
+      </div>
 
       <div className="flex-1 relative">
         <iframe
@@ -251,30 +228,33 @@ export default function ExperienceEditScreen() {
             </div>
           ))}
 
-          <div className="relative">
-            <label className="text-xs text-zinc-500 block mb-1">Fondo</label>
-            <button
-              onClick={() => setShowBgMenu(!showBgMenu)}
-              className="w-14 h-14 rounded-lg border-2 border-zinc-700 bg-zinc-800 flex items-center justify-center text-3xl"
-            >
-              🖼️
-            </button>
-            {showBgMenu && (
-              <div className="absolute bottom-full left-0 mb-2 bg-zinc-800 rounded-lg p-2 shadow-lg z-20 w-44">
-                <button
-                  onClick={() => { setShowIaInput(true); setShowBgMenu(false) }}
-                  className="block w-full text-left text-sm text-zinc-300 hover:bg-zinc-700 p-2 rounded"
-                >
-                  IA (proximamente)
-                </button>
-                <button
-                  onClick={() => { setBgInputVisible(true); setShowBgMenu(false) }}
-                  className="block w-full text-left text-sm text-zinc-300 hover:bg-zinc-700 p-2 rounded"
-                >
-                  Internet
-                </button>
-              </div>
-            )}
+            <div className="flex flex-col gap-1">
+            <label className="text-xs text-zinc-500">Fondo (URL)</label>
+            <div className="flex gap-2 items-end">
+              <input
+                type="text"
+                value={bgInput}
+                onChange={(e) => setBgInput(e.target.value)}
+                placeholder="https://ejemplo.com/imagen.jpg"
+                className="bg-zinc-800 text-white text-sm p-2 rounded border border-zinc-700 w-48 focus:border-green-500 focus:outline-none"
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && bgInput.trim()) {
+                    updateLevel(currentLevel, 'backgroundImage', bgInput.trim())
+                  }
+                }}
+              />
+              <button
+                onClick={() => {
+                  if (bgInput.trim()) {
+                    updateLevel(currentLevel, 'backgroundImage', bgInput.trim())
+                  }
+                }}
+                className="bg-green-600 text-white px-3 py-2 rounded text-sm hover:bg-green-500 disabled:opacity-50"
+                disabled={!bgInput.trim()}
+              >
+                Aplicar
+              </button>
+            </div>
           </div>
 
           <button
