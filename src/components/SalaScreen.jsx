@@ -42,10 +42,10 @@ const [sala, setSala] = useState(null)
       const salaData = JSON.parse(saved)
       setSala(salaData)
       
-      // Si no tiene imagen (fue filtrada por quota), obtener del backend
+       // Si no tiene imagen (fue filtrada por quota), obtener del backend
       if (!salaData?.image) {
-        const profile = JSON.parse(localStorage.getItem('currentProfile') || {})
-        const user = JSON.parse(localStorage.getItem('user') || {})
+        const profile = JSON.parse(localStorage.getItem('currentProfile') || '{}')
+        const user = JSON.parse(localStorage.getItem('user') || '{}')
         if (user.uid && profile.name && salaData.name) {
           fetch(`${import.meta.env.VITE_SERVER_URL || 'https://tp-eventos-backend.onrender.com'}/api/users/${user.uid}/salas?profile=${encodeURIComponent(profile.name)}`)
             .then(res => res.json())
