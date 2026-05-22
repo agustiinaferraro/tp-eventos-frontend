@@ -230,25 +230,32 @@
     updateOfflineIndicator();
   }
 
-  function sendPendingEnergy() {
+   function sendPendingEnergy() {
     const pending = getPendingEnergy();
-    if (pending > 0) {
+    console.log('sendPendingEnergy - pendiente:', pending, '- navigator.onLine:', navigator.onLine, '- socket.connected:', socket.connected);
+    
+    if (pending > 0 && navigator.onLine && socket.connected) {
       const syncing = document.getElementById("syncingEnergy");
       const offline = document.getElementById("offlineEnergy");
+      
       if (offline) offline.classList.add("hidden");
       if (syncing) {
         syncing.classList.remove("hidden");
         syncing.textContent = "🔄 Enviando " + pending + " puntos...";
       }
       
+      console.log('Enviando energía pendiente:', pending);
       socket.emit("energy", { energy: pending });
       
       setTimeout(() => {
         clearPendingEnergy();
+        console.log('Energía pendiente enviada y limpiada');
         if (syncing) {
           syncing.classList.add("hidden");
         }
       }, 1000);
+    } else if (pending > 0) {
+      console.log('No se puede enviar energía pendiente todavía - esperando reconexión');
     }
   }
 
@@ -264,29 +271,44 @@
     }
   }
 
-  function savePendingEnergy(energy) {
-    pendingEnergy += energy;
-    localStorage.setItem(OFFLINE_KEY, pendingEnergy.toString());
+   function savePendingEnergy(energy) {
+    const currentPending = getPendingEnergy();
+    const newPending = currentPending + energy;
+    localStorage.setItem(OFFLINE_KEY, newPending.toString());
+    pendingEnergy = newPending;
+    console.log('Energía guardada offline:', energy, '- Total pendiente:', newPending);
     updateOfflineIndicator();
   }
 
-  function trySendEnergy(energy) {
+   function trySendEnergy(energy) {
     const now = Date.now();
     if (now - lastSendTime < 100) return;
     lastSendTime = now;
+    
     savePendingEnergy(energy);
-    if (socket.connected) {
+    
+    const isActuallyOnline = navigator.onLine && socket.connected;
+    
+    if (isActuallyOnline) {
       socket.emit("energy", { energy: energy });
+    } else {
+      console.log('Offline: energía guardada localmente:', energy);
+      updateOfflineIndicator();
     }
   }
 
-  window.addEventListener('offline', () => {
+   window.addEventListener('offline', () => {
+    console.log('Modo offline activado');
     connectionStatus.classList.remove("connected");
     connectionText.textContent = "SIN CONEXIÓN";
     updateOfflineIndicator();
   });
 
   window.addEventListener('online', () => {
+    console.log('Conexión restaurada - enviando energía pendiente');
+    connectionStatus.classList.add("connected");
+    connectionText.textContent = "CONECTADO";
+    sendPendingEnergy();
     updateOfflineIndicator();
   });
 
