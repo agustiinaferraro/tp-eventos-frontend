@@ -70,11 +70,19 @@ export default function ExperienceEditScreen() {
     return name.toLowerCase().replace(/\s+/g, '-')
   }
 
-  async function loadExperience(salaName) {
+    async function loadExperience(salaName) {
     try {
       const profile = JSON.parse(localStorage.getItem('currentProfile') || '{}')
+      console.log('loadExperience - profile:', profile)
+      console.log('loadExperience - salaName original:', salaName)
+      
       const normalizedName = normalizeSalaName(salaName)
+      console.log('loadExperience - normalizedName:', normalizedName)
+      console.log('loadExperience - profile.name:', profile.name)
+      
       const data = await apiGetExperience(normalizedName, profile.name)
+      console.log('loadExperience - data received:', data)
+      
       setExperience(data.experience)
     } catch (err) {
       console.error('Error cargando experiencia:', err)
@@ -83,13 +91,21 @@ export default function ExperienceEditScreen() {
     }
   }
 
-  async function handleSave() {
+   async function handleSave() {
     if (!sala) return
     setSaving(true)
     try {
       const profile = JSON.parse(localStorage.getItem('currentProfile') || '{}')
+      console.log('handleSave - profile:', profile)
+      console.log('handleSave - sala.name:', sala.name)
+      
       const normalizedName = normalizeSalaName(sala.name)
+      console.log('handleSave - normalizedName:', normalizedName)
+      console.log('handleSave - profile.name:', profile.name)
+      
       await apiSaveExperience(normalizedName, experience, profile.name)
+      console.log('handleSave - guardado exitosamente')
+      
       navigate('/sala')
     } catch (err) {
       console.error('Error guardando experiencia:', err)
