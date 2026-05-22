@@ -93,10 +93,12 @@
       document.body.style.backgroundColor = '#000';
     }
     
-    // Aplicar imagen de fondo
+     // Aplicar imagen de fondo
     if (lvl.backgroundImage) {
       document.body.style.backgroundImage = 'url(' + lvl.backgroundImage + ')';
       document.body.style.backgroundSize = 'cover';
+      document.body.style.backgroundRepeat = 'no-repeat';
+      document.body.style.backgroundPosition = 'center';
     } else {
       document.body.style.backgroundImage = 'none';
     }
@@ -147,13 +149,16 @@
       createContinuousParticles(points);
     }
     
-    // Fondo
+     // Fondo
     if (lvl.background) {
       document.body.style.backgroundColor = lvl.background;
     }
     
     if (lvl.backgroundImage) {
       document.body.style.backgroundImage = 'url(' + lvl.backgroundImage + ')';
+      document.body.style.backgroundSize = 'cover';
+      document.body.style.backgroundRepeat = 'no-repeat';
+      document.body.style.backgroundPosition = 'center';
     } else if (!lvl.background) {
       document.body.style.backgroundColor = '#000';
       document.body.style.backgroundImage = 'none';
