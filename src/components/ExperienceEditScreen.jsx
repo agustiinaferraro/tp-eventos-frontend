@@ -13,10 +13,11 @@ const LEVELS = [
   { key: 'level2', min: 1000, max: 1000, label: 'Nivel 3' }
 ]
 
-export default function ExperienceEditScreen() {
+ export default function ExperienceEditScreen() {
   const navigate = useNavigate()
   const location = useLocation()
   const iframeRef = useRef(null)
+  const fileInputRef = useRef(null)
     const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [sala, setSala] = useState(null)
@@ -254,7 +255,7 @@ export default function ExperienceEditScreen() {
               >
                 🔗 URL
               </button>
-              <button
+               <button
                 onClick={() => setBgMode(bgMode === 'ai' ? null : 'ai')}
                 className={`px-3 py-1 rounded text-xs ${
                   bgMode === 'ai'
@@ -263,6 +264,12 @@ export default function ExperienceEditScreen() {
                 }`}
               >
                 🤖 IA
+              </button>
+              <button
+                onClick={() => fileInputRef.current?.click()}
+                className="px-3 py-1 rounded text-xs bg-zinc-800 text-zinc-400 hover:bg-zinc-700"
+              >
+                📁 Galería
               </button>
               <button
                 onClick={() => {
@@ -274,6 +281,31 @@ export default function ExperienceEditScreen() {
               >
                 ✕ Quitar
               </button>
+              
+              <input
+                type="file"
+                ref={fileInputRef}
+                accept="image/*"
+                className="hidden"
+                onChange={(e) => {
+                  const file = e.target.files?.[0]
+                  if (!file) return
+                  
+                  const reader = new FileReader()
+                  reader.onload = (ev) => {
+                    const imageUrl = ev.target?.result
+                    if (typeof imageUrl === 'string') {
+                      updateLevel(currentLevel, 'backgroundImage', imageUrl)
+                      updateLevel(currentLevel, 'background', null)
+                    }
+                  }
+                  reader.readAsDataURL(file)
+                  
+                  if (fileInputRef.current) {
+                    fileInputRef.current.value = ''
+                  }
+                }}
+              />
             </div>
 
             {bgMode === 'color' && (
