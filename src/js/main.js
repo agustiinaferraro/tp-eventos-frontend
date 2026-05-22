@@ -1,6 +1,7 @@
-(function() {
+ (function() {
   const urlParams = new URLSearchParams(window.location.search);
   const salaParam = urlParams.get("sala");
+  const profileParam = urlParams.get("profile");
   
   if (!salaParam) {
     return;
@@ -59,9 +60,10 @@
     }
   });
 
-  async function loadExperience() {
+   async function loadExperience() {
     try {
-      const res = await fetch(SERVER_URL + '/api/salas/' + salaParam + '/experience');
+      const profileQuery = profileParam ? `?profile=${encodeURIComponent(profileParam)}` : '';
+      const res = await fetch(SERVER_URL + '/api/salas/' + salaParam + '/experience' + profileQuery);
       if (res.ok) {
         const data = await res.json();
         experience = data.experience;

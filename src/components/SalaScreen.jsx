@@ -70,14 +70,11 @@ const [sala, setSala] = useState(null)
   // =====================
   // FUNCIÓN: IR A LA EXPERIENCIA
   // =====================
-  const goToExperience = () => {
+   const goToExperience = () => {
     if (sala) {
-      // Construimos la URL: baseUrl/experiencia.html?sala=nombre-sala
-      // replace(/\s+/g, '-') convierte espacios en guiones
-      // toLowerCase() todo en minúsculas
-      const url = getBaseUrl() + '/experiencia.html?sala=' + sala.name.toLowerCase().replace(/\s+/g, '-')
-      
-      // Navegamos a la URL de la experiencia
+      const profile = JSON.parse(localStorage.getItem('currentProfile') || '{}')
+      const profileParam = profile.name ? `&profile=${encodeURIComponent(profile.name)}` : ''
+      const url = getBaseUrl() + '/experiencia.html?sala=' + sala.name.toLowerCase().replace(/\s+/g, '-') + profileParam
       window.location.href = url
     }
   }
