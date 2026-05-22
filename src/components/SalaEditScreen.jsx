@@ -154,51 +154,56 @@ export default function SalaEditScreen() {
     }
   }
   
+   const currentProfile = JSON.parse(localStorage.getItem('currentProfile') || '{}')
+  const profileKey = currentProfile.name || 'default'
+  
   const handleSave = async () => {
-    if (!user?.uid) {
-      setError('No hay usuario logueado')
-      return
+    try {
+      if (!user?.uid) {
+        setError('No hay usuario logueado')
+        return
+      }
+      
+      if (!name.trim()) {
+        setError('El nombre de la sala es obligatorio')
+        return
+      }
+      
+      setIsSaving(true)
+      setError('')
+      
+      const savedSalas = localStorage.getItem('salas_' + user.uid + '_' + profileKey)
+      const salas = savedSalas ? JSON.parse(savedSalas) : []
+      
+      const salaData = {
+        name: name.trim(),
+        color: choseColor ? color : (image ? null : (isNew ? color : (salas[editingIndex]?.color || COLORS[0]))),
+        image: image,
+        brightness: brightness,
+        id: initialSala.id || Date.now()
+      }
+      
+      let newSalas = [...salas]
+      if (isNew) {
+        newSalas.push(salaData)
+      } else {
+        newSalas[editingIndex] = salaData
+      }
+      
+      localStorage.setItem('salas_' + user.uid + '_' + profileKey, JSON.stringify(newSalas))
+      
+      try {
+        await apiPost(`/api/users/${user.uid}/salas`, { salas: newSalas })
+      } catch (err) {}
+      
+      setIsSaving(false)
+      const salaSinImagen = { ...salaData, image: null }
+      localStorage.setItem('currentSala', JSON.stringify(salaSinImagen))
+      navigate('/sala')
+    } catch (err) {
+      setIsSaving(false)
+      setError('Error al guardar: ' + err.message)
     }
-    
-    if (!name.trim()) {
-      setError('El nombre de la sala es obligatorio')
-      return
-    }
-    
-    setIsSaving(true)
-    setError('')
-    
-    const currentProfile = JSON.parse(localStorage.getItem('currentProfile') || '{}')
-    const profileKey = currentProfile.name || 'default'
-    const savedSalas = localStorage.getItem('salas_' + user.uid + '_' + profileKey)
-    const salas = savedSalas ? JSON.parse(savedSalas) : []
-    
-    const salaData = {
-      name: name.trim(),
-      color: choseColor ? color : (image ? null : (isNew ? color : (salas[editingIndex]?.color || COLORS[0]))),
-      image: image,
-      brightness: brightness,
-      id: initialSala.id || Date.now()
-    }
-    
-    let newSalas = [...salas]
-    if (isNew) {
-      newSalas.push(salaData)
-    } else {
-      newSalas[editingIndex] = salaData
-    }
-    
-    localStorage.setItem('salas_' + user.uid + '_' + profileKey, JSON.stringify(newSalas))
-    
-     try {
-      const { apiPost } = await import('../utils/api')
-      await apiPost(`/api/users/${user.uid}/salas`, { salas: newSalas })
-    } catch (err) {}
-    
-    setIsSaving(false)
-    const salaSinImagen = { ...salaData, image: null }
-    localStorage.setItem('currentSala', JSON.stringify(salaSinImagen))
-    navigate('/sala')
   }
   
 return (
