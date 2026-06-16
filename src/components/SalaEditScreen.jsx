@@ -190,7 +190,11 @@ export default function SalaEditScreen() {
         newSalas[editingIndex] = salaData
       }
       
-      localStorage.setItem('salas_' + user.uid + '_' + profileKey, JSON.stringify(newSalas))
+      const salasForLocal = newSalas.map(s => ({
+        ...s,
+        image: s.image?.startsWith('data:image') ? null : s.image
+      }))
+      localStorage.setItem('salas_' + user.uid + '_' + profileKey, JSON.stringify(salasForLocal))
       
       try {
         await apiPost(`/api/users/${user.uid}/salas`, { salas: newSalas })
