@@ -55,7 +55,7 @@ export default function NavBar() {
       <img
         src='/img/logo.png'
         alt='Team Up'
-        className='h-10 cursor-pointer'
+        className='h-12 cursor-pointer'
         onClick={() => navigate('/dashboard')}
       />
       
