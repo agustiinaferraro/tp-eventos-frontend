@@ -52,12 +52,12 @@ export default function NavBar() {
     <nav className='w-full max-w-5xl flex justify-between items-center relative pt-4 pb-4 px-4 mx-auto'>
       
       {/* Logo a la izquierda (clickeable -> Dashboard) */}
-      <div 
-        className='w-10 h-10 bg-green-600 rounded-full flex items-center justify-center cursor-pointer'
+      <img
+        src='/img/logo.PNG'
+        alt='Team Up'
+        className='h-10 cursor-pointer'
         onClick={() => navigate('/dashboard')}
-      >
-        <span className='text-white font-bold text-xl'>E</span>
-      </div>
+      />
       
       {/* Buscador de salas (CENTRADO) */}
       <div className='flex-1 max-w-xs mx-4'>
