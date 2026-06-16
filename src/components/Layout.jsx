@@ -10,10 +10,14 @@ import Footer from './Footer'
 export default function Layout() {
   const location = useLocation()
 
-  // Ocultar Nav/Footer en pantallas específicas
+  const hasProfile = localStorage.getItem('currentProfile')
+    ? JSON.parse(localStorage.getItem('currentProfile'))?.name
+    : null
+
   const hideLayout =
     location.pathname === '/' ||
-    location.pathname.includes('experiencia')
+    location.pathname.includes('experiencia') ||
+    !hasProfile
 
   if (hideLayout) {
     return <Outlet />
