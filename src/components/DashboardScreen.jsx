@@ -6,10 +6,8 @@
 import React, { useState, useEffect } from 'react'
 
 // useNavigate para navegar entre pantallas
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 
-// useAuth: usuario actual
-// auth: instancia de Firebase Auth
 import { useAuth, auth } from '../context/AuthContext'
 import { useApp } from '../context/AppContext'
 
@@ -30,6 +28,7 @@ export default function DashboardScreen() {
   
   // Navegación
   const navigate = useNavigate()
+  const location = useLocation()
 
   // =====================
   // ESTADOS
@@ -76,7 +75,7 @@ export default function DashboardScreen() {
     
     // Cargamos los perfiles
     loadProfiles()
-  }, [user])  // Se ejecuta cuando user cambia
+  }, [user, location.key])  // Se ejecuta cuando user o la ruta cambian
 
   // =====================
   // FUNCIÓN: CARGAR PERFILES
