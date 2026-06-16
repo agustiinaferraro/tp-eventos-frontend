@@ -1,4 +1,4 @@
-# Energía Colectiva — Frontend
+# Team Up — Frontend
 
 Panel de administración para gestionar salas de experiencia musical en vivo.
 
