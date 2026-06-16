@@ -53,7 +53,7 @@ export default function NavBar() {
       
       {/* Logo a la izquierda (clickeable -> Dashboard) */}
       <img
-        src='/img/logo.PNG'
+        src='/img/logo.png'
         alt='Team Up'
         className='h-10 cursor-pointer'
         onClick={() => navigate('/dashboard')}
