@@ -15,7 +15,7 @@ export default function NavBar() {
   const [showDropdown, setShowDropdown] = useState(false)
   const [showSwitchModal, setShowSwitchModal] = useState(false)
   
-  const currentProfile = authCurrentProfile || JSON.parse(localStorage.getItem('currentProfile') || '{}')
+  const currentProfile = JSON.parse(localStorage.getItem('currentProfile') || '{}')
   const currentSala = JSON.parse(localStorage.getItem('currentSala') || 'null')
   const savedAccounts = JSON.parse(localStorage.getItem('savedAccounts') || '[]')
   
