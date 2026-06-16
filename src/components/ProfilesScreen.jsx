@@ -123,7 +123,7 @@ export default function ProfilesScreen() {
   // =====================
 return (
     <div className='flex items-center justify-center min-h-screen w-full p-10'>
-      <div className="absolute top-0 left-0 pointer-events-none">
+      <div className="absolute top-0 left-0">
         <BackButton onClick={() => navigate('/')} />
       </div>
       
