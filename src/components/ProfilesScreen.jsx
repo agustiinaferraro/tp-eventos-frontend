@@ -122,12 +122,12 @@ export default function ProfilesScreen() {
   // RENDERIZADO
   // =====================
 return (
-    <div className='flex items-center justify-center min-h-screen w-full p-10'>
-      <div className="absolute top-0 left-0">
+    <div className='flex flex-col min-h-screen w-full p-10'>
+      <div className="pointer-events-none w-full max-w-5xl">
         <BackButton onClick={() => navigate('/')} />
       </div>
       
-      <div className="flex flex-col items-center">
+      <div className="flex-1 flex flex-col items-center justify-center -mt-16">
         {/* Título */}
         <h1 className="text-4xl md:text-6xl tracking-widest text-green-400 mb-8 text-center">
           ¿QUIÉN SOS?
