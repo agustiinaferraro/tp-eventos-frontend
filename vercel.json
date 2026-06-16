@@ -2,6 +2,6 @@
   "rewrites": [
     { "source": "/(.*)", "destination": "/index.html" }
   ],
-  "buildCommand": "yarn build && cp admin.html dist/",
+  "buildCommand": "npm run build",
   "outputDirectory": "dist"
 }

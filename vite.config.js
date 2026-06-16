@@ -10,11 +10,7 @@ dotenv.config();
 export default defineConfig({
   server: {
     host: true,
-    allowedHosts: ['.onrender.com'],
-    https: {
-      key: fs.readFileSync('./key.pem'),
-      cert: fs.readFileSync('./cert.pem')
-    }
+    allowedHosts: ['.onrender.com']
   },
   resolve: {
     alias: {
@@ -30,8 +26,7 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: resolve(__dirname, 'index.html'),
-        experiencia: resolve(__dirname, 'experiencia.html'),
-        admin: resolve(__dirname, 'admin.html')
+        experiencia: resolve(__dirname, 'experiencia.html')
       }
     }
   }
