@@ -17,6 +17,7 @@ export default function Layout() {
   const hideLayout =
     location.pathname === '/' ||
     location.pathname.includes('experiencia') ||
+    location.pathname.startsWith('/profiles') ||
     !hasProfile
 
   if (hideLayout) {
