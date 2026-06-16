@@ -1,7 +1,6 @@
 import { defineConfig } from 'vite';
 import dotenv from 'dotenv';
 import { resolve } from 'path';
-import fs from 'fs';
 import tailwindcss from 'tailwindcss';
 import autoprefixer from 'autoprefixer';
 
