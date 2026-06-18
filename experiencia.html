@@ -9,10 +9,10 @@
     if (!window.location.search.includes('sala=')) {
       window.onload = function() {
         document.body.innerHTML = `
-          <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;background:#000;color:#fff;text-align:center;padding:20px;font-family:system-ui,sans-serif;">
-            <h1 style="font-size:2rem;margin-bottom:1rem;">🟠 TeamUp</h1>
-            <p style="color:#888;margin-bottom:2rem;">Ingresá desde el Admin Panel o con un código QR.</p>
-            <a href="/" style="color:#22c55e;text-decoration:underline;">Ir al Admin Panel</a>
+          <div class="no-sala-wrap">
+            <h1 class="no-sala-title">🟠 TeamUp</h1>
+            <p class="no-sala-text">Ingresá desde el Admin Panel o con un código QR.</p>
+            <a href="/" class="no-sala-link">Ir al Admin Panel</a>
           </div>
         `;
       };
@@ -44,15 +44,15 @@
     <section class="w-full max-w-md mt-8 mb-8 box-border px-4">
       <div class="relative flex justify-end">
         <div class="relative h-6 mb-1 w-full box-border" id="progressLabels">
-          <span class="absolute milestone-num" style="left: 12%" id="m125">125</span>
-          <span class="absolute milestone-num" style="left: 25%" id="m250">250</span>
-          <span class="absolute milestone-num" style="left: 37%" id="m375">375</span>
-          <span class="absolute milestone-num" style="left: 62%" id="m625">625</span>
-          <span class="absolute milestone-num" style="left: 75%" id="m750">750</span>
-          <span class="absolute milestone-num" style="left: 87%" id="m875">875</span>
-          <div class="milestone milestone-orange" style="left: 0%" id="milestone0"><span class="milestone-num big" id="milestoneNum0">0</span></div>
-          <div class="milestone milestone-yellow milestone-center" style="left: 50%" id="milestone500"><span class="milestone-num big milestone-yellow" id="milestoneNum500">500</span></div>
-          <div class="milestone milestone-green" style="right: 0%" id="milestone1000"><span class="milestone-num big milestone-green" id="milestoneNum1000">1000</span></div>
+          <span class="absolute milestone-num ml-12" id="m125">125</span>
+          <span class="absolute milestone-num ml-25" id="m250">250</span>
+          <span class="absolute milestone-num ml-37" id="m375">375</span>
+          <span class="absolute milestone-num ml-62" id="m625">625</span>
+          <span class="absolute milestone-num ml-75" id="m750">750</span>
+          <span class="absolute milestone-num ml-87" id="m875">875</span>
+          <div class="milestone milestone-orange" id="milestone0"><span class="milestone-num big" id="milestoneNum0">0</span></div>
+          <div class="milestone milestone-yellow milestone-center" id="milestone500"><span class="milestone-num big milestone-yellow" id="milestoneNum500">500</span></div>
+          <div class="milestone milestone-green" id="milestone1000"><span class="milestone-num big milestone-green" id="milestoneNum1000">1000</span></div>
         </div>
       </div>
       <div id="bar-container" class="h-2 bg-neutral-900 rounded w-full box-border">

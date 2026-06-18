@@ -136,12 +136,12 @@ header {
   transform: translateX(-50%);
 }
 
-#progressLabels span:first-child { left: 25%; }
-#progressLabels span:nth-child(2) { left: 75%; }
-#progressLabels span:nth-child(3) { left: 12%; }
-#progressLabels span:nth-child(4) { left: 37%; }
-#progressLabels span:nth-child(5) { left: 62%; }
-#progressLabels span:nth-child(6) { left: 87%; }
+.ml-12 { left: 12%; }
+.ml-25 { left: 25%; }
+.ml-37 { left: 37%; }
+.ml-62 { left: 62%; }
+.ml-75 { left: 75%; }
+.ml-87 { left: 87%; }
 
 .milestone {
   position: absolute;
@@ -479,6 +479,31 @@ header {
   padding: 1rem;
   text-align: center;
   z-index: 100;
+}
+
+.no-sala-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background: #000;
+  color: #fff;
+  text-align: center;
+  padding: 20px;
+  font-family: system-ui, sans-serif;
+}
+.no-sala-title {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+.no-sala-text {
+  color: #888;
+  margin-bottom: 2rem;
+}
+.no-sala-link {
+  color: #22c55e;
+  text-decoration: underline;
 }
 
 .connection-status {
