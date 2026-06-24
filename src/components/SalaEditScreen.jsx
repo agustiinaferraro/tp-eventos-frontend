@@ -218,7 +218,8 @@ export default function SalaEditScreen() {
       } catch (err) {}
       
       setIsSaving(false)
-      localStorage.setItem('currentSala', JSON.stringify(salaData))
+      const salaSinImagen = { ...salaData, image: null }
+      localStorage.setItem('currentSala', JSON.stringify(salaSinImagen))
       navigate('/sala')
     } catch (err) {
       setIsSaving(false)
