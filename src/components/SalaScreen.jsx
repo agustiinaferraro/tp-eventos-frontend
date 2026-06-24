@@ -8,6 +8,8 @@ import React, { useState, useEffect } from 'react'
 // useNavigate para navegar de vuelta al dashboard
 import { useNavigate } from 'react-router-dom'
 
+import { useAuth } from '../context/AuthContext'
+
 // getBaseUrl: función para obtener la URL base de la experiencia
 import { getBaseUrl } from '../constants'
 
@@ -19,6 +21,7 @@ import QRModal from './QRModal'
 export default function SalaScreen() {
   // Navegación
   const navigate = useNavigate()
+  const { user } = useAuth()
 
 // =====================
 // ESTADOS
@@ -45,8 +48,7 @@ const [sala, setSala] = useState(null)
        // Si no tiene imagen (fue filtrada por quota), obtener del backend
       if (!salaData?.image) {
         const profile = JSON.parse(localStorage.getItem('currentProfile') || '{}')
-        const user = JSON.parse(localStorage.getItem('user') || '{}')
-        if (user.uid && profile.name && salaData.name) {
+        if (user?.uid && profile.name && salaData.name) {
           fetch(`${import.meta.env.VITE_SERVER_URL || 'https://tp-eventos-backend.onrender.com'}/api/users/${user.uid}/salas?profile=${encodeURIComponent(profile.name)}`)
             .then(res => res.json())
             .then(data => {
