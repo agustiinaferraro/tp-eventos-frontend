@@ -214,7 +214,7 @@ export default function SalaEditScreen() {
       localStorage.setItem('salas_' + user.uid + '_' + profileKey, JSON.stringify(salasForLocal))
       
       try {
-        await apiPost(`/api/users/${user.uid}/salas`, { salas: newSalas })
+        await apiPost(`/api/users/${user.uid}/salas`, { salas: newSalas, profile: profileKey })
       } catch (err) {}
       
       setIsSaving(false)
