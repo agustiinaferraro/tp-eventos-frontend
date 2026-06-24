@@ -2,10 +2,10 @@
 // SalaEditScreen.jsx - Editar Sala (nombre, color, imagen)
 // =====================
 
-import React, { useState, useRef } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
-import { apiPost, generateImageWithAI } from '../utils/api'
+import { apiGet, apiPost, generateImageWithAI } from '../utils/api'
 
 import BackButton from './BackButton'
 
@@ -30,6 +30,23 @@ export default function SalaEditScreen() {
   const [error, setError] = useState('')
   const [aiPrompt, setAiPrompt] = useState('')
   const [isGenerating, setIsGenerating] = useState(false)
+  
+  useEffect(() => {
+    if (!isNew && !image && user?.uid) {
+      const profile = JSON.parse(localStorage.getItem('currentProfile') || '{}')
+      apiGet(`/api/users/${user.uid}/salas?profile=${encodeURIComponent(profile.name || '')}`)
+        .then(data => {
+          if (data.salas) {
+            const found = data.salas.find(s => s.name === initialSala.name)
+            if (found?.image) {
+              setImage(found.image)
+              setChoseColor(false)
+            }
+          }
+        })
+        .catch(() => {})
+    }
+  }, [])
   
   const handleImageSelect = (e) => {
     const file = e.target.files[0]
@@ -201,8 +218,7 @@ export default function SalaEditScreen() {
       } catch (err) {}
       
       setIsSaving(false)
-      const salaSinImagen = { ...salaData, image: null }
-      localStorage.setItem('currentSala', JSON.stringify(salaSinImagen))
+      localStorage.setItem('currentSala', JSON.stringify(salaData))
       navigate('/sala')
     } catch (err) {
       setIsSaving(false)
