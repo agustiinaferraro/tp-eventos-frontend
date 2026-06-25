@@ -189,22 +189,36 @@ export default function SalaEditScreen() {
       setIsSaving(true)
       setError('')
       
-      const savedSalas = localStorage.getItem('salas_' + user.uid + '_' + profileKey)
-      const salas = savedSalas ? JSON.parse(savedSalas) : []
+      let currentSalas = []
+      if (!isNew) {
+        try {
+          const data = await apiGet(`/api/users/${user.uid}/salas?profile=${encodeURIComponent(profileKey)}`)
+          currentSalas = data.salas || []
+        } catch (e) {}
+      }
+      if (currentSalas.length === 0) {
+        const savedSalas = localStorage.getItem('salas_' + user.uid + '_' + profileKey)
+        currentSalas = savedSalas ? JSON.parse(savedSalas) : []
+      }
+      
+      const existingSala = currentSalas.find(s => s.id === initialSala.id || s.name === initialSala.name)
       
       const salaData = {
         name: name.trim(),
-        color: choseColor ? color : (image ? null : (isNew ? color : (salas[editingIndex]?.color || COLORS[0]))),
+        color: choseColor ? color : (image ? null : (existingSala?.color || COLORS[0])),
         image: image,
         brightness: brightness,
         id: initialSala.id || Date.now()
       }
       
-      let newSalas = [...salas]
+      let newSalas = [...currentSalas]
       if (isNew) {
         newSalas.push(salaData)
+      } else if (existingSala) {
+        const actualIndex = newSalas.findIndex(s => s.id === initialSala.id || s.name === initialSala.name)
+        newSalas[actualIndex] = salaData
       } else {
-        newSalas[editingIndex] = salaData
+        newSalas.push(salaData)
       }
       
       const salasForLocal = newSalas.map(s => ({
