@@ -11,6 +11,33 @@ import BackButton from './BackButton'
 
 const COLORS = ['#22c55e', '#ef4444', '#3b82f6', '#f59e0b', '#8b5cf6', '#ec4899', '#14b8a6', '#f97316']
 
+const MAX_IMAGE_WIDTH = 800
+
+function resizeImage(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onload = (e) => {
+      const img = new Image()
+      img.onload = () => {
+        const canvas = document.createElement('canvas')
+        let { width, height } = img
+        if (width > MAX_IMAGE_WIDTH) {
+          height = Math.round(height * MAX_IMAGE_WIDTH / width)
+          width = MAX_IMAGE_WIDTH
+        }
+        canvas.width = width
+        canvas.height = height
+        canvas.getContext('2d').drawImage(img, 0, 0, width, height)
+        resolve(canvas.toDataURL('image/jpeg', 0.7))
+      }
+      img.onerror = reject
+      img.src = e.target.result
+    }
+    reader.onerror = reject
+    reader.readAsDataURL(file)
+  })
+}
+
 export default function SalaEditScreen() {
   const { user } = useAuth()
   const navigate = useNavigate()
@@ -48,16 +75,17 @@ export default function SalaEditScreen() {
     }
   }, [])
   
-  const handleImageSelect = (e) => {
+  const handleImageSelect = async (e) => {
     const file = e.target.files[0]
     if (!file) return
     
-    const reader = new FileReader()
-    reader.onload = (ev) => {
-      setImage(ev.target.result)
+    try {
+      const resized = await resizeImage(file)
+      setImage(resized)
       setChoseColor(false)
+    } catch (err) {
+      setError('Error al procesar la imagen')
     }
-    reader.readAsDataURL(file)
   }
   
   const handleGenerateAI = async () => {
@@ -123,16 +151,22 @@ export default function SalaEditScreen() {
       closeBtn.onclick = cleanup
       
       captureBtn.onclick = () => {
-        const canvas = document.createElement('canvas')
-        canvas.width = video.videoWidth
-        canvas.height = video.videoHeight
-        canvas.getContext('2d').drawImage(video, 0, 0)
+        const rawCanvas = document.createElement('canvas')
+        let vw = video.videoWidth
+        let vh = video.videoHeight
+        if (vw > MAX_IMAGE_WIDTH) {
+          vh = Math.round(vh * MAX_IMAGE_WIDTH / vw)
+          vw = MAX_IMAGE_WIDTH
+        }
+        rawCanvas.width = vw
+        rawCanvas.height = vh
+        rawCanvas.getContext('2d').drawImage(video, 0, 0, vw, vh)
         
         video.style.display = 'none'
         captureBtn.style.display = 'none'
         
-        canvas.className = 'fixed top-0 left-0 w-full h-full z-[9999] bg-black object-cover'
-        document.body.appendChild(canvas)
+        rawCanvas.className = 'fixed top-0 left-0 w-full h-full z-[9999] bg-black object-cover'
+        document.body.appendChild(rawCanvas)
         
         confirmBtn = document.createElement('button')
         confirmBtn.className = 'fixed bottom-10 right-10 z-[10001] w-16 h-16 rounded-full bg-green-600 border-none cursor-pointer text-white text-3xl'
@@ -145,8 +179,8 @@ export default function SalaEditScreen() {
         document.body.appendChild(cancelBtn)
         
         currentPhoto = {
-          canvas: canvas,
-          dataUrl: canvas.toDataURL('image/jpeg'),
+          canvas: rawCanvas,
+          dataUrl: rawCanvas.toDataURL('image/jpeg', 0.7),
           confirmBtn: confirmBtn,
           cancelBtn: cancelBtn
         }
@@ -158,7 +192,7 @@ export default function SalaEditScreen() {
         }
         
         cancelBtn.onclick = () => {
-          document.body.removeChild(canvas)
+          document.body.removeChild(rawCanvas)
           document.body.removeChild(confirmBtn)
           document.body.removeChild(cancelBtn)
           currentPhoto = null
