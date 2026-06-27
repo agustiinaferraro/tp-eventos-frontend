@@ -190,13 +190,13 @@ export default function SalaEditScreen() {
       setError('')
       
       let currentSalas = []
-      if (!isNew) {
-        try {
-          const data = await apiGet(`/api/users/${user.uid}/salas?profile=${encodeURIComponent(profileKey)}`)
-          currentSalas = data.salas || []
-        } catch (e) {}
+      try {
+        const data = await apiGet(`/api/users/${user.uid}/salas?profile=${encodeURIComponent(profileKey)}`)
+        currentSalas = data.salas || []
+      } catch (e) {
+        console.warn('Failed to fetch salas from backend, falling back to localStorage', e)
       }
-      if (currentSalas.length === 0) {
+      if (!Array.isArray(currentSalas) || currentSalas.length === 0) {
         const savedSalas = localStorage.getItem('salas_' + user.uid + '_' + profileKey)
         currentSalas = savedSalas ? JSON.parse(savedSalas) : []
       }
@@ -228,8 +228,14 @@ export default function SalaEditScreen() {
       localStorage.setItem('salas_' + user.uid + '_' + profileKey, JSON.stringify(salasForLocal))
       
       try {
-        await apiPost(`/api/users/${user.uid}/salas`, { salas: newSalas, profile: profileKey })
-      } catch (err) {}
+        const result = await apiPost(`/api/users/${user.uid}/salas`, { salas: newSalas, profile: profileKey })
+        console.log('Salas saved to backend successfully, image present:', !!salaData.image)
+      } catch (err) {
+        console.error('Failed to save salas to backend:', err)
+        setError('Error al guardar en el servidor: ' + err.message)
+        setIsSaving(false)
+        return
+      }
       
       setIsSaving(false)
       const salaSinImagen = { ...salaData, image: null }
