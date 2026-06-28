@@ -11,7 +11,7 @@ import BackButton from './BackButton'
 
 const COLORS = ['#22c55e', '#ef4444', '#3b82f6', '#f59e0b', '#8b5cf6', '#ec4899', '#14b8a6', '#f97316']
 
-const MAX_IMAGE_WIDTH = 800
+const MAX_IMAGE_WIDTH = 1200
 
 function resizeImage(file) {
   return new Promise((resolve, reject) => {

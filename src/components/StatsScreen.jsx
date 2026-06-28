@@ -73,7 +73,7 @@ return (
       <div 
         className="absolute inset-0 -z-10"
         style={{
-          background: salaData?.image ? `url(${salaData.image}) center/cover no-repeat` : salaData?.color || '#000',
+          background: salaData?.image ? `url(${salaData.image}) center/contain no-repeat` : salaData?.color || '#000',
           filter: salaData?.brightness ? `brightness(${salaData.brightness}%)` : undefined
         }}
       />
