@@ -41,33 +41,35 @@ const [sala, setSala] = useState(null)
   useEffect(() => {
     // Cuando entra a esta pantalla, carga la sala que guardamos en DashboardScreen
     const saved = localStorage.getItem('currentSala')
-    if (saved) {
-      const salaData = JSON.parse(saved)
-      setSala(salaData)
-      
-       // Si no tiene imagen (fue filtrada por quota), obtener del backend
-      if (!salaData?.image) {
-        const profile = JSON.parse(localStorage.getItem('currentProfile') || '{}')
-        if (user?.uid && profile.name && salaData.name) {
-          fetch(`${import.meta.env.VITE_SERVER_URL || 'https://tp-eventos-backend.onrender.com'}/api/users/${user.uid}/salas?profile=${encodeURIComponent(profile.name)}`)
-            .then(res => res.json())
-            .then(data => {
-              if (data.salas) {
-                const updatedSala = data.salas.find(s => s.name === salaData.name)
-                if (updatedSala) {
-                  console.log('Got sala from backend - has image:', !!updatedSala.image)
-                  setSala(updatedSala)
-                  // Guardar en localStorage sin imagen (para evitar quota)
-                  const salaForLocal = { ...updatedSala, image: null }
-                  localStorage.setItem('currentSala', JSON.stringify(salaForLocal))
-                }
-              }
-            })
-            .catch(err => console.error('Error loading sala from backend:', err))
+    if (!saved) return
+    
+    const salaData = JSON.parse(saved)
+    setSala(salaData)
+    
+    // Si no tiene imagen (fue filtrada por quota), obtener del backend
+    if (salaData?.image) return
+    
+    const profile = JSON.parse(localStorage.getItem('currentProfile') || '{}')
+    if (!user?.uid || !profile.name || !salaData.name) return
+    
+    fetch(`${import.meta.env.VITE_SERVER_URL || 'https://tp-eventos-backend.onrender.com'}/api/users/${user.uid}/salas?profile=${encodeURIComponent(profile.name)}`)
+      .then(res => {
+        if (!res.ok) throw new Error('HTTP ' + res.status)
+        return res.json()
+      })
+      .then(data => {
+        if (data.salas) {
+          const updatedSala = data.salas.find(s => s.name === salaData.name)
+          if (updatedSala) {
+            console.log('Got sala from backend - has image:', !!updatedSala.image)
+            setSala(updatedSala)
+            const salaForLocal = { ...updatedSala, image: null }
+            localStorage.setItem('currentSala', JSON.stringify(salaForLocal))
+          }
         }
-      }
-    }
-  }, [])
+      })
+      .catch(err => console.error('Error loading sala from backend:', err))
+  }, [user])
 
   // =====================
   // FUNCIÓN: IR A LA EXPERIENCIA
